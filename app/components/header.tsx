@@ -5,7 +5,7 @@ const Header = () => {
     <div className="mx-auto py-12 bg-[rgb(2,44,92)]">
       <div className="container px-7 mx-auto flex flex-col md:flex-row items-center justify-between">
         {/* Kolom kiri */}
-        <div className="flex-1 text-white mb-8 md:mb-0">
+        <div className="flex-1 text-center md:text-start text-white mb-8 md:mb-0">
           <h1 className="text-4xl font-bold mb-4">Selamat Datang di Lomba!</h1>
           <p className="mb-6 text-lg">
             Ikuti lomba seru dan menangkan hadiahnya. Daftar sekarang juga dan tunjukkan kemampuanmu!
@@ -15,7 +15,7 @@ const Header = () => {
           </button>
         </div>
         {/* Kolom kanan */}
-        <div className="flex-1 flex justify-center items-center">
+        <div className="flex-1 flex justify-center md:justify-end">
           <img
             src="https://placehold.co/500x400?text=Gambar"
             alt="Gambar Header"
