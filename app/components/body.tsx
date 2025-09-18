@@ -26,49 +26,7 @@ const Body = () => {
         {/* Kiri bawah */}
         <div className="flex justify-center items-center">
           {/* Lingkaran dengan dots */}
-          <div className="relative w-[350px] h-[350px]">
-            {/* Lingkaran luar */}
-            <div className="absolute inset-0 rounded-full border-2 border-blue-100" />
-            {/* Lingkaran dalam */}
-            <div className="absolute inset-8 rounded-full border-2 border-blue-100" />
-            {/* Dots */}
-            <div className="absolute left-1/2 top-0 -translate-x-1/2">
-              <div className="w-8 h-8 bg-yellow-400 rounded-full" />
-            </div>
-            <div className="absolute right-0 top-1/4 -translate-y-1/2">
-              <div className="w-8 h-8 bg-blue-400 rounded-full" />
-            </div>
-            <div className="absolute right-0 bottom-1/4 translate-y-1/2">
-              <div className="w-8 h-8 bg-green-400 rounded-full" />
-            </div>
-            <div className="absolute left-1/2 bottom-0 -translate-x-1/2">
-              <div className="w-8 h-8 bg-blue-400 rounded-full" />
-            </div>
-            <div className="absolute left-0 bottom-1/4 translate-y-1/2">
-              <div className="w-8 h-8 bg-yellow-400 rounded-full" />
-            </div>
-            <div className="absolute left-0 top-1/4 -translate-y-1/2">
-              <div className="w-8 h-8 bg-red-400 rounded-full" />
-            </div>
-            {/* Dots dalam */}
-            <div className="absolute left-1/2 top-8 -translate-x-1/2">
-              <div className="w-6 h-6 bg-green-400 rounded-full" />
-            </div>
-            <div className="absolute right-8 top-1/2 -translate-y-1/2">
-              <div className="w-6 h-6 bg-blue-400 rounded-full" />
-            </div>
-            <div className="absolute left-1/2 bottom-8 -translate-x-1/2">
-              <div className="w-6 h-6 bg-blue-400 rounded-full" />
-            </div>
-            <div className="absolute left-8 top-1/2 -translate-y-1/2">
-              <div className="w-6 h-6 bg-green-400 rounded-full" />
-            </div>
-            {/* Icon tengah */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                <path d="M20 10L30 25H10L20 10Z" fill="#3B82F6"/>
-              </svg>
-            </div>
+          <div className="relative w-[350px] h-[200px]">
           </div>
         </div>
         {/* Kanan bawah */}
