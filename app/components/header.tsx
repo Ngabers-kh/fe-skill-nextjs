@@ -1,3 +1,5 @@
+// jika pakai komponen button custom
+import Link from "next/link";
 import React from "react";
 
 const Header = () => {
@@ -10,9 +12,11 @@ const Header = () => {
           <p className="mb-6 text-lg">
             Ikuti lomba seru dan menangkan hadiahnya. Daftar sekarang juga dan tunjukkan kemampuanmu!
           </p>
-          <button className="bg-[#ffe600] text-[#043873] px-6 py-3 rounded-full font-bold hover:bg-white hover:text-[rgb(2,44,92)] transition-colors">
-            Try Now
-          </button>
+          <Link href="/register" passHref legacyBehavior>
+            <a className="bg-[#ffe600] text-[#043873] px-6 py-3 rounded-full font-bold hover:bg-white hover:text-[rgb(2,44,92)] transition-colors">
+              Try Now
+            </a>
+          </Link>
         </div>
         {/* Kolom kanan */}
         <div className="flex-1 flex justify-center md:justify-end">

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const Body = () => {
   return (
@@ -12,9 +13,11 @@ const Body = () => {
           <p className="text-gray-500 mb-6 max-w-md">
             Images, videos, PDFs and audio files are supported. Create math expressions and diagrams directly from the app. Take photos with the mobile app and save them to a note.
           </p>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-2 rounded transition-colors w-fit">
-            Get Started &rarr;
-          </button>
+          <Link href="/register">
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-2 rounded transition-colors w-fit">
+              Get Started &rarr;
+            </button>
+          </Link>
         </div>
         {/* Kanan atas */}
         <div className="flex justify-center items-center">
