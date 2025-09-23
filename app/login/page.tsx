@@ -1,25 +1,31 @@
 "use client";
 import { useState } from "react";
+import clsx from "clsx";
 
-export default function RegisterPage() {
-  const [form, setForm] = useState({
+export default function AuthPage() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+  const [registerForm, setRegisterForm] = useState({
+    name: "",
     email: "",
     password: "",
+    address: "",
+    job: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  // Handlers
+  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
+  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setRegisterForm({ ...registerForm, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:4001/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    const data = await res.json();
-    alert(data.message);
+    // fetch login API
+  };
+  const handleRegisterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // fetch register API
   };
 
   return (
@@ -27,62 +33,152 @@ export default function RegisterPage() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: "url('/bgRegister.png')" }}
     >
-      <div className="bg-white/80 p-10 rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col md:flex-row items-center">
-        {/* Bagian Kiri - Form */}
-        <div className="w-full md:w-1/2 space-y-4">
-          <h2 className="text-3xl font-semibold text-center text-gray-900 mb-6">
-            Sign Up
-          </h2>
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email address"
-              value={form.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
-              className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-            <button
-              type="submit"
-              className="w-full py-2 rounded-full bg-[#FFEEAA] hover:bg-yellow-400 text-gray-900 font-medium shadow-md"
+      <div className="w-full mx-4 my-4 max-w-4xl bg-white rounded-xl overflow-hidden shadow-2xl relative h-[600px]">
+        {/* SLIDER CONTAINER */}
+        <div
+          className={clsx(
+            "flex w-[200%] h-full transition-transform duration-700",
+            isLogin ? "translate-x-[-50%]" : "translate-x-0"
+          )}
+        >
+          {/* SIGN UP (LEFT) */}
+          <div className="w-1/2 flex flex-col md:flex-row">
+            {/* LEFT: FORM */}
+            <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-10 py-8">
+              <h2 className="text-3xl font-semibold text-gray-900 mb-6">
+                Sign Up
+              </h2>
+              <form className="space-y-4 w-full" onSubmit={handleRegisterSubmit}>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={registerForm.name}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email address"
+                  value={registerForm.email}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={registerForm.password}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="Address"
+                  value={registerForm.address}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                  type="text"
+                  name="job"
+                  placeholder="Job"
+                  value={registerForm.job}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="submit"
+                  className="w-full py-2 rounded-full bg-[#FFEEAA] hover:bg-yellow-400 text-gray-900 font-medium shadow-md"
+                >
+                  Sign Up →
+                </button>
+              </form>
+              <p className="text-sm text-gray-700 mt-6">
+                Already have an account?{" "}
+                <button
+                  className="text-gray-900 font-medium underline hover:text-blue-600"
+                  onClick={() => setIsLogin(true)}
+                  type="button"
+                >
+                  Log In →
+                </button>
+              </p>
+            </div>
+            {/* RIGHT: IMAGE */}
+            <div
+               className="w-full md:w-1/2 flex items-center justify-center bg-cover bg-center h-40 md:h-auto"
+                style={{ backgroundImage: "url('/bg-right-register.png')" }}
             >
-              Log In →
-            </button>
-          </form>
-          <div className="flex items-center my-4">
-            <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="mx-2 text-gray-500">or</span>
-            <div className="flex-grow h-px bg-gray-300"></div>
+              <div className="text-center text-white space-y-4 px-6">
+      <h2 className="text-2xl md:text-3xl font-bold">Join Us!</h2>
+      <p className="text-gray-200">Sign up and start your journey!</p>
+    </div>
+            </div>
           </div>
-          <p className="text-sm text-gray-700">
-            You have already account?{" "}
-            <a
-              href="/login"
-              className="text-gray-900 font-medium underline hover:text-blue-600"
+
+          {/* LOGIN (RIGHT) */}
+          <div className="w-1/2 flex">
+            {/* LEFT: IMAGE */}
+            <div
+              className="w-1/2 flex items-center justify-center bg-cover bg-center"
+              style={{ backgroundImage: "url('/bg-right-register.png')" }}
             >
-              Log In →
-            </a>
-          </p>
-        </div>
-        {/* Bagian Kanan - Info */}
-        <div className="w-full md:w-1/2 mt-8 md:mt-0 md:pl-10 text-center md:text-left" >
-          <h3 className="text-3xl font-bold text-blue-600 mb-4 px-20">
-            Create Your Account
-          </h3>
-          <p className="text-gray-700 px-20">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-          </p>
+              <div className="text-center text-white space-y-4 px-6">
+                <h2 className="text-3xl font-bold">Welcome Back!</h2>
+                <p className="text-gray-200">
+                  Login to access your account and projects.
+                </p>
+              </div>
+            </div>
+            {/* RIGHT: FORM */}
+            <div className="w-1/2 flex flex-col justify-center items-center px-10">
+              <h2 className="text-3xl font-semibold text-gray-900 mb-6">
+                Log In
+              </h2>
+              <form className="space-y-4 w-full" onSubmit={handleLoginSubmit}>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email address"
+                  value={loginForm.email}
+                  onChange={handleLoginChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={loginForm.password}
+                  onChange={handleLoginChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="w-full py-2 rounded-full bg-[#FFEEAA] hover:bg-yellow-400 text-gray-900 font-medium shadow-md"
+                >
+                  Log In →
+                </button>
+              </form>
+              <p className="text-sm text-gray-700 mt-6">
+                Don&apos;t have an account?{" "}
+                <button
+                  className="text-gray-900 font-medium underline hover:text-blue-600"
+                  onClick={() => setIsLogin(false)}
+                  type="button"
+                >
+                  Sign Up →
+                </button>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
