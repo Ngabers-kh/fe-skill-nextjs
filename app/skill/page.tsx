@@ -40,7 +40,7 @@ export default function SkillPage() {
 
   const handleNext = () => {
     console.log("Skills terpilih:", selectedSkills);
-    router.push("/nextpage"); // ganti dengan halaman berikutnya
+    router.push("/dashboard");
   };
 
   return (
