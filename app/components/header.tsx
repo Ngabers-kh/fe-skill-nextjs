@@ -10,9 +10,10 @@ const Header = () => {
         <div className="flex-1 text-center md:text-start text-white mb-8 md:mb-0">
           <h1 className="text-4xl font-bold mb-4">Selamat Datang di Lomba!</h1>
           <p className="mb-6 text-lg">
-            Ikuti lomba seru dan menangkan hadiahnya. Daftar sekarang juga dan tunjukkan kemampuanmu!
+            Ikuti lomba seru dan menangkan hadiahnya. Daftar sekarang juga dan
+            tunjukkan kemampuanmu!
           </p>
-          <Link href="/register" passHref legacyBehavior>
+          <Link href="/auth" passHref legacyBehavior>
             <a className="bg-[#ffe600] text-[#043873] px-6 py-3 rounded-full font-bold hover:bg-white hover:text-[rgb(2,44,92)] transition-colors">
               Try Now
             </a>

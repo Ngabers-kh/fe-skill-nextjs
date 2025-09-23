@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,6 +13,7 @@ export default function AuthPage() {
     address: "",
     job: "",
   });
+  const router = useRouter();
 
   // Handlers
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -21,7 +23,8 @@ export default function AuthPage() {
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // fetch login API
+    // TODO: fetch login API → kalau sukses
+    router.push("/skill");
   };
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +51,10 @@ export default function AuthPage() {
               <h2 className="text-3xl font-semibold text-gray-900 mb-6">
                 Sign Up
               </h2>
-              <form className="space-y-4 w-full" onSubmit={handleRegisterSubmit}>
+              <form
+                className="space-y-4 w-full"
+                onSubmit={handleRegisterSubmit}
+              >
                 <input
                   type="text"
                   name="name"
@@ -112,13 +118,13 @@ export default function AuthPage() {
             </div>
             {/* RIGHT: IMAGE */}
             <div
-               className="w-full md:w-1/2 flex items-center justify-center bg-cover bg-center h-40 md:h-auto"
-                style={{ backgroundImage: "url('/bg-right-register.png')" }}
+              className="w-full md:w-1/2 flex items-center justify-center bg-cover bg-center h-40 md:h-auto"
+              style={{ backgroundImage: "url('/bg-right-register.png')" }}
             >
               <div className="text-center text-white space-y-4 px-6">
-      <h2 className="text-2xl md:text-3xl font-bold">Join Us!</h2>
-      <p className="text-gray-200">Sign up and start your journey!</p>
-    </div>
+                <h2 className="text-2xl md:text-3xl font-bold">Join Us!</h2>
+                <p className="text-gray-200">Sign up and start your journey!</p>
+              </div>
             </div>
           </div>
 
