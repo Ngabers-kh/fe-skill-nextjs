@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
-import clsx from "clsx";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function AuthPage() {
+  const router = useRouter();
+
   const [isLogin, setIsLogin] = useState(true);
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [registerForm, setRegisterForm] = useState({
@@ -13,7 +14,6 @@ export default function AuthPage() {
     address: "",
     job: "",
   });
-  const router = useRouter();
 
   // Handlers
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -29,39 +29,74 @@ export default function AuthPage() {
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // fetch register API
+    console.log("Register submitted", registerForm);
   };
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      className="min-h-screen flex items-center justify-center bg-cover bg-center p-2 sm:p-4"
       style={{ backgroundImage: "url('/bgRegister.png')" }}
     >
-      <div className="w-full mx-4 my-4 max-w-4xl bg-white rounded-xl overflow-hidden shadow-2xl relative h-[600px]">
-        {/* SLIDER CONTAINER */}
-        <div
-          className={clsx(
-            "flex w-[200%] h-full transition-transform duration-700",
-            isLogin ? "translate-x-[-50%]" : "translate-x-0"
-          )}
-        >
-          {/* SIGN UP (LEFT) */}
-          <div className="w-1/2 flex flex-col md:flex-row">
-            {/* LEFT: FORM */}
-            <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-10 py-8">
-              <h2 className="text-3xl font-semibold text-gray-900 mb-6">
+      {/* Mobile/Tablet View (< lg) */}
+      <div className="lg:hidden w-full max-w-sm sm:max-w-md">
+        <div className="bg-white rounded-xl overflow-hidden shadow-2xl mx-5">
+          {isLogin ? (
+            // Mobile Login
+            <div className="p-6 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 text-center">
+                Log In
+              </h2>
+              <div className="space-y-4">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email address"
+                  value={loginForm.email}
+                  onChange={handleLoginChange}
+                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  required
+                />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={loginForm.password}
+                  onChange={handleLoginChange}
+                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  required
+                />
+                <button
+                  onClick={handleLoginSubmit}
+                  className="w-full py-3 rounded-full bg-yellow-200 hover:bg-yellow-400 text-gray-900 font-medium shadow-md transition-colors"
+                >
+                  Log In →
+                </button>
+              </div>
+              <p className="text-sm text-gray-700 mt-6 text-center">
+                Don't have an account?{" "}
+                <button
+                  className="text-gray-900 font-medium underline hover:text-blue-600"
+                  onClick={() => setIsLogin(false)}
+                  type="button"
+                >
+                  Sign Up →
+                </button>
+              </p>
+            </div>
+          ) : (
+            // Mobile Register
+            <div className="p-6 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 text-center">
                 Sign Up
               </h2>
-              <form
-                className="space-y-4 w-full"
-                onSubmit={handleRegisterSubmit}
-              >
+              <div className="space-y-4">
                 <input
                   type="text"
                   name="name"
                   placeholder="Name"
                   value={registerForm.name}
                   onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   required
                 />
                 <input
@@ -70,7 +105,7 @@ export default function AuthPage() {
                   placeholder="Email address"
                   value={registerForm.email}
                   onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   required
                 />
                 <input
@@ -79,7 +114,7 @@ export default function AuthPage() {
                   placeholder="Password"
                   value={registerForm.password}
                   onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   required
                 />
                 <input
@@ -88,7 +123,7 @@ export default function AuthPage() {
                   placeholder="Address"
                   value={registerForm.address}
                   onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 />
                 <input
                   type="text"
@@ -96,15 +131,96 @@ export default function AuthPage() {
                   placeholder="Job"
                   value={registerForm.job}
                   onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 />
                 <button
-                  type="submit"
-                  className="w-full py-2 rounded-full bg-[#FFEEAA] hover:bg-yellow-400 text-gray-900 font-medium shadow-md"
+                  onClick={handleRegisterSubmit}
+                  className="w-full py-3 rounded-full bg-yellow-200 hover:bg-yellow-400 text-gray-900 font-medium shadow-md transition-colors"
                 >
                   Sign Up →
                 </button>
-              </form>
+              </div>
+              <p className="text-sm text-gray-700 mt-6 text-center">
+                Already have an account?{" "}
+                <button
+                  className="text-gray-900 font-medium underline hover:text-blue-600"
+                  onClick={() => setIsLogin(true)}
+                  type="button"
+                >
+                  Log In →
+                </button>
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Desktop View (>= lg) - Original Design */}
+      <div className="hidden lg:block w-full mx-4 my-4 max-w-4xl bg-white rounded-xl overflow-hidden shadow-2xl relative h-[600px]">
+        {/* SLIDER CONTAINER */}
+        <div
+          className={`flex w-[200%] h-full transition-transform duration-700 ${
+            isLogin ? "translate-x-[-50%]" : "translate-x-0"
+          }`}
+        >
+          {/* SIGN UP (LEFT) */}
+          <div className="w-1/2 flex flex-col md:flex-row">
+            {/* LEFT: FORM */}
+            <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-10 py-8">
+              <h2 className="text-3xl font-semibold text-gray-900 mb-6">
+                Sign Up
+              </h2>
+              <div className="space-y-4 w-full">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={registerForm.name}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  required
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email address"
+                  value={registerForm.email}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  required
+                />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={registerForm.password}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  required
+                />
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="Address"
+                  value={registerForm.address}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                />
+                <input
+                  type="text"
+                  name="job"
+                  placeholder="Job"
+                  value={registerForm.job}
+                  onChange={handleRegisterChange}
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                />
+                <button
+                  onClick={handleRegisterSubmit}
+                  className="w-full py-2 rounded-full bg-yellow-200 hover:bg-yellow-400 text-gray-900 font-medium shadow-md"
+                >
+                  Sign Up →
+                </button>
+              </div>
               <p className="text-sm text-gray-700 mt-6">
                 Already have an account?{" "}
                 <button
@@ -154,7 +270,7 @@ export default function AuthPage() {
                   placeholder="Email address"
                   value={loginForm.email}
                   onChange={handleLoginChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   required
                 />
                 <input
@@ -163,12 +279,12 @@ export default function AuthPage() {
                   placeholder="Password"
                   value={loginForm.password}
                   onChange={handleLoginChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   required
                 />
                 <button
                   type="submit"
-                  className="w-full py-2 rounded-full bg-[#FFEEAA] hover:bg-yellow-400 text-gray-900 font-medium shadow-md"
+                  className="w-full py-2 rounded-full bg-yellow-200 hover:bg-yellow-400 text-gray-900 font-medium shadow-md"
                 >
                   Log In →
                 </button>
