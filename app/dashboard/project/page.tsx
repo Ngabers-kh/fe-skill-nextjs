@@ -4,6 +4,7 @@ import { useState } from "react";
 export default function ProjectPage() {
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [skillFilter, setSkillFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const projects = [
     {
@@ -53,6 +54,21 @@ export default function ProjectPage() {
     return categoryMatch && skillMatch;
   });
 
+  // --- Pagination ---
+  const itemsPerPage = 12; // jumlah card per halaman
+  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+
+  const paginatedProjects = filteredProjects.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-gray-50 p-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Project Board</h1>
@@ -87,7 +103,7 @@ export default function ProjectPage() {
 
       {/* Project Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProjects.map((project) => (
+        {paginatedProjects.map((project) => (
           <div
             key={project.id}
             className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition flex flex-col"
@@ -140,6 +156,41 @@ export default function ProjectPage() {
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8">
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
+          >
+            Prev
+          </button>
+
+          {[...Array(totalPages)].map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => goToPage(idx + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === idx + 1
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              {idx + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
