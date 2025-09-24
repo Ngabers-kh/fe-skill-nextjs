@@ -5,7 +5,7 @@ import React from "react";
 const Header = () => {
   return (
     <div className="mx-auto py-12 bg-[rgb(2,44,92)]">
-      <div className="container px-7 mx-auto flex flex-col md:flex-row items-center justify-between">
+      <div className="max-w-7xl px-7 mx-auto flex flex-col md:flex-row items-center justify-between">
         {/* Kolom kiri */}
         <div className="flex-1 text-center md:text-start text-white mb-8 md:mb-0">
           <h1 className="text-4xl font-bold mb-4">Selamat Datang di Lomba!</h1>

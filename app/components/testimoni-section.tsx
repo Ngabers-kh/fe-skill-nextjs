@@ -36,7 +36,7 @@ const testimonials: Testimonial[] = [
 export default function TestimonialSection() {
   return (
     <section className="py-30 bg-white">
-      <div className="max-w-6xl mx-auto px-7 text-center">
+      <div className="max-w-7xl mx-auto px-7 text-center">
         {/* Title */}
         <h2 className="text-3xl font-bold mb-12 relative inline-block text-black">
           What Our Clients{" "}
@@ -51,8 +51,8 @@ export default function TestimonialSection() {
           {testimonials.map((item, index) => (
             <div
               key={item.id}
-              className={`rounded-2xl shadow-md p-6 flex flex-col justify-between ${
-                index === 0 ? "bg-black" : "bg-blue-500 text-white"
+              className={`rounded-2xl shadow-xl p-6 flex flex-col justify-between ${
+                index === 0 ? "bg-white text-black" : "bg-blue-500 text-white"
               }`}
             >
               {/* Quote icon */}

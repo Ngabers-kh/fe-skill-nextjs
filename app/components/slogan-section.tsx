@@ -3,12 +3,12 @@ import React from "react";
 export default function ServiceSection() {
   return (
     <div className="bg-[#022C5C]">
-      <div className="container mx-auto px-7">
+      <div className="max-w-7xl mx-auto px-7">
         <div className="flex flex-col items-center justify-center py-30">
-          <h1 className="text-6xl py-4 font-bold">
+          <h1 className="text-6xl py-4 font-bold text-white">
             Your work, everywhere you are
           </h1>
-          <p className="text-center py-4">
+          <p className="text-center py-4 text-white">
             Access your notes from your computer, phone or tablet by
             synchronising with various services, including whitepace, Dropbox
             and OneDrive. The app is available on Windows, macOS, Linux, Android

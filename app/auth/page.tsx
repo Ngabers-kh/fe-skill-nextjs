@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
-import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { registerUser, loginUser } from "./../services/api";
 import Cookies from "js-cookie";
 
 export default function AuthPage() {
+  const router = useRouter();
+
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -17,8 +17,6 @@ export default function AuthPage() {
     address: "",
     job: "",
   });
-
-  const router = useRouter();
 
   // Handlers
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) =>
