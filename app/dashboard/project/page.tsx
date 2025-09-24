@@ -1,7 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ProjectPage() {
+  const router = useRouter();
+
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [skillFilter, setSkillFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -150,7 +153,10 @@ export default function ProjectPage() {
             </span>
 
             {/* Action Button */}
-            <button className="mt-auto px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium">
+            <button
+              onClick={() => router.push(`/dashboard/project/${project.id}`)}
+              className="mt-auto px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium"
+            >
               {project.category === "Learning" ? "Start Learning" : "View Job"}
             </button>
           </div>
