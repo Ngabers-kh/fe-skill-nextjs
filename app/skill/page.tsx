@@ -1,46 +1,59 @@
-// app/skill/page.tsx
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { getAllSkills, addUserSkills } from "../services/api";
+
+type Skill = {
+  idSkill: number;
+  nameSkill: string;
+};
 
 export default function SkillPage() {
   const router = useRouter();
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<number[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const skills = [
-    "Fotografi",
-    "Desain",
-    "Menulis",
-    "Public Speaking",
-    "Editing",
-    "Coding",
-    "UI/UX",
-    "Leadership",
-    "Marketing",
-    "Analisis",
-    "Research",
-    "Manajemen",
-    "Videografi",
-    "Musik",
-    "Seni",
-    "Ilustrasi",
-    "Presentasi",
-    "Komunikasi",
-    "Organisasi",
-    "Problem Solving",
-  ];
+  // ambil token & userId dari cookie
+  const token = Cookies.get("token") || "";
+  const userId = Cookies.get("userId");
 
-  const toggleSkill = (skill: string) => {
-    if (selectedSkills.includes(skill)) {
-      setSelectedSkills(selectedSkills.filter((s) => s !== skill));
-    } else {
-      setSelectedSkills([...selectedSkills, skill]);
-    }
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const data = await getAllSkills(token);
+        setSkills(data);
+      } catch (err) {
+        console.error("Error fetch skills:", err);
+      }
+    };
+    if (token) fetchSkills();
+  }, [token]);
+
+  const toggleSkill = (id: number) => {
+    setSelectedSkills((prev) =>
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+    );
   };
 
-  const handleNext = () => {
-    console.log("Skills terpilih:", selectedSkills);
-    router.push("/nextpage"); // ganti dengan halaman berikutnya
+  const handleNext = async () => {
+    if (!userId) {
+      console.error("User ID tidak ditemukan, mungkin belum login?");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await addUserSkills(Number(userId), selectedSkills, token);
+      console.log("Skills berhasil disimpan:", res);
+
+      router.push("/nextpage");
+    } catch (err) {
+      console.error("Error submit skills:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,18 +64,18 @@ export default function SkillPage() {
       <h1 className="text-3xl font-bold mb-10">Fill in Your Skill</h1>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-4xl">
-        {skills.map((skill, idx) => (
+        {skills.map((skill) => (
           <button
-            key={idx}
-            onClick={() => toggleSkill(skill)}
+            key={skill.idSkill}
+            onClick={() => toggleSkill(skill.idSkill)}
             className={`px-4 py-2 rounded-full font-medium shadow-md transition 
               ${
-                selectedSkills.includes(skill)
+                selectedSkills.includes(skill.idSkill)
                   ? "bg-blue-600 text-white"
                   : "bg-[#FFEEAA] text-black hover:bg-yellow-400"
               }`}
           >
-            {skill}
+            {skill.nameSkill}
           </button>
         ))}
       </div>
