@@ -1,70 +1,62 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 export default function ProfilePage() {
+  const router = useRouter();
+
+  // Dummy data user
+  const user = {
+    name: "Fauzan",
+    address: "Bandung, Indonesia",
+    job: "Fullstack Developer",
+    bio: "Saya suka belajar dan membuat aplikasi berbasis web dan IoT.",
+    photo: null,
+  };
+
   return (
     <div className="w-full min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8">
-        {/* Bagian foto */}
-        <div className="flex items-center gap-4 mb-8">
+        {/* Foto dan Nama */}
+        <div className="flex items-center gap-6 mb-6">
           <div className="w-24 h-24 rounded-full bg-red-500 flex items-center justify-center text-white text-lg font-bold">
-            Foto
+            {user.photo ? (
+              <img
+                src={user.photo}
+                alt="Profile"
+                className="w-24 h-24 rounded-full object-cover"
+              />
+            ) : (
+              user.name.charAt(0)
+            )}
           </div>
-          <button className="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600">
-            Add Photo
-          </button>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800">{user.name}</h1>
+            <p className="text-gray-600">{user.job}</p>
+          </div>
         </div>
 
-        {/* Form Profile */}
-        <form className="space-y-4">
+        {/* Info */}
+        <div className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your name"
-              className="mt-1 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-            />
+            <h2 className="text-sm font-semibold text-gray-500">Address</h2>
+            <p className="text-gray-800">{user.address}</p>
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Address
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your address"
-              className="mt-1 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-            />
+            <h2 className="text-sm font-semibold text-gray-500">Bio</h2>
+            <p className="text-gray-800">{user.bio}</p>
           </div>
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Job
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your job"
-              className="mt-1 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Bio
-            </label>
-            <textarea
-              placeholder="Write something about yourself..."
-              rows={4}
-              className="mt-1 w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-            />
-          </div>
-
+        {/* Tombol Edit */}
+        <div className="mt-6 flex justify-end">
           <button
-            type="submit"
-            className="mt-4 w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 shadow"
+            onClick={() => router.push("/dashboard/profile/edit")}
+            className="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600"
           >
-            Save Profile
+            Edit Profile
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );
