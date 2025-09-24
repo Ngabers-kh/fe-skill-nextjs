@@ -1,7 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function BoardPage() {
+  const router = useRouter();
+
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [skillFilter, setSkillFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -126,7 +129,10 @@ export default function BoardPage() {
           </select>
         </div>
 
-        <button className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium shadow">
+        <button
+          onClick={() => router.push("/dashboard/board/add")}
+          className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium shadow"
+        >
           + Tambah Board
         </button>
       </div>
@@ -175,7 +181,12 @@ export default function BoardPage() {
 
             {/* Action Buttons */}
             <div className="mt-auto flex justify-end gap-2">
-              <button className="px-3 py-1 text-sm bg-yellow-400 hover:bg-yellow-500 text-white rounded-lg font-medium">
+              <button
+                onClick={() =>
+                  router.push(`/dashboard/board/${project.id}/edit`)
+                }
+                className="px-3 py-1 text-sm bg-yellow-400 hover:bg-yellow-500 text-white rounded-lg font-medium"
+              >
                 Edit
               </button>
               <button className="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium">

@@ -14,6 +14,7 @@ export default function DashboardLayout({
     { name: "My Board", path: "/dashboard/board" },
     { name: "My Application", path: "/dashboard/application" },
     { name: "Profile", path: "/dashboard/profile" },
+    { name: "Inbox", path: "/dashboard/inbox" },
   ];
 
   return (
