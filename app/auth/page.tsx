@@ -1,11 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { registerUser, loginUser } from "./../services/api";
+import Cookies from "js-cookie";
 
 export default function AuthPage() {
   const router = useRouter();
 
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [registerForm, setRegisterForm] = useState({
     name: "",
@@ -18,18 +21,52 @@ export default function AuthPage() {
   // Handlers
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
+
   const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setRegisterForm({ ...registerForm, [e.target.name]: e.target.value });
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  // LOGIN
+    const handleLoginSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setLoading(true);
+      setErrorMsg("");
+      try {
+        const res = await loginUser(loginForm.email, loginForm.password);
+
+        if (res.token) {
+          Cookies.set("token", res.token, { expires: 1 }); // 7 hari
+          Cookies.set("userId", res.userId, { expires: 1 }); 
+        }
+
+        router.push("/skill");
+      } catch (err: any) {
+        setErrorMsg(err.message || "Login failed");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+
+  // REGISTER
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: fetch login API → kalau sukses
-    router.push("/skill");
-  };
-  const handleRegisterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // fetch register API
-    console.log("Register submitted", registerForm);
+    setLoading(true);
+    setErrorMsg("");
+    try {
+      const res = await registerUser(registerForm);
+      console.log("Register success:", res);
+
+      if (res.token) {
+          Cookies.set("token", res.token, { expires: 1 }); // 7 hari
+          Cookies.set("userId", res.userId, { expires: 1 }); 
+      }
+
+      router.push("/skill");
+    } catch (err: any) {
+      setErrorMsg(err.message || "Register failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -305,4 +342,5 @@ export default function AuthPage() {
       </div>
     </div>
   );
+
 }
