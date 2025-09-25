@@ -35,7 +35,7 @@ const testimonials: Testimonial[] = [
 
 export default function TestimonialSection() {
   return (
-    <section className="py-30 bg-white">
+    <section id="testimoni" className="py-30 bg-[#F9FAFB]">
       <div className="max-w-7xl mx-auto px-7 text-center">
         {/* Title */}
         <h2 className="text-3xl font-bold mb-12 relative inline-block text-black">
@@ -52,7 +52,7 @@ export default function TestimonialSection() {
             <div
               key={item.id}
               className={`rounded-2xl shadow-xl p-6 flex flex-col justify-between ${
-                index === 0 ? "bg-white text-black" : "bg-blue-500 text-white"
+                index === 0 ? "bg-white text-black" : "bg-blue-900 text-white"
               }`}
             >
               {/* Quote icon */}

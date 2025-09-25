@@ -5,13 +5,13 @@ import { Menu, X } from "lucide-react";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <nav className="py-4 bg-[rgb(2,44,92)]">
+    <nav className="fixed top-0 left-0 w-full z-50 py-4 bg-[rgb(2,44,92)]">
       <div className="max-w-7xl px-7 mx-auto flex justify-between items-center">
         <h1 className="text-2xl text-white font-bold">Logo</h1>
         <ul className="hidden md:flex gap-6 items-center">
           <li>
             <a
-              href="#"
+              href="#home"
               className="text-white  hover:text-yellow-300 transition-colors"
             >
               Home
@@ -19,7 +19,7 @@ const Navbar = () => {
           </li>
           <li>
             <a
-              href="#"
+              href="#about"
               className="text-white hover:text-yellow-300 transition-colors"
             >
               About
@@ -27,7 +27,23 @@ const Navbar = () => {
           </li>
           <li>
             <a
-              href="#"
+              href="#guide"
+              className="text-white hover:text-yellow-300 transition-colors"
+            >
+              Guide
+            </a>
+          </li>
+          <li>
+            <a
+              href="#testimoni"
+              className="text-white hover:text-yellow-300 transition-colors"
+            >
+              Testimoni
+            </a>
+          </li>
+          <li>
+            <a
+              href="#contact"
               className="text-white hover:text-yellow-300 transition-colors"
             >
               Contact
@@ -37,11 +53,6 @@ const Navbar = () => {
             <button className="bg-[#ffe600] border-2 text-[#043873] px-4 py-2 rounded-full font-bold hover:bg-white hover:text-[rgb(2,44,92)] transition-colors">
               Login
             </button>
-          </li>
-          <li>
-            {/* <button className="bg-yellow-300 text-[rgb(2,44,92)] px-4 py-2 rounded-full font-bold hover:bg-white hover:text-[rgb(2,44,92)] transition-colors">
-              Register
-            </button> */}
           </li>
         </ul>
 
