@@ -57,7 +57,7 @@ export default function ServiceSection() {
             whileInView="show"
             viewport={{ amount: 0.2 }}
             onClick={() => router.push("/auth")}
-            className="mt-10 px-8 py-4 rounded-2xl font-bold text-lg text-[#022C5C] bg-gradient-to-r from-yellow-200 to-yellow-400 shadow-lg hover:scale-105 hover:shadow-yellow-200/50 transition-transform duration-300"
+            className="mt-10 px-8 py-4 rounded-2xl font-bold text-lg text-[#022C5C] bg-gradient-to-r from-yellow-200 to-yellow-400 shadow-lg hover:scale-105 hover:shadow-yellow-200/50 transition-transform duration-300 cursor-pointer"
           >
             Try Taskey →
           </motion.a>
