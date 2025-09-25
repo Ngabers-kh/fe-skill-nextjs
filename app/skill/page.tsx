@@ -48,7 +48,7 @@ export default function SkillPage() {
       const res = await addUserSkills(Number(userId), selectedSkills, token);
       console.log("Skills berhasil disimpan:", res);
 
-      router.push("/nextpage");
+      router.push("/dashboard");
     } catch (err) {
       console.error("Error submit skills:", err);
     } finally {
