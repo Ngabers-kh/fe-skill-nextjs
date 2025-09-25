@@ -1,8 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Menu, X, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -61,11 +63,11 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { id: "home", label: "Home", emoji: "🏠" },
-    { id: "about", label: "About", emoji: "📖" },
-    { id: "guide", label: "Guide", emoji: "🧭" },
-    { id: "testimoni", label: "Testimoni", emoji: "⭐" },
-    { id: "contact", label: "Contact", emoji: "📞" },
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "guide", label: "Guide" },
+    { id: "testimoni", label: "Testimoni" },
+    { id: "contact", label: "Contact" },
   ];
 
   return (
@@ -127,7 +129,7 @@ const Navbar = () => {
 
           {/* Modern Login Button */}
           <li>
-            <button className="group relative overflow-hidden bg-[#ffe600] text-[#043873] px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-400/30 active:scale-95">
+            <button className="group relative overflow-hidden bg-[#ffe600] text-[#043873] px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-400/30 active:scale-95 cursor-pointer">
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               <span className="relative z-10 flex items-center gap-2">
                 Login
@@ -165,21 +167,18 @@ const Navbar = () => {
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="bg-[rgb(2,44,92)]/98 backdrop-blur-lg border-t border-white/10 px-6 py-6 space-y-1">
+        <div className="bg-[rgb(2,44,92)]/98 backdrop-blur-lg border-t border-white/10 px-6 py-6 space-y-1 cursor-pointer">
           {menuItems.map((item, index) => (
             <button
               key={item.id}
               onClick={() => smoothScrollTo(item.id)}
-              className={`group flex items-center gap-3 p-3 w-full text-left rounded-xl transition-all duration-300 transform hover:translate-x-2 ${
+              className={`group flex items-center gap-3 p-3 w-full text-left rounded-xl transition-all duration-300 transform hover:translate-x-2 cursor-pointer ${
                 activeSection === item.id
                   ? "text-yellow-300 bg-white/10"
                   : "text-white/80 hover:text-white hover:bg-white/10"
               }`}
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <span className="text-lg group-hover:scale-110 transition-transform duration-300">
-                {item.emoji}
-              </span>
               <span className="font-medium">{item.label}</span>
               <div
                 className={`ml-auto w-2 h-2 rounded-full transition-all duration-300 ${
@@ -192,13 +191,13 @@ const Navbar = () => {
           ))}
 
           <div className="pt-4 mt-4 border-t border-white/20">
-            <button className="w-full group relative overflow-hidden bg-[#ffe600] text-[#043873] px-6 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-400/30">
+            <button
+              onClick={() => router.push("/auth")}
+              className="w-full group relative overflow-hidden bg-[#ffe600] text-[#043873] px-6 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-400/30"
+            >
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               <span className="relative z-10 flex items-center justify-center gap-2">
                 <span>Login</span>
-                <span className="text-lg group-hover:rotate-12 transition-transform duration-300">
-                  🚀
-                </span>
               </span>
             </button>
           </div>

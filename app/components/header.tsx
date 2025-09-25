@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <div
       id="home"
-      className="mx-auto pt-40 pb-20 items-center bg-cover bg-center relative overflow-hidden "
+      className="mx-auto pt-45 pb-31 items-center bg-cover bg-center relative overflow-hidden "
       style={{ backgroundImage: "url('/bgRegister.png')" }}
     >
       {/* <div className="absolute inset-0 bg-black/20"></div> */}
@@ -51,7 +51,7 @@ const Header = () => {
           <div className="flex flex-col sm:flex-row gap-4 items-center lg:items-start">
             <button
               onClick={() => router.push("/auth")}
-              className="group relative overflow-hidden bg-[#ffe600] text-[#043873] px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-200/50 active:scale-95"
+              className="group relative overflow-hidden bg-[#ffe600] text-[#043873] px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-200/50 active:scale-95 cursor-pointer"
             >
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               <span className="relative z-10 group-hover:text-[#043873] transition-colors duration-300">
