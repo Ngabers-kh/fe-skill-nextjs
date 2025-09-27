@@ -66,7 +66,7 @@ export default function TestimonialSection() {
         >
           What Our{" "}
           <span className="bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] bg-clip-text text-transparent">
-            Clients Say
+            Clients Says
           </span>
         </motion.h2>
 
