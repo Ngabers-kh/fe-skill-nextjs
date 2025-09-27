@@ -45,7 +45,7 @@ export default function ProfilePage() {
         setUser(userData);
         setSkills(skillData);
         console.log("Data user:", userData);
-        console.log("Data skill:", skillData);  
+        console.log("Data skill:", skillData);
       } catch (err) {
         console.error("Gagal ambil data:", err);
       } finally {
@@ -73,7 +73,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-100 flex items-center justify-center p-6">
+    <div className="w-full min-h-screen bg-[#F9FAFB] flex items-center justify-center px-1 my-3">
       <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8">
         {/* Foto dan Nama */}
         <div className="flex items-center gap-6 mb-6">
