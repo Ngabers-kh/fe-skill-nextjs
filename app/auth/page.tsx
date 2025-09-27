@@ -28,8 +28,9 @@ export default function AuthPage() {
       if (res.token) {
         Cookies.set("token", res.token, { expires: 1 });
         Cookies.set("userId", res.userId, { expires: 1 });
+
       }
-      router.push("/skill");
+      router.push("/dashboard");
     } catch (err: any) {
       setErrorMsg(err.message || "Login failed");
     } finally {
