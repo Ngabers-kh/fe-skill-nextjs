@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Navbar = () => {
   const router = useRouter();
@@ -85,10 +86,7 @@ const Navbar = () => {
           onClick={() => smoothScrollTo("home")}
         >
           <div className="relative">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#ffe600] to-yellow-400 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-              <Sparkles className="w-5 h-5 text-[#043873]" />
-            </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-[rgb(2,44,92)] animate-pulse"></div>
+            <Image src="/logo.png" alt="Logo" width={50} height={50} />
           </div>
           <h1 className="text-2xl text-white font-black tracking-tight group-hover:text-yellow-300 transition-colors duration-300">
             Skillearn
