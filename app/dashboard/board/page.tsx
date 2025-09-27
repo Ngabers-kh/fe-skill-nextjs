@@ -1,6 +1,44 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+import Cookies from "js-cookie";
+import { getAllBoardFreeLance, getAllBoardLearning } from "../../services/api";
+
+type BoardFreeLance = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  quota: number;
+  skills: string[];
+  status: string;
+  startDate: string;
+  endDate: string;
+  iduser: number;
+};
+
+type BoardLearning = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  skills: string[];
+  status: string;
+  startDate: string;
+  endDate: string;
+  date: string;
+  iduser: number;
+};
+
+type UnifiedBoard = {
+  id: number;
+  category: "Learning" | "Freelance";
+  title: string;
+  description: string;
+  skills: string[];
+  status: string;
+  organizer: string;
+};
 
 export default function BoardPage() {
   const router = useRouter();
@@ -9,74 +47,59 @@ export default function BoardPage() {
   const [skillFilter, setSkillFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const projects = [
-    {
-      id: 1,
-      category: "Learning",
-      title: "Build a Portfolio Website",
-      description: "Belajar HTML, CSS, dan dasar desain web.",
-      skills: ["Coding", "UI/UX"],
-      status: "Ongoing",
-      name: "Fauzan",
-    },
-    {
-      id: 2,
-      category: "Freelance",
-      title: "Landing Page untuk Startup",
-      description: "Buat landing page interaktif untuk client startup lokal.",
-      skills: ["Coding", "Design"],
-      status: "Open",
-      name: "Riza",
-    },
-    {
-      id: 3,
-      category: "Learning",
-      title: "Mobile App UI Design",
-      description: "Pelajari cara mendesain aplikasi mobile modern.",
-      skills: ["UI/UX", "Design"],
-      status: "Not Started",
-      name: "Aisyah",
-    },
-    {
-      id: 4,
-      category: "Freelance",
-      title: "Social Media Campaign",
-      description: "Kelola konten sosial media untuk brand fashion.",
-      skills: ["Marketing", "Content"],
-      status: "Closed",
-      name: "Adinda",
-    },
-    {
-      id: 5,
-      category: "Learning",
-      title: "React Project",
-      description: "Belajar React untuk frontend development.",
-      skills: ["Coding"],
-      status: "Ongoing",
-      name: "Budi",
-    },
-    {
-      id: 6,
-      category: "Freelance",
-      title: "Company Profile Website",
-      description: "Membangun website profile perusahaan.",
-      skills: ["UI/UX", "Design"],
-      status: "Open",
-      name: "Siti",
-    },
-  ];
+  const token = Cookies.get("token") || "";
+  const [boards, setBoards] = useState<UnifiedBoard[]>([]);
 
-  const allSkills = Array.from(new Set(projects.flatMap((p) => p.skills)));
+  useEffect(() => {
+    const fetchBoards = async () => {
+      try {
+        const dataFreeLance: BoardFreeLance[] = await getAllBoardFreeLance(token);
+        const dataLearning: BoardLearning[] = await getAllBoardLearning(token);
 
-  const filteredProjects = projects.filter((p) => {
+        const mappedFL: UnifiedBoard[] = dataFreeLance.map((b) => ({
+          id: b.id,
+          category: "Freelance",
+          title: b.title,
+          description: b.description,
+          skills: b.skills || [],
+          status: b.status,
+          organizer: `User ${b.iduser}`, // sementara pake iduser
+        }));
+
+        const mappedL: UnifiedBoard[] = dataLearning.map((b) => ({
+          id: b.id,
+          category: "Learning",
+          title: b.title,
+          description: b.description,
+          skills: b.skills || [],
+          status: b.status,
+          organizer: `User ${b.iduser}`,
+        }));
+
+        setBoards([...mappedFL, ...mappedL]);
+      } catch (err) {
+        console.error("Error fetch Boards:", err);
+      }
+    };
+    if (token) fetchBoards();
+  }, [token]);
+
+  // Ambil semua unique skills
+  const allSkills = useMemo(
+    () => Array.from(new Set(boards.flatMap((b) => b.skills))),
+    [boards]
+  );
+
+  // Filter
+  const filteredProjects = boards.filter((b) => {
     const categoryMatch =
-      categoryFilter === "All" || p.category === categoryFilter;
-    const skillMatch = skillFilter === "All" || p.skills.includes(skillFilter);
+      categoryFilter === "All" || b.category === categoryFilter;
+    const skillMatch = skillFilter === "All" || b.skills.includes(skillFilter);
     return categoryMatch && skillMatch;
   });
 
-  // --- Pagination ---
-  const itemsPerPage = 12; // jumlah card per halaman
+  // Pagination
+  const itemsPerPage = 12;
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
 
   const paginatedProjects = filteredProjects.slice(
@@ -85,9 +108,7 @@ export default function BoardPage() {
   );
 
   const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
   return (
@@ -104,7 +125,7 @@ export default function BoardPage() {
               setCategoryFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:ring-2 focus:ring-blue-500"
           >
             <option value="All">All Categories</option>
             <option value="Learning">Learning</option>
@@ -118,7 +139,7 @@ export default function BoardPage() {
               setSkillFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:ring-2 focus:ring-green-500"
           >
             <option value="All">All Skills</option>
             {allSkills.map((skill) => (
@@ -129,6 +150,7 @@ export default function BoardPage() {
           </select>
         </div>
 
+        {/* Tambah Board */}
         <button
           onClick={() => router.push("/dashboard/board/add")}
           className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium shadow"
@@ -161,7 +183,7 @@ export default function BoardPage() {
             </div>
 
             <span className="text-sm font-medium text-gray-500 mb-1">
-              Organizer: {project.name}
+              Organizer: {project.organizer}
             </span>
 
             <span className="text-sm font-medium text-gray-500 mb-4">

@@ -40,7 +40,7 @@ export default function AuthPage() {
           Cookies.set("userId", res.userId, { expires: 1 }); 
         }
 
-        router.push("/skill");
+        router.push("/dashboard");
       } catch (err: any) {
         setErrorMsg(err.message || "Login failed");
       } finally {
