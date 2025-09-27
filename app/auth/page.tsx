@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { registerUser, loginUser } from "./../services/api";
 import Cookies from "js-cookie";
@@ -20,49 +19,35 @@ export default function AuthPage() {
 
   const router = useRouter();
 
-  // Handlers
-  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
+  // login
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await loginUser(loginForm.email, loginForm.password);
+      if (res.token) {
+        Cookies.set("token", res.token, { expires: 1 });
+        Cookies.set("userId", res.userId, { expires: 1 });
 
-  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setRegisterForm({ ...registerForm, [e.target.name]: e.target.value });
-
-  // LOGIN
-    const handleLoginSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      setLoading(true);
-      setErrorMsg("");
-      try {
-        const res = await loginUser(loginForm.email, loginForm.password);
-
-        if (res.token) {
-          Cookies.set("token", res.token, { expires: 1 }); // 7 hari
-          Cookies.set("userId", res.userId, { expires: 1 }); 
-        }
-
-        router.push("/dashboard");
-      } catch (err: any) {
-        setErrorMsg(err.message || "Login failed");
-      } finally {
-        setLoading(false);
       }
-    };
+      router.push("/dashboard");
+    } catch (err: any) {
+      setErrorMsg(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-
-  // REGISTER
+  // register
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg("");
     try {
       const res = await registerUser(registerForm);
-      console.log("Register success:", res);
-
       if (res.token) {
-          Cookies.set("token", res.token, { expires: 1 }); // 7 hari
-          Cookies.set("userId", res.userId, { expires: 1 }); 
+        Cookies.set("token", res.token, { expires: 1 });
+        Cookies.set("userId", res.userId, { expires: 1 });
       }
-
       router.push("/skill");
     } catch (err: any) {
       setErrorMsg(err.message || "Register failed");
@@ -73,243 +58,90 @@ export default function AuthPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-2 sm:p-4"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden mx-auto bg-cover bg-center"
       style={{ backgroundImage: "url('/bgRegister.png')" }}
     >
-      {/* Mobile/Tablet View (< lg) */}
-      <div className="lg:hidden w-full max-w-sm sm:max-w-md">
-        <div className="bg-white rounded-xl overflow-hidden shadow-2xl mx-5">
-          {isLogin ? (
-            // Mobile Login
-            <div className="p-6 sm:p-8">
-              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 text-center">
-                Log In
-              </h2>
-              <div className="space-y-4">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email address"
-                  value={loginForm.email}
-                  onChange={handleLoginChange}
-                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  required
-                />
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={loginForm.password}
-                  onChange={handleLoginChange}
-                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  required
-                />
-                <button
-                  onClick={handleLoginSubmit}
-                  className="w-full py-3 rounded-full bg-yellow-200 hover:bg-yellow-400 text-gray-900 font-medium shadow-md transition-colors"
-                >
-                  Log In →
-                </button>
-              </div>
-              <p className="text-sm text-gray-700 mt-6 text-center">
-                Don't have an account?{" "}
-                <button
-                  className="text-gray-900 font-medium underline hover:text-blue-600"
-                  onClick={() => setIsLogin(false)}
-                  type="button"
-                >
-                  Sign Up →
-                </button>
-              </p>
-            </div>
-          ) : (
-            // Mobile Register
-            <div className="p-6 sm:p-8">
-              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 text-center">
-                Sign Up
-              </h2>
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={registerForm.name}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  required
-                />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email address"
-                  value={registerForm.email}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  required
-                />
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={registerForm.password}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  required
-                />
-                <input
-                  type="text"
-                  name="address"
-                  placeholder="Address"
-                  value={registerForm.address}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                />
-                <input
-                  type="text"
-                  name="job"
-                  placeholder="Job"
-                  value={registerForm.job}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-3 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                />
-                <button
-                  onClick={handleRegisterSubmit}
-                  className="w-full py-3 rounded-full bg-yellow-200 hover:bg-yellow-400 text-gray-900 font-medium shadow-md transition-colors"
-                >
-                  Sign Up →
-                </button>
-              </div>
-              <p className="text-sm text-gray-700 mt-6 text-center">
-                Already have an account?{" "}
-                <button
-                  className="text-gray-900 font-medium underline hover:text-blue-600"
-                  onClick={() => setIsLogin(true)}
-                  type="button"
-                >
-                  Log In →
-                </button>
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Desktop View (>= lg) - Original Design */}
-      <div className="hidden lg:block w-full mx-4 my-4 max-w-4xl bg-white rounded-xl overflow-hidden shadow-2xl relative h-[600px]">
-        {/* SLIDER CONTAINER */}
+      {/* Card */}
+      <div className="relative z-10 w-full max-w-4xl mx-6 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl overflow-hidden justify-center items-center">
         <div
-          className={`flex w-[200%] h-full transition-transform duration-700 ${
-            isLogin ? "translate-x-[-50%]" : "translate-x-0"
-          }`}
+          className={`flex transition-transform duration-700 ease-in-out justify-center items-center ${
+            isLogin ? "-translate-x-1/2" : "translate-x-0"
+          } w-[200%]`}
         >
-          {/* SIGN UP (LEFT) */}
-          <div className="w-1/2 flex flex-col md:flex-row">
-            {/* LEFT: FORM */}
-            <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-10 py-8">
-              <h2 className="text-3xl font-semibold text-gray-900 mb-6">
-                Sign Up
-              </h2>
-              <div className="space-y-4 w-full">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={registerForm.name}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  required
-                />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email address"
-                  value={registerForm.email}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  required
-                />
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={registerForm.password}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  required
-                />
-                <input
-                  type="text"
-                  name="address"
-                  placeholder="Address"
-                  value={registerForm.address}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                />
-                <input
-                  type="text"
-                  name="job"
-                  placeholder="Job"
-                  value={registerForm.job}
-                  onChange={handleRegisterChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                />
+          {/* REGISTER */}
+          <div className="w-1/2 flex flex-col md:flex-row min-h-[500px] md:min-h-[600px]">
+            <div className="w-full md:w-1/2 flex flex-col justify-center p-8 lg:p-12 text-white items-center">
+              <h1 className="text-3xl font-bold mb-6">Create Account</h1>
+              <form
+                onSubmit={handleRegisterSubmit}
+                className="space-y-4 w-full max-w-sm"
+              >
+                {["name", "email", "password", "address", "job"].map(
+                  (field) => (
+                    <input
+                      key={field}
+                      type={field === "password" ? "password" : "text"}
+                      name={field}
+                      placeholder={
+                        field.charAt(0).toUpperCase() + field.slice(1)
+                      }
+                      value={(registerForm as any)[field]}
+                      onChange={(e) =>
+                        setRegisterForm({
+                          ...registerForm,
+                          [field]: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-3 rounded-full bg-white/20 placeholder-gray-200 text-white focus:ring-2 focus:ring-yellow-300 outline-none"
+                      required={["name", "email", "password"].includes(field)}
+                    />
+                  )
+                )}
                 <button
-                  onClick={handleRegisterSubmit}
-                  className="w-full py-2 rounded-full bg-yellow-200 hover:bg-yellow-400 text-gray-900 font-medium shadow-md"
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 rounded-full bg-yellow-300 text-blue-900 font-bold shadow-lg hover:bg-yellow-400 transition"
                 >
-                  Sign Up →
+                  {loading ? "Loading..." : "Sign Up →"}
                 </button>
-              </div>
-              <p className="text-sm text-gray-700 mt-6">
+              </form>
+              <p className="text-sm mt-6 text-gray-200">
                 Already have an account?{" "}
                 <button
-                  className="text-gray-900 font-medium underline hover:text-blue-600"
                   onClick={() => setIsLogin(true)}
-                  type="button"
+                  className="underline hover:text-yellow-300"
                 >
-                  Log In →
+                  Log In
                 </button>
               </p>
             </div>
-            {/* RIGHT: IMAGE */}
             <div
-              className="w-full md:w-1/2 flex items-center justify-center bg-cover bg-center h-40 md:h-auto"
+              className="hidden md:flex w-1/2 items-center justify-center bg-cover bg-center"
               style={{ backgroundImage: "url('/bg-right-register.png')" }}
-            >
-              <div className="text-center text-white space-y-4 px-6">
-                <h2 className="text-2xl md:text-3xl font-bold">Join Us!</h2>
-                <p className="text-gray-200">Sign up and start your journey!</p>
-              </div>
-            </div>
+            ></div>
           </div>
 
-          {/* LOGIN (RIGHT) */}
-          <div className="w-1/2 flex">
-            {/* LEFT: IMAGE */}
+          {/* LOGIN */}
+          <div className="w-1/2 flex flex-col md:flex-row min-h-[100px] md:min-h-[600px]">
             <div
-              className="w-1/2 flex items-center justify-center bg-cover bg-center"
+              className="hidden md:flex w-1/2 items-center justify-center bg-cover bg-center"
               style={{ backgroundImage: "url('/bg-right-register.png')" }}
-            >
-              <div className="text-center text-white space-y-4 px-6">
-                <h2 className="text-3xl font-bold">Welcome Back!</h2>
-                <p className="text-gray-200">
-                  Login to access your account and projects.
-                </p>
-              </div>
-            </div>
-            {/* RIGHT: FORM */}
-            <div className="w-1/2 flex flex-col justify-center items-center px-10">
-              <h2 className="text-3xl font-semibold text-gray-900 mb-6">
-                Log In
-              </h2>
-              <form className="space-y-4 w-full" onSubmit={handleLoginSubmit}>
+            ></div>
+            <div className="w-full md:w-1/2 flex flex-col justify-center p-8 lg:p-12 text-white items-center">
+              <h1 className="text-3xl font-bold mb-6">Log In</h1>
+              <form
+                onSubmit={handleLoginSubmit}
+                className="space-y-4 justify-center items-center"
+              >
                 <input
                   type="email"
                   name="email"
-                  placeholder="Email address"
+                  placeholder="Email"
                   value={loginForm.email}
-                  onChange={handleLoginChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  onChange={(e) =>
+                    setLoginForm({ ...loginForm, email: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-full bg-white/20 placeholder-gray-200 text-white focus:ring-2 focus:ring-yellow-300 outline-none"
                   required
                 />
                 <input
@@ -317,32 +149,40 @@ export default function AuthPage() {
                   name="password"
                   placeholder="Password"
                   value={loginForm.password}
-                  onChange={handleLoginChange}
-                  className="w-full px-4 py-2 shadow bg-amber-50 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  onChange={(e) =>
+                    setLoginForm({ ...loginForm, password: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-full bg-white/20 placeholder-gray-200 text-white focus:ring-2 focus:ring-yellow-300 outline-none"
                   required
                 />
                 <button
                   type="submit"
-                  className="w-full py-2 rounded-full bg-yellow-200 hover:bg-yellow-400 text-gray-900 font-medium shadow-md"
+                  disabled={loading}
+                  className="w-full py-3 rounded-full bg-yellow-300 text-blue-900 font-bold shadow-lg hover:bg-yellow-400 transition"
                 >
-                  Log In →
+                  {loading ? "Loading..." : "Log In →"}
                 </button>
               </form>
-              <p className="text-sm text-gray-700 mt-6">
+              <p className="text-sm mt-6 text-gray-200">
                 Don&apos;t have an account?{" "}
                 <button
-                  className="text-gray-900 font-medium underline hover:text-blue-600"
                   onClick={() => setIsLogin(false)}
-                  type="button"
+                  className="underline hover:text-yellow-300"
                 >
-                  Sign Up →
+                  Sign Up
                 </button>
               </p>
             </div>
           </div>
         </div>
+
+        {/* Error message */}
+        {errorMsg && (
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-red-300 text-sm">
+            {errorMsg}
+          </div>
+        )}
       </div>
     </div>
   );
-
 }
