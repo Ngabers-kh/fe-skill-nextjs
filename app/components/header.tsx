@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <div
       id="home"
-      className="mx-auto pt-45 pb-31 items-center bg-cover bg-center relative overflow-hidden "
+      className="mx-auto pt-25 md:pt-37 pb-15 md:pb-31 items-center bg-cover bg-center relative overflow-hidden "
       style={{ backgroundImage: "url('/bgRegister.png')" }}
     >
       {/* <div className="absolute inset-0 bg-black/20"></div> */}

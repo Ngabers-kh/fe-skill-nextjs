@@ -99,7 +99,7 @@ const Navbar = () => {
             <li key={item.id} className="relative group">
               <button
                 onClick={() => smoothScrollTo(item.id)}
-                className={`relative text-sm font-medium transition-all duration-300 ${
+                className={`relative text-sm font-medium transition-all duration-300 hover:cursor-pointer ${
                   activeSection === item.id
                     ? "text-yellow-300"
                     : "text-white/80 hover:text-white"

@@ -12,7 +12,7 @@ const Body = () => {
   return (
     <div
       id="about"
-      className="relative w-full min-h-screen bg-[#F9FAFB] pb-16 pt-32 overflow-hidden"
+      className="relative w-full min-h-screen bg-[#F9FAFB] pb-7 pt-15 md:pt-32 overflow-hidden"
     >
       {/* Gambar kiri atas */}
       <Image
@@ -56,7 +56,7 @@ const Body = () => {
               Career Growth
             </span>
           </h2>
-          <p className="text-gray-600 mb-6 max-w-md text-lg">
+          <p className="text-gray-600 mb-0 md:mb-6 max-w-md text-lg">
             A trusted platform that empowers learning and connects learners with
             organizers and opportunities, shaping a generation that is
             job-ready, competitive, and impactful for society.

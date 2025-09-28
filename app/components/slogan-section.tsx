@@ -23,7 +23,7 @@ export default function ServiceSection() {
       </div>
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-7 z-20">
-        <div className="flex flex-col items-center justify-center py-28 text-center">
+        <div className="flex flex-col items-center justify-center py-15 md:py-28 text-center">
           <motion.h1
             variants={fadeInUp}
             initial="hidden"
@@ -57,7 +57,7 @@ export default function ServiceSection() {
             whileInView="show"
             viewport={{ amount: 0.2 }}
             onClick={() => router.push("/auth")}
-            className="mt-10 px-8 py-4 rounded-2xl font-bold text-lg text-[#022C5C] bg-gradient-to-r from-yellow-200 to-yellow-400 shadow-lg hover:scale-105 hover:shadow-yellow-200/50 transition-transform duration-300 cursor-pointer"
+            className="mt-10 px-8 py-4 rounded-2xl font-bold text-lg text-[#022C5C] bg-gradient-to-r from-yellow-200 to-yellow-400 shadow-lg hover:scale-105 hover:shadow-yellow-200/50 cursor-pointer"
           >
             Try Taskey →
           </motion.a>
