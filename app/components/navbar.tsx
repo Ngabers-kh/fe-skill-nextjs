@@ -116,9 +116,9 @@ const Navbar = () => {
                 ></span>
 
                 {/* Active indicator dot */}
-                {activeSection === item.id && (
+                {/* {activeSection === item.id && (
                   <span className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-yellow-300 rounded-full animate-pulse"></span>
-                )}
+                )} */}
               </button>
               {/* Hover glow effect */}
               <div className="absolute -inset-2 bg-white/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
@@ -131,7 +131,7 @@ const Navbar = () => {
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               <span className="relative z-10 flex items-center gap-2">
                 Login
-                <div className="w-1.5 h-1.5 bg-[#043873] rounded-full group-hover:animate-bounce"></div>
+                {/* <div className="w-1.5 h-1.5 bg-[#043873] rounded-full group-hover:animate-bounce"></div> */}
               </span>
             </button>
           </li>
@@ -178,13 +178,13 @@ const Navbar = () => {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <span className="font-medium">{item.label}</span>
-              <div
+              {/* <div
                 className={`ml-auto w-2 h-2 rounded-full transition-all duration-300 ${
                   activeSection === item.id
                     ? "bg-yellow-300 opacity-100"
                     : "bg-yellow-300 opacity-0 group-hover:opacity-100"
                 }`}
-              ></div>
+              ></div> */}
             </button>
           ))}
 
