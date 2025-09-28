@@ -97,7 +97,7 @@ export default function EditFreelancePage() {
           <input
             type="text"
             name="title"
-            value={form.title}
+            value={form.title || ""}
             onChange={handleChange}
             required
             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-gray-700"
@@ -111,7 +111,7 @@ export default function EditFreelancePage() {
           </label>
           <textarea
             name="description"
-            value={form.description}
+            value={form.description || ""}
             onChange={handleChange}
             required
             rows={3}
@@ -128,7 +128,7 @@ export default function EditFreelancePage() {
             <input
               type="number"
               name="price"
-              value={form.price}
+              value={form.price || ""}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-lg border border-gray-300"
             />
@@ -140,7 +140,7 @@ export default function EditFreelancePage() {
             <input
               type="number"
               name="quota"
-              value={form.quota}
+              value={form.quota || ""}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-lg border border-gray-300"
             />
@@ -156,7 +156,7 @@ export default function EditFreelancePage() {
             <input
               type="date"
               name="startDate"
-              value={form.startDate}
+              value={form.startDate || ""}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-lg border border-gray-300"
             />
@@ -168,7 +168,7 @@ export default function EditFreelancePage() {
             <input
               type="date"
               name="endDate"
-              value={form.endDate}
+              value={form.endDate || ""}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-lg border border-gray-300"
             />

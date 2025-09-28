@@ -159,8 +159,8 @@ export async function getAllBoardLearning(token: string) {
 }
 
 // Get all Boards Freelance by UserId
-export async function getAllBoardFreeLanceByUserId(userId: number, token: string) {
-  const res = await fetch(`${BASE_URL}/boardsFreeLance/`, {
+export async function getAllBoardFreeLanceByUserId(UserId: number, token: string) {
+  const res = await fetch(`${BASE_URL}/boardsFreeLance/${UserId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error("Gagal ambil boards Free Lance");
@@ -177,8 +177,8 @@ export async function fetchBoardFreeLanceById(id: Number, token: string) {
 }
 
 // Get all Boards Learning by UserId
-export async function getAllBoardLearningByuserId(token: string) {
-  const res = await fetch(`${BASE_URL}/boardsLearning/`, {
+export async function getAllBoardLearningByuserId(UserId:number, token: string) {
+  const res = await fetch(`${BASE_URL}/boardsLearning/${UserId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error("Gagal ambil boards Free Lance");

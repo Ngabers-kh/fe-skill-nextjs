@@ -3,10 +3,10 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import Cookies from "js-cookie";
 import {
-  getAllBoardFreeLance,
-  getAllBoardLearning,
   deleteBoardFreeLance,
   deleteBoardLearning,
+  getAllBoardFreeLanceByUserId,
+  getAllBoardLearningByuserId,
 } from "../../services/api";
 
 type BoardFreeLance = {
@@ -55,12 +55,13 @@ export default function BoardPage() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const token = Cookies.get("token") || "";
+  const UserId = Cookies.get("userId") || "";
   const [boards, setBoards] = useState<UnifiedBoard[]>([]);
 
   const fetchBoards = async () => {
     try {
-      const dataFreeLance: BoardFreeLance[] = await getAllBoardFreeLance(token);
-      const dataLearning: BoardLearning[] = await getAllBoardLearning(token);
+      const dataFreeLance: BoardFreeLance[] = await getAllBoardFreeLanceByUserId(Number(UserId), token);
+      const dataLearning: BoardLearning[] = await getAllBoardLearningByuserId(Number(UserId), token);
 
       const mappedFL: UnifiedBoard[] = dataFreeLance.map((b) => ({
         id: `freelance-${b.id}`,
