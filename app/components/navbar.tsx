@@ -127,7 +127,10 @@ const Navbar = () => {
 
           {/* Modern Login Button */}
           <li>
-            <button className="group relative overflow-hidden bg-[#ffe600] text-[#043873] px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-400/30 active:scale-95 cursor-pointer">
+            <button
+              onClick={() => router.push("/auth")}
+              className="group relative overflow-hidden bg-[#ffe600] text-[#043873] px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-400/30 active:scale-95 cursor-pointer"
+            >
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               <span className="relative z-10 flex items-center gap-2">
                 Login
