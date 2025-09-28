@@ -27,7 +27,7 @@ export async function loginUser(email: string, password: string) {
   });
 
   if (!res.ok) throw new Error("Login gagal");
-  return res.json(); // { token, user }
+  return res.json();
 }
 
 // Get all skills
@@ -149,10 +149,93 @@ export async function getAllBoardFreeLance(token: string) {
   return res.json();
 }
 
+// Get all Boards Learning
 export async function getAllBoardLearning(token: string) {
   const res = await fetch(`${BASE_URL}/boardsLearning/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error("Gagal ambil boards Free Lance");
+  return res.json();
+}
+
+// Get all Boards Freelance by UserId
+export async function getAllBoardFreeLanceByUserId(userId: number, token: string) {
+  const res = await fetch(`${BASE_URL}/boardsFreeLance/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil boards Free Lance");
+  return res.json();
+}
+
+// GET board FreeLance by ID
+export async function fetchBoardFreeLanceById(id: Number, token: string) {
+  const res = await fetch(`${BASE_URL}/boardsFreeLance/board/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil board FreeLance");
+  return res.json();
+}
+
+// Get all Boards Learning by UserId
+export async function getAllBoardLearningByuserId(token: string) {
+  const res = await fetch(`${BASE_URL}/boardsLearning/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil boards Free Lance");
+  return res.json();
+}
+
+// GET board learning by ID
+export async function fetchBoardLearningById(id: Number, token: string) {
+  const res = await fetch(`${BASE_URL}/boardsLearning/board/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil board Learning");
+  return res.json();
+}
+
+// UPDATE board learning
+export async function updateBoardLearning(id: number, data: any, token: string) {
+  const res = await fetch(`${BASE_URL}/boardsLearning/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Gagal update board Learning");
+  return res.json();
+}
+
+// DELETE board learning
+export async function deleteBoardLearning(id: number, token: string) {
+  const res = await fetch(`${BASE_URL}/boardsLearning/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal delete board Learning");
+  return res.json();
+}
+
+export async function updateBoardFreeLance(id: number, data: any, token: string) {
+  const res = await fetch(`${BASE_URL}/boardsFreeLance/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Gagal update board Freelance");
+  return res.json();
+}
+
+export async function deleteBoardFreeLance(id: number, token: string) {
+  const res = await fetch(`${BASE_URL}/boardsFreeLance/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal delete board Freelance");
   return res.json();
 }

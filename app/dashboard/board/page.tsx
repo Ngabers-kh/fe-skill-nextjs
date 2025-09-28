@@ -2,7 +2,12 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import Cookies from "js-cookie";
-import { getAllBoardFreeLance, getAllBoardLearning } from "../../services/api";
+import {
+  getAllBoardFreeLance,
+  getAllBoardLearning,
+  deleteBoardFreeLance,
+  deleteBoardLearning,
+} from "../../services/api";
 
 type BoardFreeLance = {
   id: number;
@@ -15,6 +20,7 @@ type BoardFreeLance = {
   startDate: string;
   endDate: string;
   iduser: number;
+  users?: { name: string };
 };
 
 type BoardLearning = {
@@ -28,10 +34,11 @@ type BoardLearning = {
   endDate: string;
   date: string;
   iduser: number;
+  users?: { name: string };
 };
 
 type UnifiedBoard = {
-  id: number;
+  id: string; // format: "freelance-12" / "learning-7"
   category: "Learning" | "Freelance";
   title: string;
   description: string;
@@ -50,37 +57,38 @@ export default function BoardPage() {
   const token = Cookies.get("token") || "";
   const [boards, setBoards] = useState<UnifiedBoard[]>([]);
 
+  const fetchBoards = async () => {
+    try {
+      const dataFreeLance: BoardFreeLance[] = await getAllBoardFreeLance(token);
+      const dataLearning: BoardLearning[] = await getAllBoardLearning(token);
+
+      const mappedFL: UnifiedBoard[] = dataFreeLance.map((b) => ({
+        id: `freelance-${b.id}`,
+        category: "Freelance",
+        title: b.title,
+        description: b.description,
+        skills: b.skills || [],
+        status: b.status,
+        organizer: b.users ? b.users.name : `User ${b.iduser}`,
+      }));
+
+      const mappedL: UnifiedBoard[] = dataLearning.map((b) => ({
+        id: `learning-${b.id}`,
+        category: "Learning",
+        title: b.title,
+        description: b.description,
+        skills: b.skills || [],
+        status: b.status,
+        organizer: b.users ? b.users.name : `User ${b.iduser}`,
+      }));
+
+      setBoards([...mappedFL, ...mappedL]);
+    } catch (err) {
+      console.error("Error fetch Boards:", err);
+    }
+  };
+
   useEffect(() => {
-    const fetchBoards = async () => {
-      try {
-        const dataFreeLance: BoardFreeLance[] = await getAllBoardFreeLance(token);
-        const dataLearning: BoardLearning[] = await getAllBoardLearning(token);
-
-        const mappedFL: UnifiedBoard[] = dataFreeLance.map((b) => ({
-          id: b.id,
-          category: "Freelance",
-          title: b.title,
-          description: b.description,
-          skills: b.skills || [],
-          status: b.status,
-          organizer: `User ${b.iduser}`, // sementara pake iduser
-        }));
-
-        const mappedL: UnifiedBoard[] = dataLearning.map((b) => ({
-          id: b.id,
-          category: "Learning",
-          title: b.title,
-          description: b.description,
-          skills: b.skills || [],
-          status: b.status,
-          organizer: `User ${b.iduser}`,
-        }));
-
-        setBoards([...mappedFL, ...mappedL]);
-      } catch (err) {
-        console.error("Error fetch Boards:", err);
-      }
-    };
     if (token) fetchBoards();
   }, [token]);
 
@@ -109,6 +117,31 @@ export default function BoardPage() {
 
   const goToPage = (page: number) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
+
+  // Delete handler
+  const handleDelete = async (board: UnifiedBoard) => {
+    const confirmDelete = window.confirm(
+      `Yakin mau hapus board "${board.id}"?`
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const [prefix, rawId] = board.id.split("-");
+      const realId = Number(rawId);
+      console.log("Hapus board:", realId);
+
+      if (prefix === "freelance") {
+        await deleteBoardFreeLance(realId, token);
+      } else {
+        await deleteBoardLearning(realId, token);
+      }
+
+      fetchBoards();
+    } catch (err) {
+      console.error("Error delete board:", err);
+      alert("Gagal hapus board, cek console");
+    }
   };
 
   return (
@@ -204,14 +237,22 @@ export default function BoardPage() {
             {/* Action Buttons */}
             <div className="mt-auto flex justify-end gap-2">
               <button
-                onClick={() =>
-                  router.push(`/dashboard/board/${project.id}/edit`)
-                }
+                onClick={() => {
+                  const [prefix, rawId] = project.id.split("-");
+                  if (prefix === "freelance") {
+                    router.push(`/dashboard/board/${rawId}/edit/freelance`);
+                  } else {
+                    router.push(`/dashboard/board/${rawId}/edit/learning`);
+                  }
+                }}
                 className="px-3 py-1 text-sm bg-yellow-400 hover:bg-yellow-500 text-white rounded-lg font-medium"
               >
                 Edit
               </button>
-              <button className="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium">
+              <button
+                onClick={() => handleDelete(project)}
+                className="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium"
+              >
                 Hapus
               </button>
             </div>
