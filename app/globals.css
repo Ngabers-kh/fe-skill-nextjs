@@ -29,20 +29,258 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Optional: Custom scrollbar untuk feel yang lebih modern */
+/* Enhanced Global Styles */
+
+/* Modern Checkbox Styles */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: white;
+  flex-shrink: 0;
+}
+
+/* Checkbox Hover State */
+input[type="checkbox"]:hover {
+  border-color: #3b82f6;
+  background-color: #f8fafc;
+  transform: scale(1.05);
+}
+
+/* Checkbox Focus State */
+input[type="checkbox"]:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Checkbox Checked State */
+input[type="checkbox"]:checked {
+  border-color: #2563eb;
+  background-color: #2563eb;
+  background-image: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+/* Checkmark Icon */
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  width: 0.375rem;
+  height: 0.75rem;
+  border: solid white;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg) translate(-10%, -20%);
+  opacity: 1;
+  animation: checkmark-appear 0.2s ease-in-out;
+}
+
+/* Checkmark Animation */
+@keyframes checkmark-appear {
+  0% {
+    opacity: 0;
+    transform: rotate(45deg) translate(-10%, -20%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(45deg) translate(-10%, -20%) scale(1);
+  }
+}
+
+/* Label Text Animation */
+input[type="checkbox"]:checked + span {
+  color: #2563eb;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Disabled State */
+input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input[type="checkbox"]:disabled:hover {
+  transform: none;
+  border-color: #d1d5db;
+}
+
+/* Enhanced Form Input Styles */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f8fafc;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ffe600;
-  border-radius: 4px;
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ffd700;
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+}
+
+/* Loading Animation */
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Card Shadow Enhancement */
+.card-shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.card-shadow-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-shadow-hover:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Button Animation Enhancement */
+.btn-scale {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-scale:hover {
+  transform: scale(1.05);
+}
+
+.btn-scale:active {
+  transform: scale(0.98);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth Page Transitions */
+.page-transition {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Dropdown Animation */
+.dropdown-enter {
+  animation: dropdownSlideIn 0.3s ease-out;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Success Notification */
+.notification-success {
+  animation: notificationSlideIn 0.3s ease-out;
+}
+
+@keyframes notificationSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Mobile Responsive Enhancements */
+@media (max-width: 640px) {
+  input[type="checkbox"] {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  input[type="checkbox"]:checked::after {
+    width: 0.3rem;
+    height: 0.6rem;
+  }
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+  input[type="checkbox"] {
+    border-color: #4b5563;
+    background-color: #1f2937;
+  }
+
+  input[type="checkbox"]:hover {
+    background-color: #374151;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1f2937;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #4b5563, #6b7280);
+  }
 }

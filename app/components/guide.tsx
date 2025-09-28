@@ -41,7 +41,7 @@ const Guide = () => {
   return (
     <div
       id="guide"
-      className="relative w-full min-h-screen bg-[#F9FAFB] py-30 overflow-hidden"
+      className="relative w-full min-h-screen bg-[#F9FAFB] py-15 overflow-hidden flex-col items-center justify-center"
     >
       {/* Gambar kiri atas */}
       <Image
@@ -108,7 +108,7 @@ const Guide = () => {
                 initial="hidden"
                 whileInView="show"
                 viewport={{ amount: 0.2 }}
-                className={`relative w-5/12 p-6 bg-white/70 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 ${
+                className={`relative w-5/12 p-6 bg-white/70 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition-transform duration-100 hover:-translate-y-1 ${
                   index % 2 === 0 ? "text-right" : "text-left"
                 }`}
               >

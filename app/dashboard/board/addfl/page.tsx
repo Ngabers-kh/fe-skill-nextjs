@@ -171,7 +171,7 @@ export default function AddBoardFreelancePage() {
               name="startDate"
               value={form.startDate}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 text-gray-400"
             />
           </div>
           <div>
@@ -183,7 +183,7 @@ export default function AddBoardFreelancePage() {
               name="endDate"
               value={form.endDate}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 text-gray-400"
             />
           </div>
         </div>
@@ -201,7 +201,7 @@ export default function AddBoardFreelancePage() {
                 onClick={() => toggleSkill(skill.idSkill)}
                 className={`px-3 py-1 rounded-full border text-sm ${
                   selectedSkills.includes(skill.idSkill)
-                    ? "bg-blue-500 text-white border-blue-500"
+                    ? "bg-blue-100 text-[rgb(2,44,92)] border-blue-500"
                     : "bg-gray-100 text-gray-700 border-gray-300"
                 }`}
               >

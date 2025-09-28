@@ -2,19 +2,9 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-const fadeInLeft = {
-  hidden: { opacity: 0, x: -60 },
-  show: { opacity: 1, x: 0, transition: { duration: 1 } },
-};
-
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
   show: { opacity: 1, y: 0, transition: { duration: 1 } },
-};
-
-const fadeInRight = {
-  hidden: { opacity: 0, x: 60 },
-  show: { opacity: 1, x: 0, transition: { duration: 1 } },
 };
 
 interface Testimonial {
@@ -53,7 +43,7 @@ export default function TestimonialSection() {
   return (
     <section
       id="testimoni"
-      className="py-45 bg-[#F9FAFB] relative overflow-hidden"
+      className="py-15 md:py-45 bg-[#F9FAFB] relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
         {/* Title */}
@@ -62,7 +52,7 @@ export default function TestimonialSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ amount: 0.2 }}
-          className="text-4xl md:text-5xl font-extrabold mb-26 text-black/70"
+          className="text-4xl md:text-5xl font-extrabold mb-15 md:mb-26 text-black/70"
         >
           What Our{" "}
           <span className="bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] bg-clip-text text-transparent">
@@ -72,18 +62,15 @@ export default function TestimonialSection() {
 
         {/* Cards */}
         <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {testimonials.map((item, index) => {
-            const variant =
-              index === 0 ? fadeInLeft : index === 1 ? fadeInUp : fadeInRight;
-
+          {testimonials.map((item) => {
             return (
               <motion.div
                 key={item.id}
-                variants={variant}
+                variants={fadeInUp}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ amount: 0.2 }}
-                className="relative rounded-2xl bg-white/80 backdrop-blur-md shadow-lg p-8 flex flex-col items-start hover:scale-105 transition-transform duration-300 hover:shadow-2xl"
+                className="relative rounded-2xl bg-white/80 backdrop-blur-md shadow-lg p-8 flex flex-col items-start hover:scale-105 hover:shadow-2xl"
               >
                 {/* Quote icon */}
                 <div className="absolute top-6 right-6 text-6xl font-serif text-[rgb(2,44,92)]/30 select-none">

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Navbar = () => {
   const router = useRouter();
@@ -85,10 +86,7 @@ const Navbar = () => {
           onClick={() => smoothScrollTo("home")}
         >
           <div className="relative">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#ffe600] to-yellow-400 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-              <Sparkles className="w-5 h-5 text-[#043873]" />
-            </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-[rgb(2,44,92)] animate-pulse"></div>
+            <Image src="/logo.png" alt="Logo" width={50} height={50} />
           </div>
           <h1 className="text-2xl text-white font-black tracking-tight group-hover:text-yellow-300 transition-colors duration-300">
             Skillearn
@@ -101,7 +99,7 @@ const Navbar = () => {
             <li key={item.id} className="relative group">
               <button
                 onClick={() => smoothScrollTo(item.id)}
-                className={`relative text-sm font-medium transition-all duration-300 ${
+                className={`relative text-sm font-medium transition-all duration-300 hover:cursor-pointer ${
                   activeSection === item.id
                     ? "text-yellow-300"
                     : "text-white/80 hover:text-white"
@@ -118,9 +116,9 @@ const Navbar = () => {
                 ></span>
 
                 {/* Active indicator dot */}
-                {activeSection === item.id && (
+                {/* {activeSection === item.id && (
                   <span className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-yellow-300 rounded-full animate-pulse"></span>
-                )}
+                )} */}
               </button>
               {/* Hover glow effect */}
               <div className="absolute -inset-2 bg-white/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
@@ -129,11 +127,14 @@ const Navbar = () => {
 
           {/* Modern Login Button */}
           <li>
-            <button className="group relative overflow-hidden bg-[#ffe600] text-[#043873] px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-400/30 active:scale-95 cursor-pointer">
+            <button
+              onClick={() => router.push("/auth")}
+              className="group relative overflow-hidden bg-[#ffe600] text-[#043873] px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-400/30 active:scale-95 cursor-pointer"
+            >
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               <span className="relative z-10 flex items-center gap-2">
                 Login
-                <div className="w-1.5 h-1.5 bg-[#043873] rounded-full group-hover:animate-bounce"></div>
+                {/* <div className="w-1.5 h-1.5 bg-[#043873] rounded-full group-hover:animate-bounce"></div> */}
               </span>
             </button>
           </li>
@@ -180,13 +181,13 @@ const Navbar = () => {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <span className="font-medium">{item.label}</span>
-              <div
+              {/* <div
                 className={`ml-auto w-2 h-2 rounded-full transition-all duration-300 ${
                   activeSection === item.id
                     ? "bg-yellow-300 opacity-100"
                     : "bg-yellow-300 opacity-0 group-hover:opacity-100"
                 }`}
-              ></div>
+              ></div> */}
             </button>
           ))}
 

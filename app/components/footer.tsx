@@ -45,30 +45,15 @@ export default function Footer() {
         <hr className="border-gray-600 mt-8 mb-6" />
 
         {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-gray-300 text-sm gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-center text-gray-300 text-xs md:text-sm gap-4">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <Globe size={16} />
               <span>English</span>
             </div>
             <a>Terms & privacy</a>
-            <a>Security</a>
-            <a>Status</a>
             <p>©2025 Ngabers Bandung</p>
           </div>
-
-          {/* Social Icons */}
-          {/* <div className="flex gap-4 text-lg">
-            <a href="#">
-              <FaFacebookF />
-            </a>
-            <a href="#">
-              <FaTwitter />
-            </a>
-            <a href="#">
-              <FaLinkedinIn />
-            </a>
-          </div> */}
         </div>
       </div>
     </footer>

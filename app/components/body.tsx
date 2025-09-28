@@ -12,7 +12,7 @@ const Body = () => {
   return (
     <div
       id="about"
-      className="relative w-full min-h-screen bg-[#F9FAFB] pb-16 pt-32 overflow-hidden"
+      className="relative w-full min-h-screen bg-[#F9FAFB] pb-7 pt-15 md:pt-32 overflow-hidden"
     >
       {/* Gambar kiri atas */}
       <Image
@@ -56,7 +56,7 @@ const Body = () => {
               Career Growth
             </span>
           </h2>
-          <p className="text-gray-600 mb-6 max-w-md text-lg">
+          <p className="text-gray-600 mb-0 md:mb-6 max-w-md text-lg">
             A trusted platform that empowers learning and connects learners with
             organizers and opportunities, shaping a generation that is
             job-ready, competitive, and impactful for society.
@@ -86,9 +86,13 @@ const Body = () => {
           viewport={{ amount: 0.2 }}
           className="flex justify-center items-center"
         >
-          <div className="w-[350px] h-[220px] bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] rounded-2xl shadow-lg flex items-center justify-center hover:rotate-3 transition-transform duration-300">
-            <span className="text-white font-bold text-xl">✨ Gen Z Vibes</span>
-          </div>
+          <Image
+            src="/work-together.png"
+            alt="Work Together"
+            width={290}
+            height={160}
+            className="object-contain hover:rotate-3 transition-transform duration-300"
+          />
         </motion.div>
 
         {/* Right Bottom */}
