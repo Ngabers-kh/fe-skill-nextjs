@@ -70,11 +70,11 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#F9FAFB] flex items-center justify-center">
-      <div className="bg-white shadow-xl rounded-2xl w-full max-w-4xl overflow-hidden">
+    <div className="w-full min-h-screen bg-[#F9FAFB] flex items-center justify-center py-7 md:py-6 overflow-y-auto">
+      <div className="bg-white shadow-xl rounded-2xl w-full max-w-6xl">
         {/* Header Section */}
-        <div className="relative h-32 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)]">
-          <div className="absolute -bottom-12 left-6 flex items-center gap-4">
+        <div className="relative h-32 bg-gradient-to-l to-blue-600 from-[rgb(2,44,92)]">
+          <div className="absolute -bottom-12 left-6 md:left-12 flex items-center gap-4">
             <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg bg-gray-200 flex items-center justify-center overflow-hidden">
               {user.photo ? (
                 <Image
@@ -100,7 +100,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Content Section */}
-        <div className="pt-16 px-6 md:px-10 pb-8 space-y-6">
+        <div className="pt-16 px-6 md:px-40 pb-8 space-y-6">
           {/* Address */}
           <div>
             <h2 className="text-sm font-semibold text-gray-500">Address</h2>
@@ -121,7 +121,7 @@ export default function ProfilePage() {
                 skills.map((skill) => (
                   <span
                     key={skill.idSkill}
-                    className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                    className="px-3 py-1 bg-blue-100 text-[rgb(2,44,92)] rounded-full text-sm font-medium"
                   >
                     {skill.nameSkill}
                   </span>
@@ -136,7 +136,7 @@ export default function ProfilePage() {
           <div className="flex justify-end">
             <button
               onClick={() => router.push("/dashboard/profile/edit")}
-              className="px-5 py-2.5 bg-[rgb(2,44,92)] text-white rounded-lg shadow-md hover:bg-blue-800 transition"
+              className="px-5 py-2.5 bg-[rgb(2,44,92)] text-white rounded-lg shadow-md hover:bg-blue-800 transition cursor-pointer"
             >
               Edit Profile
             </button>

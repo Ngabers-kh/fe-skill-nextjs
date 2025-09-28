@@ -53,7 +53,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Sticky Logout */}
-        <div className="sticky bottom-0 bg-gray-800 pb-4">
+        <div className="sticky bottom-0">
           <button
             onClick={handleLogout}
             className="w-full px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition"
@@ -107,7 +107,7 @@ export default function DashboardLayout({
                 ))}
               </nav>
 
-              <div className="mt-auto bg-gray-800 pb-4">
+              <div className="mt-auto">
                 <button
                   onClick={handleLogout}
                   className="w-full px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition"
@@ -169,7 +169,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Konten di bawah topbar */}
-        <div className="pt-13 px-3">{children}</div>
+        <div className="pt-13 md:pt-0 px-3">{children}</div>
       </main>
     </div>
   );

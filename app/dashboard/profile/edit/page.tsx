@@ -3,7 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { getUser, getUserSkill, updateUser } from "../../../services/api";
+import {
+  getUser,
+  getUserSkill,
+  updateUser,
+  getAllSkills,
+} from "../../../services/api";
 
 interface User {
   id?: number;
@@ -29,28 +34,27 @@ export default function EditProfilePage() {
     photo: null,
   });
   const [skills, setSkills] = useState<Skill[]>([]);
+  const [allSkills, setAllSkills] = useState<Skill[]>([]);
+  const [selectedSkill, setSelectedSkill] = useState<number | "">("");
   const [loading, setLoading] = useState(true);
 
-  // ambil token & userId dari cookie
   const token = Cookies.get("token") || "";
   const userId = Cookies.get("userId") || "";
 
   useEffect(() => {
     async function fetchData() {
       try {
-        if (!userId || !token) {
-          throw new Error("Token atau userId tidak ditemukan di cookie");
-        }
+        if (!userId || !token) throw new Error("Token/userId tidak ditemukan");
 
-        const [userData, skillData] = await Promise.all([
+        const [userData, skillData, masterSkills] = await Promise.all([
           getUser(Number(userId), token),
           getUserSkill(Number(userId), token),
+          getAllSkills(token),
         ]);
 
         setForm(userData);
         setSkills(skillData);
-        console.log("Data user:", userData);
-        console.log("Data skill:", skillData);
+        setAllSkills(masterSkills);
       } catch (err) {
         console.error("Gagal ambil data:", err);
       } finally {
@@ -61,29 +65,43 @@ export default function EditProfilePage() {
     fetchData();
   }, [userId, token]);
 
-  // handle perubahan input
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // handle save (PATCH API)
+  // tambah skill dari select
+  const handleAddSkill = () => {
+    if (!selectedSkill) return;
+    const skillObj = allSkills.find((s) => s.idSkill === Number(selectedSkill));
+    if (!skillObj) return;
+
+    // cek biar ga duplicate
+    if (skills.some((s) => s.idSkill === skillObj.idSkill)) {
+      alert("Skill sudah ada");
+      return;
+    }
+
+    setSkills([...skills, skillObj]);
+    setSelectedSkill("");
+  };
+
+  // hapus skill
+  const handleRemoveSkill = (id: number) => {
+    setSkills(skills.filter((s) => s.idSkill !== id));
+  };
+
+  // save
   const handleSave = async () => {
     try {
-      if (!userId || !token) {
-        throw new Error("Token atau userId tidak ada");
-      }
+      if (!userId || !token) throw new Error("Token/userId tidak ada");
 
-      const updated = await updateUser(Number(userId), token, {
-        name: form.name,
-        address: form.address,
-        job: form.job,
-        bio: form.bio,
-        photo: form.photo,
+      await updateUser(Number(userId), token, {
+        ...form,
+        skillIds: skills.map((s) => s.idSkill), // kirim ID skill ke backend
       });
 
-      console.log("User berhasil diupdate:", updated);
       alert("Profile updated!");
       router.push("/dashboard/profile");
     } catch (err) {
@@ -101,13 +119,14 @@ export default function EditProfilePage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8">
-        <h1 className="text-xl font-bold text-gray-800 mb-6">Edit Profile</h1>
+    <div className="w-full min-h-screen bg-gray-50 flex items-center justify-center py-7 md:py-6">
+      <div className="bg-white shadow-md rounded-2xl w-full max-w-2xl p-8">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">Edit Profile</h1>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
+          {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-700">
               Name
             </label>
             <input
@@ -115,11 +134,13 @@ export default function EditProfilePage() {
               name="name"
               value={form.name || ""}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 border rounded-md text-gray-600"
+              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-500"
             />
           </div>
+
+          {/* Address */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-700">
               Address
             </label>
             <input
@@ -127,11 +148,13 @@ export default function EditProfilePage() {
               name="address"
               value={form.address || ""}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 border rounded-md text-gray-600"
+              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-500"
             />
           </div>
+
+          {/* Job */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-700">
               Job
             </label>
             <input
@@ -139,55 +162,85 @@ export default function EditProfilePage() {
               name="job"
               value={form.job || ""}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 border rounded-md text-gray-600"
+              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-500"
             />
           </div>
+
+          {/* Bio */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-700">
               Bio
             </label>
             <textarea
               name="bio"
               value={form.bio || ""}
               onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 border rounded-md text-gray-600"
               rows={3}
+              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-500"
             />
           </div>
 
-          {/* Skills (readonly dulu) */}
+          {/* Skills */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-700">
               Skills
             </label>
-            <div className="flex flex-wrap gap-2 mt-1">
+            <div className="flex flex-wrap gap-2 mt-2">
               {skills.length > 0 ? (
                 skills.map((skill) => (
                   <span
                     key={skill.idSkill}
-                    className="px-3 py-1 bg-gray-200 rounded-full text-sm text-gray-700"
+                    className="relative px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center"
                   >
                     {skill.nameSkill}
+                    <button
+                      onClick={() => handleRemoveSkill(skill.idSkill)}
+                      className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full bg-red-500 text-white text-xs hover:bg-red-600"
+                    >
+                      -
+                    </button>
                   </span>
                 ))
               ) : (
-                <p className="text-gray-600">Belum ada skill</p>
+                <p className="text-gray-500">Belum ada skill</p>
               )}
+            </div>
+
+            {/* Pilih skill dari dropdown */}
+            <div className="flex mt-3 gap-2">
+              <select
+                value={selectedSkill}
+                onChange={(e) => setSelectedSkill(e.target.value as any)}
+                className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-500"
+              >
+                <option value="">Pilih skill...</option>
+                {allSkills.map((skill) => (
+                  <option key={skill.idSkill} value={skill.idSkill}>
+                    {skill.nameSkill}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={handleAddSkill}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Add
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Tombol aksi */}
-        <div className="mt-6 flex justify-end gap-3">
+        {/* Action buttons */}
+        <div className="mt-8 flex justify-end gap-3">
           <button
             onClick={() => router.push("/dashboard/profile")}
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
           >
             Save
           </button>
