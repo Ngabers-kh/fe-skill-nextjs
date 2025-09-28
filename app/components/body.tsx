@@ -86,9 +86,13 @@ const Body = () => {
           viewport={{ amount: 0.2 }}
           className="flex justify-center items-center"
         >
-          <div className="w-[350px] h-[220px] bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] rounded-2xl shadow-lg flex items-center justify-center hover:rotate-3 transition-transform duration-300">
-            <span className="text-white font-bold text-xl">✨ Gen Z Vibes</span>
-          </div>
+          <Image
+            src="/work-together.png"
+            alt="Work Together"
+            width={290}
+            height={160}
+            className="object-contain hover:rotate-3 transition-transform duration-300"
+          />
         </motion.div>
 
         {/* Right Bottom */}

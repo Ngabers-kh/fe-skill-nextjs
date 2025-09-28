@@ -55,7 +55,7 @@ const Header = () => {
             >
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               <span className="relative z-10 group-hover:text-[#043873] transition-colors duration-300">
-                Try Now ✨
+                Try Now
               </span>
             </button>
           </div>
@@ -71,14 +71,6 @@ const Header = () => {
           <div className="relative group">
             {/* Glassmorphism card wrapper */}
             <div className="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20 shadow-2xl transform group-hover:scale-105 transition-transform duration-500 z-10"></div>
-
-            {/* Floating badges (z-30 biar paling atas) */}
-            <div className="absolute -top-4 -left-4 bg-yellow-200 text-[#043873] px-3 py-2 rounded-xl font-bold text-sm shadow-lg animate-bounce z-30">
-              🚀 New!
-            </div>
-            <div className="absolute -bottom-4 -right-4 bg-white/20 backdrop-blur-sm border border-white/30 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-lg z-30 animate-pulse">
-              💯 Success Rate
-            </div>
 
             {/* Image */}
             <img

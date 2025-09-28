@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { getUser, getUserSkill } from "../../services/api";
+import Image from "next/image";
 
 interface User {
   id?: number;
@@ -25,7 +26,6 @@ export default function ProfilePage() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // ambil token & userId dari cookie
   const token = Cookies.get("token") || "";
   const userId = Cookies.get("userId") || "";
 
@@ -36,7 +36,6 @@ export default function ProfilePage() {
           throw new Error("Token atau userId tidak ditemukan di cookie");
         }
 
-        // ambil data user & skill paralel
         const [userData, skillData] = await Promise.all([
           getUser(Number(userId), token),
           getUserSkill(Number(userId), token),
@@ -44,8 +43,6 @@ export default function ProfilePage() {
 
         setUser(userData);
         setSkills(skillData);
-        console.log("Data user:", userData);
-        console.log("Data skill:", skillData);
       } catch (err) {
         console.error("Gagal ambil data:", err);
       } finally {
@@ -58,7 +55,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen flex items-center justify-center">
+      <div className="w-full min-h-screen flex items-center justify-center text-gray-600">
         Loading...
       </div>
     );
@@ -66,54 +63,65 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="w-full min-h-screen flex items-center justify-center">
+      <div className="w-full min-h-screen flex items-center justify-center text-gray-600">
         User tidak ditemukan
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#F9FAFB] flex items-center justify-center px-1 my-3">
-      <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8">
-        {/* Foto dan Nama */}
-        <div className="flex items-center gap-6 mb-6">
-          <div className="w-24 h-24 rounded-full bg-red-500 flex items-center justify-center text-white text-lg font-bold">
-            {user.photo ? (
-              <img
-                src={user.photo}
-                alt="Profile"
-                className="w-24 h-24 rounded-full object-cover"
-              />
-            ) : (
-              user?.name?.charAt(0) || "?"
-            )}
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">
-              {user?.name || "No Name"}
-            </h1>
-            <p className="text-gray-600">{user?.job || "No Job"}</p>
+    <div className="w-full min-h-screen bg-[#F9FAFB] flex items-center justify-center">
+      <div className="bg-white shadow-xl rounded-2xl w-full max-w-4xl overflow-hidden">
+        {/* Header Section */}
+        <div className="relative h-32 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)]">
+          <div className="absolute -bottom-12 left-6 flex items-center gap-4">
+            <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg bg-gray-200 flex items-center justify-center overflow-hidden">
+              {user.photo ? (
+                <Image
+                  src={user.photo}
+                  alt="Profile"
+                  width={96}
+                  height={96}
+                  className="object-cover rounded-full"
+                />
+              ) : (
+                <span className="text-2xl font-bold text-gray-700">
+                  {user?.name?.charAt(0) || "?"}
+                </span>
+              )}
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-100 pb-2">
+                {user?.name || "No Name"}
+              </h1>
+              <p className="text-gray-600 pb-2">{user?.job || "No Job"}</p>
+            </div>
           </div>
         </div>
 
-        {/* Info */}
-        <div className="space-y-3">
+        {/* Content Section */}
+        <div className="pt-16 px-6 md:px-10 pb-8 space-y-6">
+          {/* Address */}
           <div>
             <h2 className="text-sm font-semibold text-gray-500">Address</h2>
             <p className="text-gray-800">{user?.address || "-"}</p>
           </div>
+
+          {/* Bio */}
           <div>
             <h2 className="text-sm font-semibold text-gray-500">Bio</h2>
             <p className="text-gray-800">{user?.bio || "-"}</p>
           </div>
+
+          {/* Skills */}
           <div>
             <h2 className="text-sm font-semibold text-gray-500">Skills</h2>
-            <div className="flex flex-wrap gap-2 mt-1">
+            <div className="flex flex-wrap gap-2 mt-2">
               {skills.length > 0 ? (
                 skills.map((skill) => (
                   <span
                     key={skill.idSkill}
-                    className="px-3 py-1 bg-gray-200 rounded-full text-sm text-gray-700"
+                    className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
                   >
                     {skill.nameSkill}
                   </span>
@@ -123,16 +131,16 @@ export default function ProfilePage() {
               )}
             </div>
           </div>
-        </div>
 
-        {/* Tombol Edit */}
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={() => router.push("/dashboard/profile/edit")}
-            className="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600"
-          >
-            Edit Profile
-          </button>
+          {/* Edit Button */}
+          <div className="flex justify-end">
+            <button
+              onClick={() => router.push("/dashboard/profile/edit")}
+              className="px-5 py-2.5 bg-[rgb(2,44,92)] text-white rounded-lg shadow-md hover:bg-blue-800 transition"
+            >
+              Edit Profile
+            </button>
+          </div>
         </div>
       </div>
     </div>
