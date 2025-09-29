@@ -48,8 +48,11 @@ export default function BoardPage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
+      <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-[rgb(2,44,92)] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600 font-medium">Loading your boards...</p>
+        </div>
       </div>
     );
   }
@@ -95,6 +98,14 @@ export default function BoardPage() {
               board={board}
               deleting={deleting}
               onDelete={handleDelete}
+              onEdit={(board) => {
+                const [prefix, rawId] = board.id.split("-");
+                if (prefix === "freelance") {
+                  router.push(`/dashboard/board/${rawId}/edit/freelance`);
+                } else {
+                  router.push(`/dashboard/board/${rawId}/edit/learning`);
+                }
+              }}
             />
           ))}
           {paginatedBoards.length === 0 && (

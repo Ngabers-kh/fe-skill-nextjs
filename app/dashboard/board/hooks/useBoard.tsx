@@ -30,8 +30,8 @@ export type BoardLearning = {
   price: number;
   skills: string[];
   status: string;
-  startDate: string;
-  endDate: string;
+  startTime: string;
+  endTime: string;
   date: string;
   iduser: number;
   users?: { name: string };
@@ -45,6 +45,17 @@ export type UnifiedBoard = {
   skills: string[];
   status: string;
   organizer: string;
+  price: number;
+
+  // freelance specific
+  startDate?: string;
+  endDate?: string;
+  quota?: number;
+
+  // learning specific
+  date?: string;
+  startTime?: string;
+  endTime?: string;
 };
 
 export function useBoards() {
@@ -73,6 +84,10 @@ export function useBoards() {
         skills: b.skills || [],
         status: b.status,
         organizer: b.users ? b.users.name : `User ${b.iduser}`,
+        price: b.price,
+        startDate: b.startDate,
+        endDate: b.endDate,
+        quota: b.quota,
       }));
 
       const mappedL: UnifiedBoard[] = dataLearning.map((b) => ({
@@ -83,6 +98,10 @@ export function useBoards() {
         skills: b.skills || [],
         status: b.status,
         organizer: b.users ? b.users.name : `User ${b.iduser}`,
+        price: b.price,
+        date: b.date,
+        startTime: b.startTime,
+        endTime: b.endTime,
       }));
 
       setBoards([...mappedFL, ...mappedL]);
