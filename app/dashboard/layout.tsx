@@ -15,6 +15,9 @@ import {
   LogOut,
 } from "lucide-react";
 
+// Define the sidebar width for use in Tailwind CSS and calculations
+const DESKTOP_SIDEBAR_WIDTH = "w-80"; // w-80 is 320px
+
 export default function DashboardLayout({
   children,
 }: {
@@ -24,11 +27,15 @@ export default function DashboardLayout({
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  // NOTE: This state is key for client-only rendering portions like motion.div
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
     setDropdownOpen(false);
+    // You might also want to close the mobile sidebar on navigation
+    setIsOpen(false);
   }, [pathname]);
 
   const menus = [
@@ -65,6 +72,7 @@ export default function DashboardLayout({
   ];
 
   const handleLogout = () => {
+    // NOTE: This check ensures localStorage is only accessed on the client.
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
       router.push("/auth");
@@ -72,6 +80,7 @@ export default function DashboardLayout({
   };
 
   const SidebarContent = ({ isMobile = false }) => (
+    // This div needs to be consistent between server and client
     <div className="flex flex-col h-full">
       {/* Header */}
       <div
@@ -116,7 +125,7 @@ export default function DashboardLayout({
                     : "text-blue-100 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                {/* Active indicator (client-only) */}
+                {/* Active indicator (ONLY rendered on client when isClient is true) */}
                 {isClient && isActive && (
                   <motion.div
                     className="absolute left-0 top-0 bottom-0 w-1 bg-white rounded-r-full"
@@ -186,15 +195,19 @@ export default function DashboardLayout({
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-80 bg-gradient-to-br bg-[rgb(2,44,92)] text-white flex-col p-6 shadow-2xl relative overflow-hidden">
+    // 1. Removed 'flex' from the top-level div
+    <div className="min-h-screen bg-gray-50">
+      {/* Desktop Sidebar (FIXED) */}
+      <aside
+        // 2. Added 'lg:fixed', 'lg:inset-y-0', 'lg:left-0', 'h-screen'
+        className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex ${DESKTOP_SIDEBAR_WIDTH} h-screen bg-gradient-to-br bg-[rgb(2,44,92)] text-white flex-col p-6 shadow-2xl relative overflow-hidden z-20`}
+      >
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
         <SidebarContent isMobile={false} />
       </aside>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile Sidebar Overlay (Unchanged) */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -220,33 +233,44 @@ export default function DashboardLayout({
         )}
       </AnimatePresence>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-h-screen">
-        {/* Top Nav (Mobile) */}
+      {/* Main Content Container */}
+      {/* 3. Added 'lg:ml-80' to account for the fixed sidebar's width */}
+      <main className={`lg:ml-80 flex-1 flex flex-col min-h-screen`}>
+        {/* Top Nav (Mobile) */}{" "}
         <header className="lg:hidden sticky top-0 z-30 bg-[rgb(2,44,92)] backdrop-blur-md border-b border-gray-200/80 shadow-sm">
+          {" "}
           <div className="flex items-center justify-between px-4 py-3">
+            {" "}
             <div className="flex items-center gap-4">
+              {" "}
               <button
                 onClick={() => setIsOpen(true)}
                 className="p-2 text-white/95 hover:bg-white/10 rounded-xl transition-colors active:scale-95"
               >
-                <TwoLineHamburger />
-              </button>
-              <h1 className="font-bold text-white/95 text-lg">Skillearn</h1>
-            </div>
+                {" "}
+                <TwoLineHamburger />{" "}
+              </button>{" "}
+              <h1 className="font-bold text-white/95 text-lg">
+                Skillearn
+              </h1>{" "}
+            </div>{" "}
             <div className="flex items-center gap-3">
+              {" "}
               <div className="relative">
+                {" "}
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex items-center gap-2 p-2 hover:bg-white/10 rounded-xl transition-colors"
                 >
+                  {" "}
                   <div className="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center">
-                    <User size={16} className="text-white" />
-                  </div>
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                </button>
-
+                    {" "}
+                    <User size={16} className="text-white" />{" "}
+                  </div>{" "}
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>{" "}
+                </button>{" "}
                 <AnimatePresence>
+                  {" "}
                   {dropdownOpen && (
                     <motion.div
                       initial={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -259,33 +283,43 @@ export default function DashboardLayout({
                       }}
                       className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100/80 overflow-hidden z-50"
                     >
+                      {" "}
                       <div className="bg-gradient-to-r bg-[rgb(2,44,92)] px-4 py-3">
+                        {" "}
                         <div className="flex items-center gap-3">
+                          {" "}
                           <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                            <User size={18} className="text-white" />
-                          </div>
+                            {" "}
+                            <User size={18} className="text-white" />{" "}
+                          </div>{" "}
                           <div>
+                            {" "}
                             <p className="font-medium text-white text-sm">
-                              John Doe
-                            </p>
+                              {" "}
+                              John Doe{" "}
+                            </p>{" "}
                             <p className="text-blue-200 text-xs">
-                              john@example.com
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                              {" "}
+                              john@example.com{" "}
+                            </p>{" "}
+                          </div>{" "}
+                        </div>{" "}
+                      </div>{" "}
                       <div className="p-2">
+                        {" "}
                         <Link
                           href="/dashboard/profile"
                           onClick={() => setDropdownOpen(false)}
                           className="flex items-center gap-3 px-3 py-2.5 hover:bg-blue-100 rounded-xl transition-colors text-gray-700"
                         >
-                          <UserCircle size={18} />
+                          {" "}
+                          <UserCircle size={18} />{" "}
                           <span className="text-sm font-medium">
-                            View Profile
-                          </span>
-                        </Link>
-                        <hr className="my-2 border-gray-100" />
+                            {" "}
+                            View Profile{" "}
+                          </span>{" "}
+                        </Link>{" "}
+                        <hr className="my-2 border-gray-100" />{" "}
                         <button
                           onClick={() => {
                             setDropdownOpen(false);
@@ -293,20 +327,21 @@ export default function DashboardLayout({
                           }}
                           className="relative w-full flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 rounded-xl transition-colors text-red-600"
                         >
-                          <LogOut size={18} />
-                          <span className="text-sm font-medium">Logout</span>
-                        </button>
-                      </div>
+                          {" "}
+                          <LogOut size={18} />{" "}
+                          <span className="text-sm font-medium">Logout</span>{" "}
+                        </button>{" "}
+                      </div>{" "}
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
+                  )}{" "}
+                </AnimatePresence>{" "}
+              </div>{" "}
+            </div>{" "}
+          </div>{" "}
         </header>
-
         {/* Page Content */}
-        <div className="flex-1 overflow-auto">
+        {/* Removed overflow-auto from this div as the scroll is naturally on the body/main content */}
+        <div className="flex-1">
           <div className="min-h-full">{children}</div>
         </div>
       </main>
