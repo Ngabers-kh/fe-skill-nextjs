@@ -1,6 +1,7 @@
 "use client";
 
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
+import DropdownFilters from "./DropdownFilters";
 
 export default function BoardFilters({
   searchQuery,
@@ -20,47 +21,41 @@ export default function BoardFilters({
   allSkills: string[];
 }) {
   return (
-    <div className="flex flex-col md:flex-row gap-4 mb-6">
-      {/* Search */}
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      {/* Search kiri panjang */}
       <div className="relative flex-1">
         <input
           type="text"
           placeholder="Search boards..."
-          className="w-full pl-10 pr-4 py-3 rounded-xl border bg-white border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
+          className="w-full pl-10 pr-4 py-2.5 rounded-lg border bg-white border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 text-sm"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <Search className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
+        <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
       </div>
 
-      {/* Skill Filter */}
-      <div className="relative">
-        <select
-          className="appearance-none px-4 py-3 pr-10 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500 cursor-pointer"
+      {/* Filters kanan */}
+      <div className="flex gap-3 w-full md:w-auto">
+        <DropdownFilters
+          label="All Skills"
           value={selectedSkill}
-          onChange={(e) => setSelectedSkill(e.target.value)}
-        >
-          <option value="">All Skills</option>
-          {allSkills.map((skill) => (
-            <option key={skill} value={skill}>
-              {skill}
-            </option>
-          ))}
-        </select>
-        <Filter className="absolute right-3 top-3.5 w-5 h-5 text-gray-400 pointer-events-none" />
-      </div>
+          onChange={setSelectedSkill}
+          options={[
+            { label: "All Skills", value: "" },
+            ...allSkills.map((s) => ({ label: s, value: s })),
+          ]}
+        />
 
-      {/* Status Filter */}
-      <div className="relative">
-        <select
-          className="appearance-none px-4 py-3 pr-10 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500 cursor-pointer"
+        <DropdownFilters
+          label="All Status"
           value={selectedStatus}
-          onChange={(e) => setSelectedStatus(e.target.value)}
-        >
-          <option value="">All Status</option>
-          <option value="open">Open</option>
-          <option value="closed">Closed</option>
-        </select>
+          onChange={setSelectedStatus}
+          options={[
+            { label: "All Status", value: "" },
+            { label: "Open", value: "open" },
+            { label: "Closed", value: "closed" },
+          ]}
+        />
       </div>
     </div>
   );
