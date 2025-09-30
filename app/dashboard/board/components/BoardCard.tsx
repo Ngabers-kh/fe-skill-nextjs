@@ -67,6 +67,19 @@ export default function BoardCard({
         {board.description}
       </p>
 
+      <div className="flex flex-wrap gap-1.5 mt-2">
+        {" "}
+        {board.skills.map((skill) => (
+          <span
+            key={skill}
+            className="flex items-center gap-1 px-2 py-0.5 text-[11px] bg-blue-50 text-blue-700 rounded-md"
+          >
+            {" "}
+            <Tag className="w-3 h-3" /> {skill}{" "}
+          </span>
+        ))}{" "}
+      </div>
+
       {/* Info Section */}
       <div className="mt-3 relative">
         <div className="space-y-1 text-xs text-gray-600 pr-20">

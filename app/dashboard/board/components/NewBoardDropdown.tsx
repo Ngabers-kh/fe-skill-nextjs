@@ -25,7 +25,7 @@ export default function NewBoardDropdown() {
             <button
               onClick={() => {
                 setDropdownOpen(false);
-                router.push("/dashboard/board/add?type=freelance");
+                router.push("/dashboard/board/addfl");
               }}
               className="cursor-pointer w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
@@ -34,7 +34,7 @@ export default function NewBoardDropdown() {
             <button
               onClick={() => {
                 setDropdownOpen(false);
-                router.push("/dashboard/board/add?type=learning");
+                router.push("/dashboard/board/addlearn");
               }}
               className="cursor-pointer w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
