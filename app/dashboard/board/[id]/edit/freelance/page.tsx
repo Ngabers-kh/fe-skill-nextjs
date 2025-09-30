@@ -1,236 +1,217 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import React, { use } from "react";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { fetchBoardFreeLanceById, updateBoardFreeLance } from "../../../../../services/api";
+import {
+  getBoardFreeLanceById,
+  getAllSkills,
+  updateBoardFreeLance,
+} from "../../../../../services/api";
 
-export default function EditFreelancePage() {
+interface Skill {
+  idSkill: number;
+  nameSkill: string;
+}
+
+interface BoardFreeLance {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  quota: number;
+  skills: Skill[];
+  status: string;
+  startDate: string;
+  endDate: string;
+  iduser: number;
+}
+
+export default function EditBoardFreeLancePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const router = useRouter();
-  const params = useParams();
-  const { id } = params;
+  const { id: boardId } = use(params);
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<BoardFreeLance>({
+    id: 0,
     title: "",
     description: "",
     price: 0,
     quota: 0,
+    skills: [],
+    status: "",
     startDate: "",
     endDate: "",
-    status: "open",
+    iduser: 0,
   });
-  const [skills, setSkills] = useState<string[]>([]);
-  const [newSkill, setNewSkill] = useState("");
-  const [token, setToken] = useState<string>("");
+
+  const [allSkills, setAllSkills] = useState<Skill[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<number[]>([]);
+  const [oldSkills, setOldSkills] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const token = Cookies.get("token") || "";
 
   useEffect(() => {
-    // ambil token dari localStorage
-    const token = Cookies.get("token") || "";
-
-    // fetch board data by id
-    const fetchData = async () => {
+    async function fetchData() {
       try {
-        const data = await fetchBoardFreeLanceById(Number(id), token);
-        console.log("Data board freelance:", id);
-        setForm({
-          title: data.title,
-          description: data.description,
-          price: data.price,
-          quota: data.quota,
-          startDate: data.startDate,
-          endDate: data.endDate,
-          status: data.status,
-        });
-        setSkills(data.skills || []);
+        if (!boardId || !token) throw new Error("Token/boardId tidak ditemukan");
+
+        const [boardData, masterSkills] = await Promise.all([
+          getBoardFreeLanceById(Number(boardId), token),
+          getAllSkills(token),
+        ]);
+
+        setForm(boardData);
+        setAllSkills(masterSkills);
+
+        const currentSkillIds = boardData.skills.map((s: Skill) => s.idSkill);
+        setSelectedSkills(currentSkillIds);
+        setOldSkills(currentSkillIds);
       } catch (err) {
-        console.error("Gagal ambil data board:", err);
+        console.error("Gagal ambil data:", err);
+      } finally {
+        setLoading(false);
       }
-    };
+    }
 
-    if (id && token) fetchData();
-  }, [id]);
+    fetchData();
+  }, [boardId, token]);
 
-  // handle change form
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // hapus skill
-  const removeSkill = (skill: string) => {
-    setSkills(skills.filter((s) => s !== skill));
+  const handleSkillToggle = (id: number) => {
+    setSelectedSkills((prev) =>
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+    );
   };
 
-  // tambah skill baru
-  const addSkill = () => {
-    if (newSkill && !skills.includes(newSkill)) {
-      setSkills([...skills, newSkill]);
-      setNewSkill("");
-    }
-  };
-
-  // submit update
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await updateBoardFreeLance(Number(id), { ...form, skills }, token);
-      router.push("/dashboard/board");
+      const payload = {
+        ...form,
+        skills: selectedSkills,
+      };
+
+      await updateBoardFreeLance(Number(boardId), payload, token);
+
+      router.push("/dashboard/board"); // tetap di url ini
     } catch (err) {
       console.error("Gagal update board:", err);
+      alert("Gagal update board!");
     }
   };
 
+  if (loading) return <p>Loading...</p>;
+
+  const addedSkills = selectedSkills.filter((id) => !oldSkills.includes(id));
+  const removedSkills = oldSkills.filter((id) => !selectedSkills.includes(id));
+
   return (
-    <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center p-6">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-2xl bg-white p-8 rounded-xl shadow-md"
-      >
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">
-          Edit Board Freelance
-        </h1>
+    <div className="p-6 max-w-2xl mx-auto">
+      <h1 className="text-xl font-bold mb-4">Edit Board Freelance</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          name="title"
+          value={form.title}
+          onChange={handleChange}
+          placeholder="Judul"
+          className="border p-2 w-full"
+        />
+        <textarea
+          name="description"
+          value={form.description}
+          onChange={handleChange}
+          placeholder="Deskripsi"
+          className="border p-2 w-full"
+        />
+        <input
+          type="number"
+          name="price"
+          value={form.price}
+          onChange={handleChange}
+          placeholder="Harga"
+          className="border p-2 w-full"
+        />
+        <input
+          type="number"
+          name="quota"
+          value={form.quota}
+          onChange={handleChange}
+          placeholder="Kuota"
+          className="border p-2 w-full"
+        />
+        <input
+          type="date"
+          name="startDate"
+          value={form.startDate}
+          onChange={handleChange}
+          className="border p-2 w-full"
+        />
+        <input
+          type="date"
+          name="endDate"
+          value={form.endDate}
+          onChange={handleChange}
+          className="border p-2 w-full"
+        />
 
-        {/* Title */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Judul Project
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={form.title || ""}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-gray-700"
-          />
-        </div>
-
-        {/* Description */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Deskripsi
-          </label>
-          <textarea
-            name="description"
-            value={form.description || ""}
-            onChange={handleChange}
-            required
-            rows={3}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-gray-700"
-          />
-        </div>
-
-        {/* Price & Quota */}
-        <div className="mb-4 grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Harga
+        {/* Checklist skill */}
+        <div>
+          <p className="font-semibold mb-2">Pilih Skill:</p>
+          {allSkills.map((skill) => (
+            <label key={skill.idSkill} className="block">
+              <input
+                type="checkbox"
+                checked={selectedSkills.includes(skill.idSkill)}
+                onChange={() => handleSkillToggle(skill.idSkill)}
+              />
+              <span className="ml-2">{skill.nameSkill}</span>
             </label>
-            <input
-              type="number"
-              name="price"
-              value={form.price || ""}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Kuota
-            </label>
-            <input
-              type="number"
-              name="quota"
-              value={form.quota || ""}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300"
-            />
-          </div>
+          ))}
         </div>
 
-        {/* Date */}
-        <div className="mb-4 grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tanggal Mulai
-            </label>
-            <input
-              type="date"
-              name="startDate"
-              value={form.startDate || ""}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tanggal Selesai
-            </label>
-            <input
-              type="date"
-              name="endDate"
-              value={form.endDate || ""}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300"
-            />
-          </div>
+        {/* Info perubahan skill */}
+        <div className="mt-4">
+          {addedSkills.length > 0 && (
+            <div className="text-green-600">
+              <p className="font-semibold">Skill akan ditambahkan:</p>
+              <ul className="list-disc ml-5">
+                {addedSkills.map((id) => {
+                  const skill = allSkills.find((s) => s.idSkill === id);
+                  return <li key={id}>{skill?.nameSkill}</li>;
+                })}
+              </ul>
+            </div>
+          )}
+          {removedSkills.length > 0 && (
+            <div className="text-red-600 mt-2">
+              <p className="font-semibold">Skill akan dihapus:</p>
+              <ul className="list-disc ml-5">
+                {removedSkills.map((id) => {
+                  const skill = allSkills.find((s) => s.idSkill === id);
+                  return <li key={id}>{skill?.nameSkill}</li>;
+                })}
+              </ul>
+            </div>
+          )}
         </div>
 
-        {/* Skills */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Skills
-          </label>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {skills.map((skill, idx) => (
-              <span
-                key={idx}
-                className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full flex items-center gap-2"
-              >
-                {skill}
-                <button
-                  type="button"
-                  onClick={() => removeSkill(skill)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  ✕
-                </button>
-              </span>
-            ))}
-          </div>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={newSkill}
-              onChange={(e) => setNewSkill(e.target.value)}
-              className="flex-1 px-4 py-2 rounded-lg border border-gray-300"
-              placeholder="Tambah skill baru"
-            />
-            <button
-              type="button"
-              onClick={addSkill}
-              className="px-4 py-2 bg-green-500 text-white rounded-lg"
-            >
-              Tambah
-            </button>
-          </div>
-        </div>
-
-        {/* Action */}
-        <div className="flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => router.push("/dashboard/board")}
-            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium"
-          >
-            Batal
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
-          >
-            Simpan
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Simpan
+        </button>
       </form>
     </div>
   );
