@@ -133,15 +133,15 @@ export default function EditProfilePage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100">
+    <div className="w-full min-h-screen flex justify-center items-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100">
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           {/* Main Form Card */}
           <div className="bg-white shadow-2xl rounded-3xl overflow-hidden border border-gray-100/50">
             {/* Header Section */}
             <div className="bg-gradient-to-r bg-[rgb(2,44,92)] px-8 py-6">
               <div className="flex items-center gap-4">
-                <div className="md:w-16 md:h-16 w-13 h-13 bg-white/20 rounded-xl md:rounded-2xl flex items-center justify-center">
+                <div className="md:w-12 md:h-12 w-13 h-13 bg-white/20 rounded-xl md:rounded-2xl flex items-center justify-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -161,7 +161,7 @@ export default function EditProfilePage() {
                   <h2 className="text-2xl font-bold text-white">
                     Profile Settings
                   </h2>
-                  <p className="text-blue-100">
+                  <p className="text-blue-100 text-sm font-medium">
                     Customize your profile information
                   </p>
                 </div>
@@ -172,7 +172,7 @@ export default function EditProfilePage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Left Column - Basic Info */}
                 <div className="space-y-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                  <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-3">
                     <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                       <svg
                         className="w-5 h-5 text-[rgb(2,44,92)]"
@@ -200,7 +200,7 @@ export default function EditProfilePage() {
                         name="name"
                         value={form.name || ""}
                         onChange={handleChange}
-                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-gray-700 font-medium group-hover:border-gray-300"
+                        className="w-full text-sm px-2.5 py-2.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-gray-700 font-medium group-hover:border-gray-300"
                         placeholder="Enter your full name"
                       />
                       <div className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -230,7 +230,7 @@ export default function EditProfilePage() {
                         name="address"
                         value={form.address || ""}
                         onChange={handleChange}
-                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-gray-700 font-medium group-hover:border-gray-300"
+                        className="w-full text-sm px-2.5 py-2.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-gray-700 font-medium group-hover:border-gray-300"
                         placeholder="Enter your address"
                       />
                       <div className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -260,7 +260,7 @@ export default function EditProfilePage() {
                         name="job"
                         value={form.job || ""}
                         onChange={handleChange}
-                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-gray-700 font-medium group-hover:border-gray-300"
+                        className="w-full text-sm px-2.5 py-2.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-gray-700 font-medium group-hover:border-gray-300"
                         placeholder="Enter your job title"
                       />
                       <div className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -290,7 +290,7 @@ export default function EditProfilePage() {
                       value={form.bio || ""}
                       onChange={handleChange}
                       rows={4}
-                      className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-gray-700 font-medium group-hover:border-gray-300 resize-none"
+                      className="w-full text-sm px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-gray-700 font-medium group-hover:border-gray-300 resize-none"
                       placeholder="Tell us about yourself..."
                     />
                   </div>
@@ -298,7 +298,7 @@ export default function EditProfilePage() {
 
                 {/* Right Column - Skills */}
                 <div className="space-y-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                  <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-3">
                     <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                       <svg
                         className="w-5 h-5 text-[rgb(2,44,92)]"
@@ -327,7 +327,7 @@ export default function EditProfilePage() {
                         skills.map((skill, index) => (
                           <span
                             key={skill.idSkill}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r to-[rgb(2,44,92)] from-blue-800 text-white rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-all duration-200"
+                            className="inline-flex items-center gap-1 px-3 py-2 bg-gradient-to-r to-[rgb(2,44,92)] from-blue-800 text-white rounded-full text-sm shadow-sm hover:shadow-md transition-all duration-200"
                             style={{ animationDelay: `${index * 50}ms` }}
                           >
                             <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -350,7 +350,7 @@ export default function EditProfilePage() {
                     <button
                       type="button"
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="cursor-pointer w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-left font-medium text-gray-600 hover:border-gray-300 flex items-center justify-between"
+                      className="cursor-pointer w-full text-sm px-2.5 py-2.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-200 text-left font-medium text-gray-600 hover:border-gray-300 flex items-center justify-between"
                     >
                       <span>Choose your skills...</span>
                       <svg
@@ -391,7 +391,7 @@ export default function EditProfilePage() {
                                 <div
                                   className={`w-5 h-5 border-2 rounded-md flex-shrink-0 flex items-center justify-center transition-all duration-200 ${
                                     selectedSkills.includes(skill.idSkill)
-                                      ? "bg-blue-600 border-blue-600"
+                                      ? "bg-[rgb(2,44,92)] border-blue-800"
                                       : "border-gray-300 group-hover:border-blue-400"
                                   }`}
                                 >
@@ -414,7 +414,7 @@ export default function EditProfilePage() {
                                 <span
                                   className={`text-sm font-medium transition-colors duration-200 ${
                                     selectedSkills.includes(skill.idSkill)
-                                      ? "text-blue-600"
+                                      ? "text-blue-800"
                                       : "text-gray-700 group-hover:text-blue-600"
                                   }`}
                                 >
@@ -435,7 +435,7 @@ export default function EditProfilePage() {
                               setSkills(newSkills);
                               setDropdownOpen(false);
                             }}
-                            className="cursor-pointer w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg"
+                            className="cursor-pointer w-full text-sm px-3 py-2.5 bg-gradient-to-r to-[rgb(2,44,92)] from-blue-800 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg"
                           >
                             Apply Selected Skills ({selectedSkills.length})
                           </button>
@@ -448,18 +448,18 @@ export default function EditProfilePage() {
             </div>
 
             {/* Footer Actions */}
-            <div className="bg-gray-50 px-8 py-6 border-t border-gray-100">
-              <div className="flex flex-col sm:flex-row justify-end gap-4">
+            <div className="bg-gray-50 px-6 py-4 border-t border-gray-100">
+              <div className="flex flex-col sm:flex-row justify-end gap-2">
                 <button
                   onClick={() => router.push("/dashboard/profile")}
-                  className="cursor-pointer px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
+                  className="cursor-pointer text-sm px-3 py-2 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className={`cursor-pointer px-8 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 min-w-[140px] ${
+                  className={`cursor-pointer text-sm px-3 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 min-w-[140px] ${
                     saving
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-gradient-to-r to-[rgb(2,44,92)] from-blue-800 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl transform hover:scale-105"
