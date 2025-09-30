@@ -28,7 +28,6 @@ export default function AuthPage() {
       if (res.token) {
         Cookies.set("token", res.token, { expires: 1 });
         Cookies.set("userId", res.userId, { expires: 1 });
-
       }
       router.push("/dashboard");
     } catch (err: any) {
@@ -100,7 +99,7 @@ export default function AuthPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-full bg-yellow-300 text-blue-900 font-bold shadow-lg hover:bg-yellow-400 transition"
+                  className="cursor-pointer w-full py-3 rounded-full bg-yellow-300 text-blue-900 font-bold shadow-lg hover:bg-yellow-400 transition"
                 >
                   {loading ? "Loading..." : "Sign Up →"}
                 </button>
@@ -109,7 +108,7 @@ export default function AuthPage() {
                 Already have an account?{" "}
                 <button
                   onClick={() => setIsLogin(true)}
-                  className="underline hover:text-yellow-300"
+                  className="cursor-pointer underline hover:text-yellow-300"
                 >
                   Log In
                 </button>
@@ -158,7 +157,7 @@ export default function AuthPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-full bg-yellow-300 text-blue-900 font-bold shadow-lg hover:bg-yellow-400 transition"
+                  className="cursor-pointer w-full py-3 rounded-full bg-yellow-300 text-blue-900 font-bold shadow-lg hover:bg-yellow-400 transition"
                 >
                   {loading ? "Loading..." : "Log In →"}
                 </button>
@@ -167,7 +166,7 @@ export default function AuthPage() {
                 Don&apos;t have an account?{" "}
                 <button
                   onClick={() => setIsLogin(false)}
-                  className="underline hover:text-yellow-300"
+                  className="cursor-pointer underline hover:text-yellow-300"
                 >
                   Sign Up
                 </button>

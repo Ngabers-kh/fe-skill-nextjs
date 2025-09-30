@@ -1,300 +1,127 @@
 "use client";
+
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useMemo } from "react";
-import Cookies from "js-cookie";
-import {
-  deleteBoardFreeLance,
-  deleteBoardLearning,
-  getAllBoardFreeLanceByUserId,
-  getAllBoardLearningByuserId,
-} from "../../services/api";
-
-type BoardFreeLance = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  quota: number;
-  skills: string[];
-  status: string;
-  startDate: string;
-  endDate: string;
-  iduser: number;
-  users?: { name: string };
-};
-
-type BoardLearning = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  skills: string[];
-  status: string;
-  startDate: string;
-  endDate: string;
-  date: string;
-  iduser: number;
-  users?: { name: string };
-};
-
-type UnifiedBoard = {
-  id: string; // format: "freelance-12" / "learning-7"
-  category: "Learning" | "Freelance";
-  title: string;
-  description: string;
-  skills: string[];
-  status: string;
-  organizer: string;
-};
+import { useState, useMemo } from "react";
+import { MoreHorizontal, Plus } from "lucide-react";
+import { useBoards } from "./hooks/useBoard";
+import BoardStats from "./components/BoardStats";
+import BoardFilters from "./components/BoardFilters";
+import BoardCard from "./components/BoardCard";
+import Pagination from "./components/Pagination";
+import NewBoardDropdown from "./components/NewBoardDropdown";
 
 export default function BoardPage() {
   const router = useRouter();
+  const { boards, loading, deleting, allSkills, handleDelete } = useBoards();
 
-  const [categoryFilter, setCategoryFilter] = useState("All");
-  const [skillFilter, setSkillFilter] = useState("All");
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const token = Cookies.get("token") || "";
-  const UserId = Cookies.get("userId") || "";
-  const [boards, setBoards] = useState<UnifiedBoard[]>([]);
-
-  const fetchBoards = async () => {
-    try {
-      const dataFreeLance: BoardFreeLance[] = await getAllBoardFreeLanceByUserId(Number(UserId), token);
-      const dataLearning: BoardLearning[] = await getAllBoardLearningByuserId(Number(UserId), token);
-
-      const mappedFL: UnifiedBoard[] = dataFreeLance.map((b) => ({
-        id: `freelance-${b.id}`,
-        category: "Freelance",
-        title: b.title,
-        description: b.description,
-        skills: b.skills || [],
-        status: b.status,
-        organizer: b.users ? b.users.name : `User ${b.iduser}`,
-      }));
-
-      const mappedL: UnifiedBoard[] = dataLearning.map((b) => ({
-        id: `learning-${b.id}`,
-        category: "Learning",
-        title: b.title,
-        description: b.description,
-        skills: b.skills || [],
-        status: b.status,
-        organizer: b.users ? b.users.name : `User ${b.iduser}`,
-      }));
-
-      setBoards([...mappedFL, ...mappedL]);
-    } catch (err) {
-      console.error("Error fetch Boards:", err);
-    }
-  };
-
-  useEffect(() => {
-    if (token) fetchBoards();
-  }, [token]);
-
-  // Ambil semua unique skills
-  const allSkills = useMemo(
-    () => Array.from(new Set(boards.flatMap((b) => b.skills))),
-    [boards]
-  );
-
-  // Filter
-  const filteredProjects = boards.filter((b) => {
-    const categoryMatch =
-      categoryFilter === "All" || b.category === categoryFilter;
-    const skillMatch = skillFilter === "All" || b.skills.includes(skillFilter);
-    return categoryMatch && skillMatch;
-  });
+  // Filters
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSkill, setSelectedSkill] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   // Pagination
-  const itemsPerPage = 12;
-  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
-  const paginatedProjects = filteredProjects.slice(
+  // Apply filters
+  const filteredBoards = useMemo(() => {
+    return boards.filter((board) => {
+      const matchSearch = board.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchSkill = selectedSkill
+        ? board.skills.includes(selectedSkill)
+        : true;
+      const matchStatus = selectedStatus
+        ? board.status === selectedStatus
+        : true;
+      return matchSearch && matchSkill && matchStatus;
+    });
+  }, [boards, searchQuery, selectedSkill, selectedStatus]);
+
+  // Pagination calc
+  const totalPages = Math.ceil(filteredBoards.length / itemsPerPage);
+  const paginatedBoards = filteredBoards.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page);
-  };
-
-  // Delete handler
-  const handleDelete = async (board: UnifiedBoard) => {
-    const confirmDelete = window.confirm(
-      `Yakin mau hapus board "${board.id}"?`
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-[rgb(2,44,92)] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600 font-medium">Loading your boards...</p>
+        </div>
+      </div>
     );
-    if (!confirmDelete) return;
-
-    try {
-      const [prefix, rawId] = board.id.split("-");
-      const realId = Number(rawId);
-      console.log("Hapus board:", realId);
-
-      if (prefix === "freelance") {
-        await deleteBoardFreeLance(realId, token);
-      } else {
-        await deleteBoardLearning(realId, token);
-      }
-
-      fetchBoards();
-    } catch (err) {
-      console.error("Error delete board:", err);
-      alert("Gagal hapus board, cek console");
-    }
-  };
+  }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">My Board</h1>
-
-      {/* Filter + Tambah Board */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Dropdown Kategori */}
-          <select
-            value={categoryFilter}
-            onChange={(e) => {
-              setCategoryFilter(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="All">All Categories</option>
-            <option value="Learning">Learning</option>
-            <option value="Freelance">Freelance</option>
-          </select>
-
-          {/* Dropdown Skill */}
-          <select
-            value={skillFilter}
-            onChange={(e) => {
-              setSkillFilter(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:ring-2 focus:ring-green-500"
-          >
-            <option value="All">All Skills</option>
-            {allSkills.map((skill) => (
-              <option key={skill} value={skill}>
-                {skill}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Tambah Board */}
-        <button
-          onClick={() => router.push("/dashboard/board/add")}
-          className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium shadow"
-        >
-          + Tambah Board
-        </button>
-      </div>
-
-      {/* Project Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {paginatedProjects.map((project) => (
-          <div
-            key={project.id}
-            className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition flex flex-col"
-          >
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              {project.title}
-            </h2>
-            <p className="text-gray-600 mb-3">{project.description}</p>
-
-            <div className="flex flex-wrap gap-2 mb-3">
-              {project.skills.map((skill, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-full"
-                >
-                  {skill}
-                </span>
-              ))}
+    <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100">
+      <div className="container mx-auto px-4 pt-8 py-2">
+        {/* Header */}
+        <div className="mb-3">
+          <div className="flex items-center gap-4 mb-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] rounded-2xl flex items-center justify-center">
+              <MoreHorizontal className="w-6 h-6 text-white" />
             </div>
-
-            <span className="text-sm font-medium text-gray-500 mb-1">
-              Organizer: {project.organizer}
-            </span>
-
-            <span className="text-sm font-medium text-gray-500 mb-4">
-              Status:{" "}
-              <span
-                className={`${
-                  project.status === "Ongoing"
-                    ? "text-blue-600"
-                    : project.status === "Open"
-                    ? "text-green-600"
-                    : "text-red-500"
-                }`}
-              >
-                {project.status}
-              </span>
-            </span>
-
-            {/* Action Buttons */}
-            <div className="mt-auto flex justify-end gap-2">
-              <button
-                onClick={() => {
-                  const [prefix, rawId] = project.id.split("-");
-                  if (prefix === "freelance") {
-                    router.push(`/dashboard/board/${rawId}/edit/freelance`);
-                  } else {
-                    router.push(`/dashboard/board/${rawId}/edit/learning`);
-                  }
-                }}
-                className="px-3 py-1 text-sm bg-yellow-400 hover:bg-yellow-500 text-white rounded-lg font-medium"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(project)}
-                className="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium"
-              >
-                Hapus
-              </button>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">My Boards</h1>
+              <p className="text-gray-600 text-md">
+                Manage boards you created.
+              </p>
             </div>
           </div>
-        ))}
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-8">
-          <button
-            onClick={() => goToPage(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
-          >
-            Prev
-          </button>
-
-          {[...Array(totalPages)].map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => goToPage(idx + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === idx + 1
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              {idx + 1}
-            </button>
-          ))}
-
-          <button
-            onClick={() => goToPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
-          >
-            Next
-          </button>
+          <BoardStats boards={boards} />
         </div>
-      )}
+
+        {/* Action */}
+        <NewBoardDropdown />
+
+        {/* Filters */}
+        <BoardFilters
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          selectedSkill={selectedSkill}
+          setSelectedSkill={setSelectedSkill}
+          selectedStatus={selectedStatus}
+          setSelectedStatus={setSelectedStatus}
+          allSkills={allSkills}
+        />
+
+        {/* Board List */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {paginatedBoards.map((board) => (
+            <BoardCard
+              key={board.id}
+              board={board}
+              deleting={deleting}
+              onDelete={handleDelete}
+              onEdit={(board) => {
+                const [prefix, rawId] = board.id.split("-");
+                if (prefix === "freelance") {
+                  router.push(`/dashboard/board/${rawId}/edit/freelance`);
+                } else {
+                  router.push(`/dashboard/board/${rawId}/edit/learning`);
+                }
+              }}
+            />
+          ))}
+          {paginatedBoards.length === 0 && (
+            <p className="text-gray-500 col-span-full text-center py-10">
+              No boards found.
+            </p>
+          )}
+        </div>
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </div>
   );
 }
