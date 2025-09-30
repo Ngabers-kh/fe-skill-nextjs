@@ -1,64 +1,117 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+import Cookies from "js-cookie";
+import {
+  getAllBoardFreeLance,
+  getAllBoardLearning,
+} from "../../services/api";
 
-export default function ProjectPage() {
+type BoardFreeLance = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  quota: number;
+  skills: string[];
+  status: string;
+  startDate: string;
+  endDate: string;
+  iduser: number;
+  users?: { name: string };
+};
+
+type BoardLearning = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  skills: string[];
+  status: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  iduser: number;
+  users?: { name: string };
+};
+
+type UnifiedBoard = {
+  id: string; // contoh: freelance-12 / learning-7
+  realId: number;
+  category: "Learning" | "Freelance";
+  title: string;
+  description: string;
+  skills: string[];
+  status: string;
+  organizer: string;
+};
+
+export default function ProjectBoardPage() {
   const router = useRouter();
 
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [skillFilter, setSkillFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const projects = [
-    {
-      id: 1,
-      category: "Learning",
-      title: "Build a Portfolio Website",
-      description: "Belajar HTML, CSS, dan dasar desain web.",
-      skills: ["Coding", "UI/UX"],
-      status: "Ongoing",
-      name: "Fauzan",
-    },
-    {
-      id: 2,
-      category: "Freelance",
-      title: "Landing Page untuk Startup",
-      description: "Buat landing page interaktif untuk client startup lokal.",
-      skills: ["Coding", "Design"],
-      status: "Open",
-      name: "Riza",
-    },
-    {
-      id: 3,
-      category: "Learning",
-      title: "Mobile App UI Design",
-      description: "Pelajari cara mendesain aplikasi mobile modern.",
-      skills: ["UI/UX", "Design"],
-      status: "Not Started",
-      name: "Aisyah",
-    },
-    {
-      id: 4,
-      category: "Freelance",
-      title: "Social Media Campaign",
-      description: "Kelola konten sosial media untuk brand fashion.",
-      skills: ["Marketing", "Content"],
-      status: "Closed",
-      name: "Adinda",
-    },
-  ];
+  const token = Cookies.get("token") || "";
+  const [boards, setBoards] = useState<UnifiedBoard[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const allSkills = Array.from(new Set(projects.flatMap((p) => p.skills)));
+  const fetchBoards = async () => {
+    try {
+      const dataFreeLance: BoardFreeLance[] = await getAllBoardFreeLance(token);
+      const dataLearning: BoardLearning[] = await getAllBoardLearning(token);
 
-  const filteredProjects = projects.filter((p) => {
+      const mappedFL: UnifiedBoard[] = dataFreeLance.map((b) => ({
+        id: `freelance-${b.id}`,
+        realId: b.id,
+        category: "Freelance",
+        title: b.title,
+        description: b.description,
+        skills: b.skills || [],
+        status: b.status,
+        organizer: b.users ? b.users.name : `User ${b.iduser}`,
+      }));
+
+      const mappedL: UnifiedBoard[] = dataLearning.map((b) => ({
+        id: `learning-${b.id}`,
+        realId: b.id,
+        category: "Learning",
+        title: b.title,
+        description: b.description,
+        skills: b.skills || [],
+        status: b.status,
+        organizer: b.users ? b.users.name : `User ${b.iduser}`,
+      }));
+
+      setBoards([...mappedFL, ...mappedL]);
+    } catch (err) {
+      console.error("Error fetch Boards:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token) fetchBoards();
+  }, [token]);
+
+  // Ambil semua unique skills
+  const allSkills = useMemo(
+    () => Array.from(new Set(boards.flatMap((b) => b.skills))),
+    [boards]
+  );
+
+  // Filter
+  const filteredProjects = boards.filter((b) => {
     const categoryMatch =
-      categoryFilter === "All" || p.category === categoryFilter;
-    const skillMatch = skillFilter === "All" || p.skills.includes(skillFilter);
+      categoryFilter === "All" || b.category === categoryFilter;
+    const skillMatch = skillFilter === "All" || b.skills.includes(skillFilter);
     return categoryMatch && skillMatch;
   });
 
-  // --- Pagination ---
-  const itemsPerPage = 12; // jumlah card per halaman
+  // Pagination
+  const itemsPerPage = 12;
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
 
   const paginatedProjects = filteredProjects.slice(
@@ -67,41 +120,49 @@ export default function ProjectPage() {
   );
 
   const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
+
+  if (loading) return <p className="p-6">Loading...</p>;
 
   return (
     <div className="w-full min-h-screen bg-gray-50 p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Project Board</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">📌 Project Board</h1>
 
-      {/* Filter Row */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
-        {/* Dropdown Kategori */}
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="All">All Categories</option>
-          <option value="Learning">Learning</option>
-          <option value="Freelance">Freelance</option>
-        </select>
+      {/* Filter */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Dropdown Kategori */}
+          <select
+            value={categoryFilter}
+            onChange={(e) => {
+              setCategoryFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="All">All Categories</option>
+            <option value="Learning">Learning</option>
+            <option value="Freelance">Freelance</option>
+          </select>
 
-        {/* Dropdown Skill */}
-        <select
-          value={skillFilter}
-          onChange={(e) => setSkillFilter(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          <option value="All">All Skills</option>
-          {allSkills.map((skill) => (
-            <option key={skill} value={skill}>
-              {skill}
-            </option>
-          ))}
-        </select>
+          {/* Dropdown Skill */}
+          <select
+            value={skillFilter}
+            onChange={(e) => {
+              setSkillFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:ring-2 focus:ring-green-500"
+          >
+            <option value="All">All Skills</option>
+            {allSkills.map((skill) => (
+              <option key={skill} value={skill}>
+                {skill}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Project Grid */}
@@ -114,9 +175,8 @@ export default function ProjectPage() {
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
               {project.title}
             </h2>
-            <p className="text-gray-600 mb-3">{project.description}</p>
+            <p className="text-gray-600 mb-3 line-clamp-3">{project.description}</p>
 
-            {/* Skills */}
             <div className="flex flex-wrap gap-2 mb-3">
               {project.skills.map((skill, idx) => (
                 <span
@@ -128,15 +188,10 @@ export default function ProjectPage() {
               ))}
             </div>
 
-            {/* Organizer */}
             <span className="text-sm font-medium text-gray-500 mb-1">
-              Organizer:{" "}
-              <span className="text-sm font-medium text-gray-500 mb-1">
-                {project.name}
-              </span>
+              Organizer: {project.organizer}
             </span>
 
-            {/* Status */}
             <span className="text-sm font-medium text-gray-500 mb-4">
               Status:{" "}
               <span
@@ -152,13 +207,21 @@ export default function ProjectPage() {
               </span>
             </span>
 
-            {/* Action Button */}
-            <button
-              onClick={() => router.push(`/dashboard/project/${project.id}`)}
-              className="mt-auto px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium"
-            >
-              {project.category === "Learning" ? "Start Learning" : "View Job"}
-            </button>
+            {/* Action Buttons */}
+            <div className="mt-auto flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  if (project.category === "Freelance") {
+                    router.push(`/dashboard/board/detail/freelance/${project.realId}`);
+                  } else {
+                    router.push(`/dashboard/board/detail/learning/${project.realId}`);
+                  }
+                }}
+                className="px-3 py-1 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium"
+              >
+                View Detail
+              </button>
+            </div>
           </div>
         ))}
       </div>

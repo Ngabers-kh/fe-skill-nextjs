@@ -8,6 +8,7 @@ import {
   getBoardFreeLanceById,
   getAllSkills,
   updateBoardFreeLance,
+  getBoardFreeLanceSkills,
 } from "../../../../../services/api";
 
 interface Skill {
@@ -61,17 +62,21 @@ export default function EditBoardFreeLancePage({
       try {
         if (!boardId || !token) throw new Error("Token/boardId tidak ditemukan");
 
-        const [boardData, masterSkills] = await Promise.all([
+        const [boardData, masterSkills, boardSkills] = await Promise.all([
           getBoardFreeLanceById(Number(boardId), token),
           getAllSkills(token),
+          getBoardFreeLanceSkills(Number(boardId), token),
         ]);
 
         setForm(boardData);
         setAllSkills(masterSkills);
 
-        const currentSkillIds = boardData.skills.map((s: Skill) => s.idSkill);
-        setSelectedSkills(currentSkillIds);
-        setOldSkills(currentSkillIds);
+        const skillIds = Array.isArray(boardSkills)
+          ? boardSkills.map((s: Skill) => s.idSkill)
+          : boardSkills.skills?.map((s: Skill) => s.idSkill) || [];
+
+        setSelectedSkills(skillIds);
+        setOldSkills(skillIds);
       } catch (err) {
         console.error("Gagal ambil data:", err);
       } finally {

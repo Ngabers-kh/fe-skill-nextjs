@@ -1,206 +1,226 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useState, useEffect, use } from "react";
+import Cookies from "js-cookie";
+import {
+  getBoardLearningById,
+  updateBoardLearning,
+  getBoardLearningSkills,
+  getAllSkills,
+} from "../../../../services/api";
 
-export default function EditBoardPage() {
+interface Skill {
+  idSkill: number;
+  nameSkill: string;
+}
+
+interface BoardLearning {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  status: string;
+}
+
+export default function EditBoardLearningPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const router = useRouter();
-  const params = useParams();
-  const { id } = params;
+  const { id: boardId } = use(params);
 
-  // --- Dummy data (sementara) ---
-  const projects = [
-    {
-      id: 1,
-      category: "Learning",
-      title: "Build a Portfolio Website",
-      description: "Belajar HTML, CSS, dan dasar desain web.",
-      skills: ["Coding", "UI/UX"],
-      status: "Ongoing",
-      name: "Fauzan",
-    },
-    {
-      id: 2,
-      category: "Freelance",
-      title: "Landing Page untuk Startup",
-      description: "Buat landing page interaktif untuk client startup lokal.",
-      skills: ["Coding", "Design"],
-      status: "Open",
-      name: "Riza",
-    },
-  ];
+  const [form, setForm] = useState<BoardLearning>({
+    id: 0,
+    title: "",
+    description: "",
+    price: 0,
+    date: "",
+    startTime: "",
+    endTime: "",
+    status: "open",
+  });
 
-  const availableSkills = ["Coding", "UI/UX", "Design", "Marketing", "Content"];
+  const [allSkills, setAllSkills] = useState<Skill[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<number[]>([]);
+  const [oldSkills, setOldSkills] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // --- State ---
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("Learning");
-  const [skills, setSkills] = useState<string[]>([]);
-  const [status, setStatus] = useState("Not Started");
-  const [name, setName] = useState("");
+  const token = Cookies.get("token") || "";
 
-  // --- Ambil data project by id ---
   useEffect(() => {
-    if (id) {
-      const project = projects.find((p) => p.id === Number(id));
-      if (project) {
-        setTitle(project.title);
-        setDescription(project.description);
-        setCategory(project.category);
-        setSkills(project.skills);
-        setStatus(project.status);
-        setName(project.name);
+    async function fetchData() {
+      try {
+        if (!boardId || !token) throw new Error("Token/boardId tidak ditemukan");
+
+        const [boardData, masterSkills, boardSkills] = await Promise.all([
+          getBoardLearningById(Number(boardId), token),
+          getAllSkills(token),
+          getBoardLearningSkills(Number(boardId), token),
+        ]);
+
+        setForm(boardData);
+        setAllSkills(masterSkills);
+
+        // Simpan skill lama dari API skills
+        const skillIds = Array.isArray(boardSkills)
+          ? boardSkills.map((s: Skill) => s.idSkill)
+          : boardSkills.skills?.map((s: Skill) => s.idSkill) || [];
+
+        setOldSkills(skillIds);
+        setSelectedSkills(skillIds);
+      } catch (err) {
+        console.error("Gagal ambil data:", err);
+      } finally {
+        setLoading(false);
       }
     }
-  }, [id]);
 
-  const handleSkillChange = (skill: string) => {
-    setSkills((prev) =>
-      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
+    fetchData();
+  }, [boardId, token]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSkillToggle = (id: number) => {
+    setSelectedSkills((prev) =>
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      const payload = {
+        ...form,
+        skills: selectedSkills,
+      };
 
-    const updatedBoard = {
-      id,
-      title,
-      description,
-      category,
-      skills,
-      status,
-      name,
-    };
+      await updateBoardLearning(Number(boardId), payload, token);
 
-    console.log("Board di-update:", updatedBoard);
-
-    // nanti ganti ke API PUT
-    router.push("/dashboard/board");
+      router.push("/dashboard/board-learning");
+    } catch (err) {
+      console.error("Gagal update board:", err);
+      alert("Gagal update board!");
+    }
   };
 
+  if (loading) return <p>Loading...</p>;
+
+  // Bedakan skill ditambah/dihapus
+  const addedSkills = selectedSkills.filter((s) => !oldSkills.includes(s));
+  const removedSkills = oldSkills.filter((s) => !selectedSkills.includes(s));
+
   return (
-    <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center p-6">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-2xl bg-white p-8 rounded-xl shadow-md"
-      >
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Edit Board</h1>
+    <div className="p-6 max-w-2xl mx-auto">
+      <h1 className="text-xl font-bold mb-4">Edit Board Learning</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          name="title"
+          value={form.title}
+          onChange={handleChange}
+          placeholder="Judul"
+          className="border p-2 w-full"
+        />
+        <textarea
+          name="description"
+          value={form.description}
+          onChange={handleChange}
+          placeholder="Deskripsi"
+          className="border p-2 w-full"
+        />
+        <input
+          type="number"
+          name="price"
+          value={form.price}
+          onChange={handleChange}
+          placeholder="Harga"
+          className="border p-2 w-full"
+        />
+        <input
+          type="date"
+          name="date"
+          value={form.date}
+          onChange={handleChange}
+          className="border p-2 w-full"
+        />
+        <input
+          type="time"
+          name="startTime"
+          value={form.startTime}
+          onChange={handleChange}
+          className="border p-2 w-full"
+        />
+        <input
+          type="time"
+          name="endTime"
+          value={form.endTime}
+          onChange={handleChange}
+          className="border p-2 w-full"
+        />
+        <input
+          name="status"
+          value={form.status}
+          onChange={handleChange}
+          placeholder="Status"
+          className="border p-2 w-full"
+        />
 
-        {/* Title */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Judul Project
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-gray-700"
-          />
+        {/* Checklist skill */}
+        <div>
+          <p className="font-semibold mb-2">Pilih Skill:</p>
+          {allSkills.map((skill) => (
+            <label key={skill.idSkill} className="block">
+              <input
+                type="checkbox"
+                checked={selectedSkills.includes(skill.idSkill)}
+                onChange={() => handleSkillToggle(skill.idSkill)}
+              />
+              <span className="ml-2">{skill.nameSkill}</span>
+            </label>
+          ))}
         </div>
 
-        {/* Description */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Deskripsi
-          </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            rows={3}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-gray-700"
-          />
+        {/* Info perubahan skill */}
+        <div className="mt-4">
+          {addedSkills.length > 0 && (
+            <div className="text-green-600">
+              <p className="font-semibold">Akan ditambahkan:</p>
+              <ul className="list-disc ml-5">
+                {addedSkills.map((id) => {
+                  const skill = allSkills.find((s) => s.idSkill === id);
+                  return <li key={id}>{skill?.nameSkill}</li>;
+                })}
+              </ul>
+            </div>
+          )}
+
+          {removedSkills.length > 0 && (
+            <div className="text-red-600 mt-2">
+              <p className="font-semibold">Akan dihapus:</p>
+              <ul className="list-disc ml-5">
+                {removedSkills.map((id) => {
+                  const skill = allSkills.find((s) => s.idSkill === id);
+                  return <li key={id}>{skill?.nameSkill}</li>;
+                })}
+              </ul>
+            </div>
+          )}
         </div>
 
-        {/* Category */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Kategori
-          </label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 text-gray-700"
-          >
-            <option value="Learning">Learning</option>
-            <option value="Freelance">Freelance</option>
-          </select>
-        </div>
-
-        {/* Skills */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Skills
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {availableSkills.map((skill) => (
-              <button
-                type="button"
-                key={skill}
-                onClick={() => handleSkillChange(skill)}
-                className={`px-3 py-1 rounded-full border text-sm ${
-                  skills.includes(skill)
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-gray-100 text-gray-700 border-gray-300"
-                }`}
-              >
-                {skill}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Status */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Status
-          </label>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 text-gray-700"
-          >
-            <option value="Not Started">Not Started</option>
-            <option value="Ongoing">Ongoing</option>
-            <option value="Open">Open</option>
-            <option value="Closed">Closed</option>
-          </select>
-        </div>
-
-        {/* Organizer */}
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Organizer
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 text-gray-700"
-          />
-        </div>
-
-        {/* Actions */}
-        <div className="flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => router.push("/dashboard/board")}
-            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium"
-          >
-            Batal
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium"
-          >
-            Update
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Simpan
+        </button>
       </form>
     </div>
   );
