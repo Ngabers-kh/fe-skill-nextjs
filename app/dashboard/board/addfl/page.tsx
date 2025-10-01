@@ -232,7 +232,7 @@ export default function AddBoardFreelancePage() {
                 type="button"
                 key={skill.idSkill}
                 onClick={() => toggleSkill(skill.idSkill)}
-                className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
+                className={`cursor-pointer px-4 py-2 rounded-full border-2 text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
                   selectedSkills.includes(skill.idSkill)
                     ? "bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white border-transparent shadow-lg shadow-indigo-200"
                     : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50"
@@ -249,13 +249,13 @@ export default function AddBoardFreelancePage() {
           <button
             type="button"
             onClick={() => router.push("/dashboard/board")}
-            className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-md"
+            className="cursor-pointer px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-md"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transform hover:-translate-y-0.5"
+            className="cursor-pointer px-6 py-3 bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transform hover:-translate-y-0.5"
           >
             Create Project
           </button>
