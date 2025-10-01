@@ -82,7 +82,7 @@ export default function AddBoardLearningPage() {
     e.preventDefault();
     if (!userId || !token) {
       showNotification(
-        "Token atau User ID tidak ditemukan, silakan login ulang.",
+        "Token or User ID not found, please log in again.",
         "error"
       );
       return;
@@ -103,11 +103,11 @@ export default function AddBoardLearningPage() {
         token
       );
 
-      showNotification("Board Learning berhasil disimpan!", "success");
+      showNotification("Board Learning saved successfully!", "success");
       setTimeout(() => router.push("/dashboard/board"), 1500);
     } catch (err: any) {
-      console.error("Gagal simpan board:", err);
-      showNotification("Gagal simpan board.", "error");
+      console.error("Failed to save board:", err);
+      showNotification("Failed to save board.", "error");
     }
   };
 
