@@ -111,18 +111,24 @@ export default function AddBoardFreelancePage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex justify-center items-center p-4">
+    <div className="w-full min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex justify-center items-center p-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-2xl bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200"
+        className="w-full max-w-2xl bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl shadow-indigo-100 border border-white/20"
       >
-        <h1 className="text-xl font-bold text-slate-800 mb-5">
-          Tambah Board Freelance
-        </h1>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            Tambah Board Freelance
+          </h1>
+          <p className="text-sm text-slate-500">
+            Buat proyek freelance baru untuk menarik talent terbaik
+          </p>
+        </div>
 
         {/* Title */}
-        <div className="mb-4">
-          <label className="block text-xs font-medium text-slate-600 mb-1.5">
+        <div className="mb-5">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
             Judul Project
           </label>
           <input
@@ -131,14 +137,14 @@ export default function AddBoardFreelancePage() {
             value={form.title}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-400 focus:outline-none text-sm text-slate-800 bg-white"
-            placeholder="Masukkan judul project"
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+            placeholder="Contoh: Desain UI/UX untuk Aplikasi Mobile"
           />
         </div>
 
         {/* Description */}
-        <div className="mb-4">
-          <label className="block text-xs font-medium text-slate-600 mb-1.5">
+        <div className="mb-5">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
             Deskripsi
           </label>
           <textarea
@@ -146,46 +152,51 @@ export default function AddBoardFreelancePage() {
             value={form.description}
             onChange={handleChange}
             required
-            rows={3}
-            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-400 focus:outline-none text-sm text-slate-800 bg-white resize-none"
-            placeholder="Tuliskan deskripsi singkat"
+            rows={4}
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200 hover:border-slate-300"
+            placeholder="Jelaskan detail proyek, requirements, dan ekspektasi Anda..."
           />
         </div>
 
         {/* Price & Quota */}
-        <div className="mb-4 grid grid-cols-2 gap-3">
+        <div className="mb-5 grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1.5">
-              Harga
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
+              Harga (Rp)
             </label>
-            <input
-              type="number"
-              name="price"
-              value={form.price}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-400 focus:outline-none text-sm text-slate-800 bg-white"
-              placeholder="0"
-            />
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
+                Rp
+              </span>
+              <input
+                type="number"
+                name="price"
+                value={form.price}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+                placeholder="0"
+              />
+            </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1.5">
-              Kuota
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
+              Kuota Freelancer
             </label>
             <input
               type="number"
               name="quota"
               value={form.quota}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-400 focus:outline-none text-sm text-slate-800 bg-white"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
               placeholder="0"
             />
           </div>
         </div>
 
         {/* Date Range */}
-        <div className="mb-4 grid grid-cols-2 gap-3">
+        <div className="mb-5 grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1.5">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Tanggal Mulai
             </label>
             <input
@@ -193,11 +204,11 @@ export default function AddBoardFreelancePage() {
               name="startDate"
               value={form.startDate}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-400 focus:outline-none text-sm text-slate-700 bg-white"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1.5">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Tanggal Selesai
             </label>
             <input
@@ -205,15 +216,15 @@ export default function AddBoardFreelancePage() {
               name="endDate"
               value={form.endDate}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-400 focus:outline-none text-sm text-slate-700 bg-white"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
         </div>
 
         {/* Skills */}
-        <div className="mb-5">
-          <label className="block text-xs font-medium text-slate-600 mb-2">
-            Skills
+        <div className="mb-8">
+          <label className="block text-sm font-semibold text-slate-700 mb-3">
+            Skills yang Dibutuhkan
           </label>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill) => (
@@ -221,10 +232,10 @@ export default function AddBoardFreelancePage() {
                 type="button"
                 key={skill.idSkill}
                 onClick={() => toggleSkill(skill.idSkill)}
-                className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-all ${
+                className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
                   selectedSkills.includes(skill.idSkill)
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-blue-300"
+                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-lg shadow-indigo-200"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50"
                 }`}
               >
                 {skill.nameSkill}
@@ -234,19 +245,19 @@ export default function AddBoardFreelancePage() {
         </div>
 
         {/* Action */}
-        <div className="flex justify-end gap-2 pt-2">
+        <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button
             type="button"
             onClick={() => router.push("/dashboard/board")}
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition-colors"
+            className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-md"
           >
             Batal
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors"
+            className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transform hover:-translate-y-0.5"
           >
-            Simpan
+            Simpan Project
           </button>
         </div>
       </form>
