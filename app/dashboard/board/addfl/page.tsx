@@ -111,7 +111,7 @@ export default function AddBoardFreelancePage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex justify-center items-center p-4">
+    <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex justify-center items-center p-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-2xl bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl shadow-indigo-100 border border-white/20"
@@ -119,7 +119,7 @@ export default function AddBoardFreelancePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] bg-clip-text text-transparent mb-2">
-            Create Board Freealance
+            Create Freelance Board
           </h1>
           <p className="text-sm text-slate-500">
             Create new freelance projects to attract the best talent
