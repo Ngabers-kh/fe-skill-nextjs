@@ -119,17 +119,17 @@ export default function AddBoardFreelancePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] bg-clip-text text-transparent mb-2">
-            Tambah Board Freelance
+            Create Board Freealance
           </h1>
           <p className="text-sm text-slate-500">
-            Buat proyek freelance baru untuk menarik talent terbaik
+            Create new freelance projects to attract the best talent
           </p>
         </div>
 
         {/* Title */}
         <div className="mb-5">
           <label className="block text-sm font-semibold text-slate-700 mb-2">
-            Judul Project
+            Project Title
           </label>
           <input
             type="text"
@@ -138,14 +138,14 @@ export default function AddBoardFreelancePage() {
             onChange={handleChange}
             required
             className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
-            placeholder="Contoh: Desain UI/UX untuk Aplikasi Mobile"
+            placeholder="Example: Desain UI/UX untuk Aplikasi Mobile"
           />
         </div>
 
         {/* Description */}
         <div className="mb-5">
           <label className="block text-sm font-semibold text-slate-700 mb-2">
-            Deskripsi
+            Description
           </label>
           <textarea
             name="description"
@@ -154,7 +154,7 @@ export default function AddBoardFreelancePage() {
             required
             rows={4}
             className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200 hover:border-slate-300"
-            placeholder="Jelaskan detail proyek, requirements, dan ekspektasi Anda..."
+            placeholder="Describe your project details, requirements, and expectations..."
           />
         </div>
 
@@ -162,7 +162,7 @@ export default function AddBoardFreelancePage() {
         <div className="mb-5 grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Harga (Rp)
+              Price (Rp)
             </label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
@@ -180,7 +180,7 @@ export default function AddBoardFreelancePage() {
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Kuota Freelancer
+              Freelancer Quota
             </label>
             <input
               type="number"
@@ -197,7 +197,7 @@ export default function AddBoardFreelancePage() {
         <div className="mb-5 grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Tanggal Mulai
+              Start Date
             </label>
             <input
               type="date"
@@ -209,7 +209,7 @@ export default function AddBoardFreelancePage() {
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Tanggal Selesai
+              End Date
             </label>
             <input
               type="date"
@@ -224,7 +224,7 @@ export default function AddBoardFreelancePage() {
         {/* Skills */}
         <div className="mb-8">
           <label className="block text-sm font-semibold text-slate-700 mb-3">
-            Skills yang Dibutuhkan
+            Required Skills
           </label>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill) => (
@@ -251,13 +251,13 @@ export default function AddBoardFreelancePage() {
             onClick={() => router.push("/dashboard/board")}
             className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-md"
           >
-            Batal
+            Cancel
           </button>
           <button
             type="submit"
             className="px-6 py-3 bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transform hover:-translate-y-0.5"
           >
-            Simpan Project
+            Create Project
           </button>
         </div>
       </form>
