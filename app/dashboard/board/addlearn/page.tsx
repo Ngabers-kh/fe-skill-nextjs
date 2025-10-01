@@ -26,7 +26,6 @@ export default function AddBoardLearningPage() {
     endTime: "",
   });
 
-  // ambil token & userId dari cookie
   const token = Cookies.get("token") || "";
   const userId = Cookies.get("userId") || "";
 
@@ -58,10 +57,34 @@ export default function AddBoardLearningPage() {
     }));
   };
 
+  const showNotification = (message: string, type: "success" | "error") => {
+    const notif = document.createElement("div");
+    notif.className = `fixed top-4 right-4 ${
+      type === "success" ? "bg-green-500" : "bg-red-500"
+    } text-white px-6 py-3 rounded-lg z-50 transform transition-transform duration-300`;
+    notif.innerHTML = `
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          ${
+            type === "success"
+              ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>'
+              : '<path fill-rule="evenodd" d="M18 10A8 8 0 11.001 10a8 8 0 0117.998 0zM9 13a1 1 0 102 0V9a1 1 0 10-2 0v4zm1-6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" clip-rule="evenodd"/>'
+          }
+        </svg>
+        ${message}
+      </div>
+    `;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), type === "success" ? 1500 : 2000);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId || !token) {
-      alert("Token atau User ID tidak ditemukan, silakan login ulang.");
+      showNotification(
+        "Token atau User ID tidak ditemukan, silakan login ulang.",
+        "error"
+      );
       return;
     }
 
@@ -80,28 +103,34 @@ export default function AddBoardLearningPage() {
         token
       );
 
-      alert("Board Learning berhasil disimpan!");
-      router.push("/dashboard/board");
+      showNotification("Board Learning berhasil disimpan!", "success");
+      setTimeout(() => router.push("/dashboard/board"), 1500);
     } catch (err: any) {
       console.error("Gagal simpan board:", err);
-      alert("Gagal simpan board");
+      showNotification("Gagal simpan board.", "error");
     }
   };
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center p-6">
+    <div className="w-full min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex justify-center items-center p-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-2xl bg-white p-8 rounded-xl shadow-md"
+        className="w-full max-w-2xl bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl shadow-orange-100 border border-white/20"
       >
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">
-          Tambah Board Learning
-        </h1>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent mb-2">
+            Tambah Board Learning
+          </h1>
+          <p className="text-sm text-slate-500">
+            Buat sesi pembelajaran baru dan bagikan ilmu Anda
+          </p>
+        </div>
 
         {/* Title */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Judul Project
+        <div className="mb-5">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
+            Judul Pembelajaran
           </label>
           <input
             type="text"
@@ -109,14 +138,14 @@ export default function AddBoardLearningPage() {
             value={form.title}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-gray-700"
-            placeholder="Masukkan judul project"
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+            placeholder="Contoh: Workshop React untuk Pemula"
           />
         </div>
 
         {/* Description */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="mb-5">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
             Deskripsi
           </label>
           <textarea
@@ -124,29 +153,34 @@ export default function AddBoardLearningPage() {
             value={form.description}
             onChange={handleChange}
             required
-            rows={3}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-gray-700"
-            placeholder="Tuliskan deskripsi singkat"
+            rows={4}
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200 hover:border-slate-300"
+            placeholder="Jelaskan materi yang akan dipelajari, target peserta, dan manfaat yang didapat..."
           />
         </div>
 
-        {/* Price & date */}
-        <div className="mb-4 grid grid-cols-2 gap-4">
+        {/* Price & Date */}
+        <div className="mb-5 grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Harga
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
+              Harga (Rp)
             </label>
-            <input
-              type="number"
-              name="price"
-              value={form.price}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 text-gray-700"
-              placeholder="Masukkan harga"
-            />
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
+                Rp
+              </span>
+              <input
+                type="number"
+                name="price"
+                value={form.price}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+                placeholder="0"
+              />
+            </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Tanggal
             </label>
             <input
@@ -154,16 +188,15 @@ export default function AddBoardLearningPage() {
               name="date"
               value={form.date}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 text-gray-700"
-              placeholder="Masukkan Tanggal"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
         </div>
 
-        {/* Date */}
-        <div className="mb-4 grid grid-cols-2 gap-4">
+        {/* Time Range */}
+        <div className="mb-5 grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Jam Mulai
             </label>
             <input
@@ -171,11 +204,11 @@ export default function AddBoardLearningPage() {
               name="startTime"
               value={form.startTime}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Jam Selesai
             </label>
             <input
@@ -183,15 +216,15 @@ export default function AddBoardLearningPage() {
               name="endTime"
               value={form.endTime}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
         </div>
 
         {/* Skills */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Skills
+        <div className="mb-8">
+          <label className="block text-sm font-semibold text-slate-700 mb-3">
+            Skills yang Diajarkan
           </label>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill) => (
@@ -199,10 +232,10 @@ export default function AddBoardLearningPage() {
                 type="button"
                 key={skill.idSkill}
                 onClick={() => toggleSkill(skill.idSkill)}
-                className={`px-3 py-1 rounded-full border text-sm ${
+                className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
                   selectedSkills.includes(skill.idSkill)
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-gray-100 text-gray-700 border-gray-300"
+                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-transparent shadow-lg shadow-orange-200"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-orange-300 hover:bg-orange-50"
                 }`}
               >
                 {skill.nameSkill}
@@ -212,19 +245,19 @@ export default function AddBoardLearningPage() {
         </div>
 
         {/* Action */}
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button
             type="button"
             onClick={() => router.push("/dashboard/board")}
-            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium"
+            className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-md"
           >
             Batal
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-orange-200 hover:shadow-xl hover:shadow-orange-300 transform hover:-translate-y-0.5"
           >
-            Simpan
+            Simpan Pembelajaran
           </button>
         </div>
       </form>
