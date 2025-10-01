@@ -118,7 +118,7 @@ export default function AddBoardFreelancePage() {
       >
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-3xl font-bold bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] bg-clip-text text-transparent mb-2">
             Tambah Board Freelance
           </h1>
           <p className="text-sm text-slate-500">
@@ -137,7 +137,7 @@ export default function AddBoardFreelancePage() {
             value={form.title}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
             placeholder="Contoh: Desain UI/UX untuk Aplikasi Mobile"
           />
         </div>
@@ -153,7 +153,7 @@ export default function AddBoardFreelancePage() {
             onChange={handleChange}
             required
             rows={4}
-            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200 hover:border-slate-300"
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200 hover:border-slate-300"
             placeholder="Jelaskan detail proyek, requirements, dan ekspektasi Anda..."
           />
         </div>
@@ -173,7 +173,7 @@ export default function AddBoardFreelancePage() {
                 name="price"
                 value={form.price}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
                 placeholder="0"
               />
             </div>
@@ -187,7 +187,7 @@ export default function AddBoardFreelancePage() {
               name="quota"
               value={form.quota}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
               placeholder="0"
             />
           </div>
@@ -204,7 +204,7 @@ export default function AddBoardFreelancePage() {
               name="startDate"
               value={form.startDate}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
           <div>
@@ -216,7 +216,7 @@ export default function AddBoardFreelancePage() {
               name="endDate"
               value={form.endDate}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
         </div>
@@ -234,7 +234,7 @@ export default function AddBoardFreelancePage() {
                 onClick={() => toggleSkill(skill.idSkill)}
                 className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
                   selectedSkills.includes(skill.idSkill)
-                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-lg shadow-indigo-200"
+                    ? "bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white border-transparent shadow-lg shadow-indigo-200"
                     : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50"
                 }`}
               >
@@ -255,7 +255,7 @@ export default function AddBoardFreelancePage() {
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transform hover:-translate-y-0.5"
+            className="px-6 py-3 bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transform hover:-translate-y-0.5"
           >
             Simpan Project
           </button>
