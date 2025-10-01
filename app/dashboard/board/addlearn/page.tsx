@@ -119,7 +119,7 @@ export default function AddBoardLearningPage() {
       >
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] bg-clip-text text-transparent mb-2">
             Tambah Board Learning
           </h1>
           <p className="text-sm text-slate-500">
@@ -138,7 +138,7 @@ export default function AddBoardLearningPage() {
             value={form.title}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
             placeholder="Contoh: Workshop React untuk Pemula"
           />
         </div>
@@ -154,7 +154,7 @@ export default function AddBoardLearningPage() {
             onChange={handleChange}
             required
             rows={4}
-            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200 hover:border-slate-300"
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200 hover:border-slate-300"
             placeholder="Jelaskan materi yang akan dipelajari, target peserta, dan manfaat yang didapat..."
           />
         </div>
@@ -174,7 +174,7 @@ export default function AddBoardLearningPage() {
                 name="price"
                 value={form.price}
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
                 placeholder="0"
               />
             </div>
@@ -188,7 +188,7 @@ export default function AddBoardLearningPage() {
               name="date"
               value={form.date}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
         </div>
@@ -204,7 +204,7 @@ export default function AddBoardLearningPage() {
               name="startTime"
               value={form.startTime}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
           <div>
@@ -216,7 +216,7 @@ export default function AddBoardLearningPage() {
               name="endTime"
               value={form.endTime}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
         </div>
@@ -234,8 +234,8 @@ export default function AddBoardLearningPage() {
                 onClick={() => toggleSkill(skill.idSkill)}
                 className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-all duration-200 transform hover:scale-105 ${
                   selectedSkills.includes(skill.idSkill)
-                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-transparent shadow-lg shadow-orange-200"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-orange-300 hover:bg-orange-50"
+                    ? "bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white border-transparent shadow-lg shadow-indigo-200"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50"
                 }`}
               >
                 {skill.nameSkill}
@@ -255,7 +255,7 @@ export default function AddBoardLearningPage() {
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-orange-200 hover:shadow-xl hover:shadow-orange-300 transform hover:-translate-y-0.5"
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transform hover:-translate-y-0.5"
           >
             Simpan Pembelajaran
           </button>
