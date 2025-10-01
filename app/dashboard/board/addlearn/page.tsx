@@ -112,10 +112,10 @@ export default function AddBoardLearningPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex justify-center items-center p-4">
+    <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex justify-center items-center p-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-2xl bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl shadow-orange-100 border border-white/20"
+        className="w-full max-w-2xl bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl shadow-indigo-100 border border-white/20"
       >
         {/* Header */}
         <div className="mb-8">
