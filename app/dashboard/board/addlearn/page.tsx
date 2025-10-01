@@ -120,17 +120,17 @@ export default function AddBoardLearningPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] bg-clip-text text-transparent mb-2">
-            Tambah Board Learning
+            Create Learning Board
           </h1>
           <p className="text-sm text-slate-500">
-            Buat sesi pembelajaran baru dan bagikan ilmu Anda
+            Create new learning sessions and share your knowledge
           </p>
         </div>
 
         {/* Title */}
         <div className="mb-5">
           <label className="block text-sm font-semibold text-slate-700 mb-2">
-            Judul Pembelajaran
+            Learning Title
           </label>
           <input
             type="text"
@@ -139,14 +139,14 @@ export default function AddBoardLearningPage() {
             onChange={handleChange}
             required
             className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
-            placeholder="Contoh: Workshop React untuk Pemula"
+            placeholder="Example: Workshop React untuk Pemula"
           />
         </div>
 
         {/* Description */}
         <div className="mb-5">
           <label className="block text-sm font-semibold text-slate-700 mb-2">
-            Deskripsi
+            Description
           </label>
           <textarea
             name="description"
@@ -155,7 +155,7 @@ export default function AddBoardLearningPage() {
             required
             rows={4}
             className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200 hover:border-slate-300"
-            placeholder="Jelaskan materi yang akan dipelajari, target peserta, dan manfaat yang didapat..."
+            placeholder="Explain the material to be studied, target participants, and benefits to be gained..."
           />
         </div>
 
@@ -163,7 +163,7 @@ export default function AddBoardLearningPage() {
         <div className="mb-5 grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Harga (Rp)
+              Price (Rp)
             </label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
@@ -181,7 +181,7 @@ export default function AddBoardLearningPage() {
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Tanggal
+              Date
             </label>
             <input
               type="date"
@@ -197,7 +197,7 @@ export default function AddBoardLearningPage() {
         <div className="mb-5 grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Jam Mulai
+              Start Time
             </label>
             <input
               type="time"
@@ -209,7 +209,7 @@ export default function AddBoardLearningPage() {
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              Jam Selesai
+              Start Time
             </label>
             <input
               type="time"
@@ -224,7 +224,7 @@ export default function AddBoardLearningPage() {
         {/* Skills */}
         <div className="mb-8">
           <label className="block text-sm font-semibold text-slate-700 mb-3">
-            Skills yang Diajarkan
+            Skills Outcomes
           </label>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill) => (
@@ -251,13 +251,13 @@ export default function AddBoardLearningPage() {
             onClick={() => router.push("/dashboard/board")}
             className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-md"
           >
-            Batal
+            Cancel
           </button>
           <button
             type="submit"
             className="px-6 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transform hover:-translate-y-0.5"
           >
-            Simpan Pembelajaran
+            Create Learning
           </button>
         </div>
       </form>
