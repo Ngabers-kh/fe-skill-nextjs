@@ -21,7 +21,7 @@ export default function BoardPage() {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 9;
 
   // Apply filters
   const filteredBoards = useMemo(() => {

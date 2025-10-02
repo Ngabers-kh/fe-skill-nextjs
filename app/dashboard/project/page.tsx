@@ -2,14 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import Cookies from "js-cookie";
-import {
-  Search,
-  Grid3x3,
-  ChevronLeft,
-  ChevronRight,
-  Tag,
-  User,
-} from "lucide-react";
+import { Search, Grid3x3, Tag, User } from "lucide-react";
 import { getAllBoardFreeLance, getAllBoardLearning } from "../../services/api";
 import DropdownFilters from "../board/components/DropdownFilters";
 
@@ -121,7 +114,7 @@ export default function ProjectBoardPage() {
   });
 
   // Pagination
-  const itemsPerPage = 6;
+  const itemsPerPage = 9;
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
 
   const paginatedProjects = filteredProjects.slice(
@@ -279,7 +272,7 @@ export default function ProjectBoardPage() {
                       );
                     }
                   }}
-                  className="px-3.5 py-1.5 text-sm bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-[rgb(2,44,92)] text-white rounded-lg font-medium transition-all shadow-sm hover:shadow"
+                  className="cursor-pointer px-3.5 py-1.5 text-sm bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-[rgb(2,44,92)] text-white rounded-lg font-medium transition-all shadow-sm hover:shadow"
                 >
                   View Detail
                 </button>
@@ -296,13 +289,13 @@ export default function ProjectBoardPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2">
+          <div className="flex justify-center items-center gap-2 mb-4">
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg bg-white border border-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="cursor-pointer px-3 h-8 flex items-center justify-center rounded-full text-sm font-medium border border-gray-200 bg-white text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <ChevronLeft className="w-5 h-5" />
+              ‹
             </button>
 
             {[...Array(totalPages)].map((_, idx) => {
@@ -316,7 +309,7 @@ export default function ProjectBoardPage() {
                   <button
                     key={idx}
                     onClick={() => goToPage(pageNum)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    className={`cursor-pointer w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium transition-colors duration-200 ${
                       currentPage === pageNum
                         ? "bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white shadow-sm"
                         : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -341,9 +334,9 @@ export default function ProjectBoardPage() {
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg bg-white border border-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="cursor-pointer px-3 h-8 flex items-center justify-center rounded-full text-sm font-medium border border-gray-200 bg-white text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <ChevronRight className="w-5 h-5" />
+              ›
             </button>
           </div>
         )}
