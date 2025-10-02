@@ -3,7 +3,16 @@
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { ArrowLeft, User, Tag, Calendar, Users, X, Send } from "lucide-react";
+import {
+  ArrowLeft,
+  User,
+  Tag,
+  Calendar,
+  Users,
+  X,
+  Send,
+  CreditCard,
+} from "lucide-react";
 import {
   getBoardFreeLanceById,
   getBoardFreeLanceSkills,
@@ -114,7 +123,7 @@ export default function ProjectFreeLanceDetailPage() {
         <div className="flex flex-col items-center gap-4">
           <div className="w-8 h-8 border-4 border-[rgb(2,44,92)] border-t-transparent rounded-full animate-spin"></div>
           <p className="text-gray-600 font-medium">
-            Loading project details...
+            Loading project freelance details...
           </p>
         </div>
       </div>
@@ -126,16 +135,20 @@ export default function ProjectFreeLanceDetailPage() {
       <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            Project Not Found
+            Project Freelaance Not Found
           </h2>
           <p className="text-gray-600 mb-4">
-            The project you're looking for doesn't exist.
+            The project freelance you're looking for doesn't exist.
           </p>
           <button
             onClick={() => router.push("/dashboard/project")}
-            className="px-6 py-2 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white rounded-lg font-medium hover:shadow-lg transition-all"
+            className="cursor-pointer flex items-center gap-2 mb-6 px-4 py-2 rounded-xl 
+             text-gray-700 hover:text-white hover:bg-gradient-to-r 
+             hover:from-blue-600 hover:to-[rgb(2,44,92)] font-medium 
+             transition-all duration-300 shadow-sm hover:shadow-md group"
           >
-            Back to Projects
+            <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+            <span className="text-sm">Back to Projects</span>
           </button>
         </div>
       </div>
@@ -148,25 +161,25 @@ export default function ProjectFreeLanceDetailPage() {
         {/* Back Button */}
         <button
           onClick={() => router.push("/dashboard/project")}
-          className="flex items-center gap-2 mb-6 text-gray-700 hover:text-blue-600 font-medium transition-colors group"
+          className="cursor-pointer flex items-center gap-2 mb-6 px-4 py-2 rounded-xl 
+             text-gray-700 hover:text-white hover:bg-gradient-to-r 
+             hover:from-blue-600 hover:to-[rgb(2,44,92)] font-medium 
+             transition-all duration-300 shadow-sm hover:shadow-md group"
         >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          Back to Projects
+          <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+          <span className="text-sm">Back to Projects</span>
         </button>
 
         <div className="max-w-4xl mx-auto">
           {/* Main Card */}
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-700 p-8 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] p-8 text-white">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="px-4 py-1.5 text-sm font-semibold rounded-full bg-white/20 backdrop-blur-sm text-white">
+                    <span className="px-4 py-1.5 text-sm rounded-full bg-white/20 backdrop-blur-sm text-white">
                       Freelance
-                    </span>
-                    <span className="px-3 py-1 text-xs font-medium rounded-full bg-white text-green-700">
-                      {project.status}
                     </span>
                   </div>
                   <h1 className="text-3xl font-bold mb-3">{project.title}</h1>
@@ -226,9 +239,22 @@ export default function ProjectFreeLanceDetailPage() {
                   </div>
                 </div>
 
-                {/* Skills */}
+                {/* Price */}
                 <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CreditCard className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Paid</p>
+                    <p className="text-sm font-semibold text-gray-800">
+                      Rp {project.price},00
+                    </p>
+                  </div>
+                </div>
+
+                {/* Skills */}
+                <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200 md:col-span-2">
+                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <Tag className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
@@ -240,7 +266,7 @@ export default function ProjectFreeLanceDetailPage() {
                         skills.map((skill) => (
                           <span
                             key={skill.idSkill}
-                            className="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-lg text-sm font-medium border border-yellow-200"
+                            className="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium border border-blue-200"
                           >
                             {skill.nameSkill}
                           </span>
@@ -262,7 +288,7 @@ export default function ProjectFreeLanceDetailPage() {
                 </div>
                 <button
                   onClick={() => setShowModal(true)}
-                  className="px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                  className="cursor-pointer px-8 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
                 >
                   Apply for Freelance
                 </button>
@@ -279,10 +305,10 @@ export default function ProjectFreeLanceDetailPage() {
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-700 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] rounded-full flex items-center justify-center">
                   <Send className="w-5 h-5 text-white" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-800">
+                <h2 className="text-sm font-semibold text-gray-800">
                   Apply for Freelance
                 </h2>
               </div>
@@ -290,7 +316,7 @@ export default function ProjectFreeLanceDetailPage() {
                 onClick={() => setShowModal(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <X className="w-6 h-6" />
+                <X className="w-6 h-6 cursor-pointer " />
               </button>
             </div>
 
@@ -305,7 +331,7 @@ export default function ProjectFreeLanceDetailPage() {
                   placeholder="e.g., Web Development Specialist"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
                 />
               </div>
 
@@ -318,7 +344,7 @@ export default function ProjectFreeLanceDetailPage() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={5}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all resize-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all resize-none"
                 />
               </div>
             </div>
@@ -327,17 +353,17 @@ export default function ProjectFreeLanceDetailPage() {
             <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                className="cursor-pointer px-6 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleApply}
                 disabled={submitting || !subject.trim() || !message.trim()}
-                className={`px-6 py-2.5 rounded-lg text-white font-medium transition-all ${
+                className={`cursor-pointer px-6 py-2.5 rounded-lg text-white font-medium transition-all disabled:cursor-not-allowed ${
                   submitting || !subject.trim() || !message.trim()
                     ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 shadow-md hover:shadow-lg"
+                    : "bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg"
                 }`}
               >
                 {submitting ? (
