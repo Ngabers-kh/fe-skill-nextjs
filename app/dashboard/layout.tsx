@@ -128,6 +128,7 @@ export default function DashboardLayout({
                 {/* Active indicator (ONLY rendered on client when isClient is true) */}
                 {isClient && isActive && (
                   <motion.div
+                    suppressHydrationWarning
                     className="absolute left-0 top-0 bottom-0 w-1 bg-white rounded-r-full"
                     layoutId="activeIndicator"
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}

@@ -121,6 +121,45 @@ export function useBoards() {
     [boards]
   );
 
+  const showNotification = (message: string, type: "success" | "error") => {
+    const notif = document.createElement("div");
+    notif.className = `
+      fixed top-4 right-4 w-fit min-w-[250px] flex items-center gap-2 
+      text-white px-5 py-3 rounded-lg shadow-lg z-50 
+      transform translate-x-full opacity-0 transition-all duration-300
+      ${type === "success" ? "bg-green-500" : "bg-red-500"}
+    `;
+
+    notif.innerHTML = `
+      <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        ${
+          type === "success"
+            ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>'
+            : '<path fill-rule="evenodd" d="M18 10A8 8 0 11.001 10a8 8 0 0117.998 0zM9 13a1 1 0 102 0V9a1 1 0 10-2 0v4zm1-6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" clip-rule="evenodd"/>'
+        }
+      </svg>
+      <span>${message}</span>
+    `;
+
+    document.body.appendChild(notif);
+
+    // animasi masuk
+    requestAnimationFrame(() => {
+      notif.classList.remove("translate-x-full", "opacity-0");
+      notif.classList.add("translate-x-0", "opacity-100");
+    });
+
+    // auto close
+    setTimeout(
+      () => {
+        notif.classList.remove("translate-x-0", "opacity-100");
+        notif.classList.add("translate-x-full", "opacity-0");
+        setTimeout(() => notif.remove(), 300);
+      },
+      type === "success" ? 2000 : 2500
+    );
+  };
+
   const handleDelete = async (board: UnifiedBoard) => {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete "${board.title}"?`
@@ -139,9 +178,10 @@ export function useBoards() {
       }
 
       fetchBoards();
+      showNotification(`"${board.title}" successfully deleted!`, "success");
     } catch (err) {
       console.error("Error delete board:", err);
-      alert("Failed to delete board. Please try again.");
+      showNotification("Failed to delete board!", "error");
     } finally {
       setDeleting(null);
     }
