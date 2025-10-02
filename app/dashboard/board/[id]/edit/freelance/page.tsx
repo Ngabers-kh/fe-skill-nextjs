@@ -60,8 +60,7 @@ export default function EditBoardFreeLancePage({
   useEffect(() => {
     async function fetchData() {
       try {
-        if (!boardId || !token)
-          throw new Error("Token/boardId tidak ditemukan");
+        if (!boardId || !token) throw new Error("Token/boardId not found");
 
         const [boardData, masterSkills, boardSkills] = await Promise.all([
           getBoardFreeLanceById(Number(boardId), token),
@@ -79,7 +78,7 @@ export default function EditBoardFreeLancePage({
         setSelectedSkills(skillIds);
         setOldSkills(skillIds);
       } catch (err) {
-        console.error("Gagal ambil data:", err);
+        console.error("Failed to retrieve data:", err);
       } finally {
         setLoading(false);
       }
@@ -131,11 +130,11 @@ export default function EditBoardFreeLancePage({
 
       await updateBoardFreeLance(Number(boardId), payload, token);
 
-      showNotification("Board Freelance berhasil diupdate!", "success");
+      showNotification("Freelance Board successfully updated!", "success");
       setTimeout(() => router.push("/dashboard/board"), 1500);
     } catch (err) {
-      console.error("Gagal update board:", err);
-      showNotification("Gagal update board!", "error");
+      console.error("Failed to update board:", err);
+      showNotification("Failed to update board!", "error");
     }
   };
 

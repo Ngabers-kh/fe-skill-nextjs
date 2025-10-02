@@ -56,8 +56,7 @@ export default function EditBoardLearningPage({
   useEffect(() => {
     async function fetchData() {
       try {
-        if (!boardId || !token)
-          throw new Error("Token/boardId tidak ditemukan");
+        if (!boardId || !token) throw new Error("Token/boardId not found");
 
         const [boardData, masterSkills, boardSkills] = await Promise.all([
           getBoardLearningById(Number(boardId), token),
@@ -72,7 +71,7 @@ export default function EditBoardLearningPage({
         setOldSkills(skillIds);
         setSelectedSkills(skillIds);
       } catch (err) {
-        console.error("Gagal ambil data:", err);
+        console.error("Failed to retrieve data:", err);
       } finally {
         setLoading(false);
       }
@@ -124,20 +123,20 @@ export default function EditBoardLearningPage({
 
       await updateBoardLearning(Number(boardId), payload, token);
 
-      showNotification("Board Learning berhasil diupdate!", "success");
-      setTimeout(() => router.push("/dashboard/board-learning"), 1500);
+      showNotification("LearningBoard successfully updated!", "success");
+      setTimeout(() => router.push("/dashboard/board"), 1500);
     } catch (err) {
-      console.error("Gagal update board:", err);
-      showNotification("Gagal update board!", "error");
+      console.error("Failed to update board:", err);
+      showNotification("Failed to update board!", "error");
     }
   };
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex justify-center items-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin mx-auto mb-3"></div>
-          <p className="text-sm text-slate-600">Memuat data...</p>
+      <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-[rgb(2,44,92)] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600 font-medium">Loading your boards...</p>
         </div>
       </div>
     );
@@ -147,39 +146,39 @@ export default function EditBoardLearningPage({
   const removedSkills = oldSkills.filter((s) => !selectedSkills.includes(s));
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex justify-center items-center p-4">
+    <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex justify-center items-center p-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-xl bg-white/90 backdrop-blur-xl p-6 rounded-2xl shadow-xl shadow-orange-100 border border-white/20"
       >
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent mb-1">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] bg-clip-text text-transparent mb-1">
             Edit Board Learning
           </h1>
           <p className="text-xs text-slate-500">
-            Perbarui informasi sesi pembelajaran Anda
+            Update your learning session information
           </p>
         </div>
 
         {/* Title */}
         <div className="mb-4">
           <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-            Judul Pembelajaran
+            Project Title
           </label>
           <input
             name="title"
             value={form.title}
             onChange={handleChange}
             placeholder="Masukkan judul"
-            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
           />
         </div>
 
         {/* Description */}
         <div className="mb-4">
           <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-            Deskripsi
+            Description
           </label>
           <textarea
             name="description"
@@ -187,7 +186,7 @@ export default function EditBoardLearningPage({
             onChange={handleChange}
             placeholder="Tuliskan deskripsi"
             rows={3}
-            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200"
+            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200"
           />
         </div>
 
@@ -195,7 +194,7 @@ export default function EditBoardLearningPage({
         <div className="mb-4 grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Harga (Rp)
+              Price (Rp)
             </label>
             <input
               type="number"
@@ -203,19 +202,19 @@ export default function EditBoardLearningPage({
               value={form.price}
               onChange={handleChange}
               placeholder="0"
-              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
             />
           </div>
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Tanggal
+              Date
             </label>
             <input
               type="date"
               name="date"
               value={form.date}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
             />
           </div>
         </div>
@@ -224,26 +223,26 @@ export default function EditBoardLearningPage({
         <div className="mb-4 grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Jam Mulai
+              Start Time
             </label>
             <input
               type="time"
               name="startTime"
               value={form.startTime}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
             />
           </div>
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Jam Selesai
+              End Time
             </label>
             <input
               type="time"
               name="endTime"
               value={form.endTime}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
             />
           </div>
         </div>
@@ -258,14 +257,14 @@ export default function EditBoardLearningPage({
             value={form.status}
             onChange={handleChange}
             placeholder="Status"
-            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-orange-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
           />
         </div>
 
         {/* Skills */}
         <div className="mb-4">
           <label className="block text-xs font-semibold text-slate-700 mb-2">
-            Skills yang Diajarkan
+            Skills Outcomes
           </label>
           <div className="flex flex-wrap gap-2">
             {allSkills.map((skill) => (
@@ -275,8 +274,8 @@ export default function EditBoardLearningPage({
                 onClick={() => handleSkillToggle(skill.idSkill)}
                 className={`px-3 py-1.5 rounded-full border-2 text-xs font-medium transition-all duration-200 ${
                   selectedSkills.includes(skill.idSkill)
-                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-transparent shadow-md shadow-orange-200"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-orange-300"
+                    ? "bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white border-transparent shadow-md shadow-indigo-200"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
                 }`}
               >
                 {skill.nameSkill}
@@ -291,7 +290,7 @@ export default function EditBoardLearningPage({
             {addedSkills.length > 0 && (
               <div className="mb-2">
                 <p className="text-xs font-semibold text-green-600 mb-1">
-                  ✓ Skill akan ditambahkan:
+                  ✓ Skills will be added:
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {addedSkills.map((id) => {
@@ -311,7 +310,7 @@ export default function EditBoardLearningPage({
             {removedSkills.length > 0 && (
               <div>
                 <p className="text-xs font-semibold text-red-600 mb-1">
-                  ✕ Skill akan dihapus:
+                  ✕ Skills will be removed:
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {removedSkills.map((id) => {
@@ -335,16 +334,16 @@ export default function EditBoardLearningPage({
         <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
           <button
             type="button"
-            onClick={() => router.push("/dashboard/board-learning")}
+            onClick={() => router.push("/dashboard/board")}
             className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-all duration-200"
           >
-            Batal
+            Cance
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-lg shadow-orange-200"
+            className="px-4 py-2 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200"
           >
-            Simpan Perubahan
+            Save Changes
           </button>
         </div>
       </form>
