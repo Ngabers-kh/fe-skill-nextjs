@@ -267,7 +267,7 @@ export default function EditBoardFreeLancePage({
                 type="button"
                 key={skill.idSkill}
                 onClick={() => handleSkillToggle(skill.idSkill)}
-                className={`px-3 py-1.5 rounded-full border-2 text-xs font-medium transition-all duration-200 ${
+                className={`cursor-pointer px-3 py-1.5 rounded-full border-2 text-xs font-medium transition-all duration-200 ${
                   selectedSkills.includes(skill.idSkill)
                     ? "bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white border-transparent shadow-md shadow-indigo-200"
                     : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
@@ -330,13 +330,13 @@ export default function EditBoardFreeLancePage({
           <button
             type="button"
             onClick={() => router.push("/dashboard/board")}
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-all duration-200"
+            className="cursor-pointer px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-all duration-200"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200"
+            className="cursor-pointer px-4 py-2 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200"
           >
             Save Changes
           </button>
