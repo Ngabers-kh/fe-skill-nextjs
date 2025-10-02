@@ -255,13 +255,139 @@ export async function deleteBoardLearning(id: number, token: string) {
   return res.json();
 }
 
-
-
 export async function deleteBoardFreeLance(id: number, token: string) {
   const res = await fetch(`${BASE_URL}/boardsFreeLance/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error("Gagal delete board Freelance");
+  return res.json();
+}
+
+// create apply learning
+export async function createApplicationLearning(data: {
+  idUser: number;
+  idBoardLearning: number;
+  idTransaction: string;
+  totalAmount: number;
+}, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/learning`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("Gagal simpan apply board learning");
+  }
+  return res.json();
+}
+
+// cek sudah daftar atau belum board learning
+export async function checkApplyBoardLearning(data: {
+  idUser: number;
+  idBoardLearning: number;
+}, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/learning/search`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("Gagal simpan apply board learning");
+  }
+  return res.json();
+}
+
+// create apply FreeLance
+export async function createApplicationFreeLance(data: {
+  idUser: number;
+  idBoardFreeLance: number;
+  idUserCreated: number;
+  message: string;
+  subject: string;
+}, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/freelance`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("Gagal simpan apply board freelance");
+  }
+  return res.json();
+}
+
+// cek sudah daftar atau belum board FreeLance
+export async function checkApplyBoardFreeLance(data: {
+  idUser: number;
+  idBoardFreeLance: number;
+}, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/freelance/search`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("Gagal simpan apply board FreeLance");
+  }
+  return res.json();
+}
+
+// Get all Boards Apply Freelance
+export async function getAllApplicationsFreeLanceByUser(idUser: number, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/freelance/${idUser}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil boards Free Lance");
+  return res.json();
+}
+
+// Get all Boards Apply Learning
+export async function getAllApplicationsLearningByUser(idUser: number, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/learning/${idUser}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil boards Free Lance");
+  return res.json();
+}
+
+// get message
+export async function getMessageFreeLanceFromApply(idUser: number, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/freelance/messages/${idUser}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil Pesan");
+  return res.json();
+}
+
+export async function getMessageLearningFromApply(idUser: number, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/learning/messages/${idUser}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil Pesan");
+  return res.json();
+}
+
+export async function getMessageLearningFromById(id: number, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/learning/message/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil Pesan");
   return res.json();
 }

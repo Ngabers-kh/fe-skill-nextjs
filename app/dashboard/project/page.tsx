@@ -127,7 +127,7 @@ export default function ProjectBoardPage() {
 
   return (
     <div className="w-full min-h-screen bg-gray-50 p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">📌 Project Board</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Project Board</h1>
 
       {/* Filter */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
@@ -191,30 +191,14 @@ export default function ProjectBoardPage() {
             <span className="text-sm font-medium text-gray-500 mb-1">
               Organizer: {project.organizer}
             </span>
-
-            <span className="text-sm font-medium text-gray-500 mb-4">
-              Status:{" "}
-              <span
-                className={`${
-                  project.status === "Ongoing"
-                    ? "text-blue-600"
-                    : project.status === "Open"
-                    ? "text-green-600"
-                    : "text-red-500"
-                }`}
-              >
-                {project.status}
-              </span>
-            </span>
-
             {/* Action Buttons */}
             <div className="mt-auto flex justify-end gap-2">
               <button
                 onClick={() => {
                   if (project.category === "Freelance") {
-                    router.push(`/dashboard/board/detail/freelance/${project.realId}`);
+                    router.push(`/dashboard/project/${project.realId}/freelance`);
                   } else {
-                    router.push(`/dashboard/board/detail/learning/${project.realId}`);
+                    router.push(`/dashboard/project/${project.realId}/learning`);
                   }
                 }}
                 className="px-3 py-1 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium"

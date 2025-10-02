@@ -105,7 +105,7 @@ export default function EditBoardLearningPage({
 
       await updateBoardLearning(Number(boardId), payload, token);
 
-      router.push("/dashboard/board-learning");
+      router.push("/dashboard/board");
     } catch (err) {
       console.error("Gagal update board:", err);
       alert("Gagal update board!");
