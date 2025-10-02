@@ -289,7 +289,7 @@ export default function ProjectFreeLanceDetailPage() {
                   onClick={() => setShowModal(true)}
                   className="cursor-pointer px-8 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
                 >
-                  Apply for Freelance
+                  Apply
                 </button>
               </div>
             </div>
