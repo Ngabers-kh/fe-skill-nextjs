@@ -154,14 +154,14 @@ export default function EditBoardFreeLancePage({
   const removedSkills = oldSkills.filter((id) => !selectedSkills.includes(id));
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex justify-center items-center p-4">
+    <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex justify-center items-center p-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-xl bg-white/90 backdrop-blur-xl p-6 rounded-2xl shadow-xl shadow-indigo-100 border border-white/20"
       >
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] bg-clip-text text-transparent mb-1">
             Edit Board Freelance
           </h1>
           <p className="text-xs text-slate-500">
@@ -179,7 +179,7 @@ export default function EditBoardFreeLancePage({
             value={form.title}
             onChange={handleChange}
             placeholder="Masukkan judul project"
-            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
           />
         </div>
 
@@ -194,7 +194,7 @@ export default function EditBoardFreeLancePage({
             onChange={handleChange}
             placeholder="Tuliskan deskripsi"
             rows={3}
-            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200"
+            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200"
           />
         </div>
 
@@ -210,7 +210,7 @@ export default function EditBoardFreeLancePage({
               value={form.price}
               onChange={handleChange}
               placeholder="0"
-              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
             />
           </div>
           <div>
@@ -223,7 +223,7 @@ export default function EditBoardFreeLancePage({
               value={form.quota}
               onChange={handleChange}
               placeholder="0"
-              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
             />
           </div>
         </div>
@@ -239,7 +239,7 @@ export default function EditBoardFreeLancePage({
               name="startDate"
               value={form.startDate}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
             />
           </div>
           <div>
@@ -251,7 +251,7 @@ export default function EditBoardFreeLancePage({
               name="endDate"
               value={form.endDate}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
             />
           </div>
         </div>
@@ -269,7 +269,7 @@ export default function EditBoardFreeLancePage({
                 onClick={() => handleSkillToggle(skill.idSkill)}
                 className={`px-3 py-1.5 rounded-full border-2 text-xs font-medium transition-all duration-200 ${
                   selectedSkills.includes(skill.idSkill)
-                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-md shadow-indigo-200"
+                    ? "bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white border-transparent shadow-md shadow-indigo-200"
                     : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
                 }`}
               >
@@ -336,7 +336,7 @@ export default function EditBoardFreeLancePage({
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200"
+            className="px-4 py-2 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200"
           >
             Simpan Perubahan
           </button>
