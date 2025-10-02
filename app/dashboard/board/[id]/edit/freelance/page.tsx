@@ -141,10 +141,10 @@ export default function EditBoardFreeLancePage({
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex justify-center items-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-3"></div>
-          <p className="text-sm text-slate-600">Memuat data...</p>
+      <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-[rgb(2,44,92)] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600 font-medium">Loading your boards...</p>
         </div>
       </div>
     );
@@ -165,14 +165,14 @@ export default function EditBoardFreeLancePage({
             Edit Board Freelance
           </h1>
           <p className="text-xs text-slate-500">
-            Perbarui informasi proyek freelance Anda
+            Update your freelance project information
           </p>
         </div>
 
         {/* Title */}
         <div className="mb-4">
           <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-            Judul Project
+            Project Title
           </label>
           <input
             name="title"
@@ -186,7 +186,7 @@ export default function EditBoardFreeLancePage({
         {/* Description */}
         <div className="mb-4">
           <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-            Deskripsi
+            Description
           </label>
           <textarea
             name="description"
@@ -202,7 +202,7 @@ export default function EditBoardFreeLancePage({
         <div className="mb-4 grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Harga (Rp)
+              Price (Rp)
             </label>
             <input
               type="number"
@@ -215,7 +215,7 @@ export default function EditBoardFreeLancePage({
           </div>
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Kuota
+              Freelancer Quota
             </label>
             <input
               type="number"
@@ -232,7 +232,7 @@ export default function EditBoardFreeLancePage({
         <div className="mb-4 grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Tanggal Mulai
+              Start Date
             </label>
             <input
               type="date"
@@ -244,7 +244,7 @@ export default function EditBoardFreeLancePage({
           </div>
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Tanggal Selesai
+              End Date
             </label>
             <input
               type="date"
@@ -259,7 +259,7 @@ export default function EditBoardFreeLancePage({
         {/* Skills */}
         <div className="mb-4">
           <label className="block text-xs font-semibold text-slate-700 mb-2">
-            Skills yang Dibutuhkan
+            Required Skills
           </label>
           <div className="flex flex-wrap gap-2">
             {allSkills.map((skill) => (
@@ -285,7 +285,7 @@ export default function EditBoardFreeLancePage({
             {addedSkills.length > 0 && (
               <div className="mb-2">
                 <p className="text-xs font-semibold text-green-600 mb-1">
-                  ✓ Skill akan ditambahkan:
+                  ✓ Skills will be added:
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {addedSkills.map((id) => {
@@ -305,7 +305,7 @@ export default function EditBoardFreeLancePage({
             {removedSkills.length > 0 && (
               <div>
                 <p className="text-xs font-semibold text-red-600 mb-1">
-                  ✕ Skill akan dihapus:
+                  ✕ Skills will be removed:
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {removedSkills.map((id) => {
@@ -332,13 +332,13 @@ export default function EditBoardFreeLancePage({
             onClick={() => router.push("/dashboard/board")}
             className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-all duration-200"
           >
-            Batal
+            Cancel
           </button>
           <button
             type="submit"
             className="px-4 py-2 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200"
           >
-            Simpan Perubahan
+            Save Changes
           </button>
         </div>
       </form>
