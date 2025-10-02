@@ -60,7 +60,8 @@ export default function EditBoardFreeLancePage({
   useEffect(() => {
     async function fetchData() {
       try {
-        if (!boardId || !token) throw new Error("Token/boardId tidak ditemukan");
+        if (!boardId || !token)
+          throw new Error("Token/boardId tidak ditemukan");
 
         const [boardData, masterSkills, boardSkills] = await Promise.all([
           getBoardFreeLanceById(Number(boardId), token),
@@ -99,6 +100,27 @@ export default function EditBoardFreeLancePage({
     );
   };
 
+  const showNotification = (message: string, type: "success" | "error") => {
+    const notif = document.createElement("div");
+    notif.className = `fixed top-4 right-4 ${
+      type === "success" ? "bg-green-500" : "bg-red-500"
+    } text-white px-6 py-3 rounded-lg z-50 transform transition-transform duration-300`;
+    notif.innerHTML = `
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          ${
+            type === "success"
+              ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>'
+              : '<path fill-rule="evenodd" d="M18 10A8 8 0 11.001 10a8 8 0 0117.998 0zM9 13a1 1 0 102 0V9a1 1 0 10-2 0v4zm1-6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" clip-rule="evenodd"/>'
+          }
+        </svg>
+        ${message}
+      </div>
+    `;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), type === "success" ? 1500 : 2000);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -109,114 +131,216 @@ export default function EditBoardFreeLancePage({
 
       await updateBoardFreeLance(Number(boardId), payload, token);
 
-      router.push("/dashboard/board"); // tetap di url ini
+      showNotification("Board Freelance berhasil diupdate!", "success");
+      setTimeout(() => router.push("/dashboard/board"), 1500);
     } catch (err) {
       console.error("Gagal update board:", err);
-      alert("Gagal update board!");
+      showNotification("Gagal update board!", "error");
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex justify-center items-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-sm text-slate-600">Memuat data...</p>
+        </div>
+      </div>
+    );
+  }
 
   const addedSkills = selectedSkills.filter((id) => !oldSkills.includes(id));
   const removedSkills = oldSkills.filter((id) => !selectedSkills.includes(id));
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-xl font-bold mb-4">Edit Board Freelance</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          placeholder="Judul"
-          className="border p-2 w-full"
-        />
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          placeholder="Deskripsi"
-          className="border p-2 w-full"
-        />
-        <input
-          type="number"
-          name="price"
-          value={form.price}
-          onChange={handleChange}
-          placeholder="Harga"
-          className="border p-2 w-full"
-        />
-        <input
-          type="number"
-          name="quota"
-          value={form.quota}
-          onChange={handleChange}
-          placeholder="Kuota"
-          className="border p-2 w-full"
-        />
-        <input
-          type="date"
-          name="startDate"
-          value={form.startDate}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-        <input
-          type="date"
-          name="endDate"
-          value={form.endDate}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
+    <div className="w-full min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex justify-center items-center p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-xl bg-white/90 backdrop-blur-xl p-6 rounded-2xl shadow-xl shadow-indigo-100 border border-white/20"
+      >
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1">
+            Edit Board Freelance
+          </h1>
+          <p className="text-xs text-slate-500">
+            Perbarui informasi proyek freelance Anda
+          </p>
+        </div>
 
-        {/* Checklist skill */}
-        <div>
-          <p className="font-semibold mb-2">Pilih Skill:</p>
-          {allSkills.map((skill) => (
-            <label key={skill.idSkill} className="block">
-              <input
-                type="checkbox"
-                checked={selectedSkills.includes(skill.idSkill)}
-                onChange={() => handleSkillToggle(skill.idSkill)}
-              />
-              <span className="ml-2">{skill.nameSkill}</span>
+        {/* Title */}
+        <div className="mb-4">
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            Judul Project
+          </label>
+          <input
+            name="title"
+            value={form.title}
+            onChange={handleChange}
+            placeholder="Masukkan judul project"
+            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+          />
+        </div>
+
+        {/* Description */}
+        <div className="mb-4">
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            Deskripsi
+          </label>
+          <textarea
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            placeholder="Tuliskan deskripsi"
+            rows={3}
+            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white resize-none transition-all duration-200"
+          />
+        </div>
+
+        {/* Price & Quota */}
+        <div className="mb-4 grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              Harga (Rp)
             </label>
-          ))}
+            <input
+              type="number"
+              name="price"
+              value={form.price}
+              onChange={handleChange}
+              placeholder="0"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              Kuota
+            </label>
+            <input
+              type="number"
+              name="quota"
+              value={form.quota}
+              onChange={handleChange}
+              placeholder="0"
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+            />
+          </div>
         </div>
 
-        {/* Info perubahan skill */}
-        <div className="mt-4">
-          {addedSkills.length > 0 && (
-            <div className="text-green-600">
-              <p className="font-semibold">Skill akan ditambahkan:</p>
-              <ul className="list-disc ml-5">
-                {addedSkills.map((id) => {
-                  const skill = allSkills.find((s) => s.idSkill === id);
-                  return <li key={id}>{skill?.nameSkill}</li>;
-                })}
-              </ul>
-            </div>
-          )}
-          {removedSkills.length > 0 && (
-            <div className="text-red-600 mt-2">
-              <p className="font-semibold">Skill akan dihapus:</p>
-              <ul className="list-disc ml-5">
-                {removedSkills.map((id) => {
-                  const skill = allSkills.find((s) => s.idSkill === id);
-                  return <li key={id}>{skill?.nameSkill}</li>;
-                })}
-              </ul>
-            </div>
-          )}
+        {/* Date Range */}
+        <div className="mb-4 grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              Tanggal Mulai
+            </label>
+            <input
+              type="date"
+              name="startDate"
+              value={form.startDate}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              Tanggal Selesai
+            </label>
+            <input
+              type="date"
+              name="endDate"
+              value={form.endDate}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-indigo-400 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
+            />
+          </div>
         </div>
 
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Simpan
-        </button>
+        {/* Skills */}
+        <div className="mb-4">
+          <label className="block text-xs font-semibold text-slate-700 mb-2">
+            Skills yang Dibutuhkan
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {allSkills.map((skill) => (
+              <button
+                type="button"
+                key={skill.idSkill}
+                onClick={() => handleSkillToggle(skill.idSkill)}
+                className={`px-3 py-1.5 rounded-full border-2 text-xs font-medium transition-all duration-200 ${
+                  selectedSkills.includes(skill.idSkill)
+                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-md shadow-indigo-200"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
+                }`}
+              >
+                {skill.nameSkill}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Skill Changes Info */}
+        {(addedSkills.length > 0 || removedSkills.length > 0) && (
+          <div className="mb-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
+            {addedSkills.length > 0 && (
+              <div className="mb-2">
+                <p className="text-xs font-semibold text-green-600 mb-1">
+                  ✓ Skill akan ditambahkan:
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {addedSkills.map((id) => {
+                    const skill = allSkills.find((s) => s.idSkill === id);
+                    return (
+                      <span
+                        key={id}
+                        className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs"
+                      >
+                        {skill?.nameSkill}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            {removedSkills.length > 0 && (
+              <div>
+                <p className="text-xs font-semibold text-red-600 mb-1">
+                  ✕ Skill akan dihapus:
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {removedSkills.map((id) => {
+                    const skill = allSkills.find((s) => s.idSkill === id);
+                    return (
+                      <span
+                        key={id}
+                        className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs"
+                      >
+                        {skill?.nameSkill}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard/board")}
+            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-all duration-200"
+          >
+            Batal
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-lg shadow-indigo-200"
+          >
+            Simpan Perubahan
+          </button>
+        </div>
       </form>
     </div>
   );
