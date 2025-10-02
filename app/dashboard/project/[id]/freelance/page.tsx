@@ -176,18 +176,16 @@ export default function ProjectFreeLanceDetailPage() {
             {/* Header Section */}
             <div className="bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] p-8 text-white">
               <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="px-4 py-1.5 text-sm rounded-full bg-white/20 backdrop-blur-sm text-white">
-                      Freelance
-                    </span>
-                  </div>
-                  <h1 className="text-3xl font-bold mb-3">{project.title}</h1>
-                  <p className="text-green-50 text-lg leading-relaxed">
-                    {project.description}
-                  </p>
+                <div>
+                  <span className="px-4 py-1.5 text-sm font-semibold rounded-full bg-white/20 backdrop-blur-sm">
+                    Freelance
+                  </span>
                 </div>
               </div>
+              <h1 className="text-3xl font-bold mb-3">{project.title}</h1>
+              <p className="text-blue-50 text-lg leading-relaxed">
+                {project.description}
+              </p>
             </div>
 
             {/* Content Section */}
@@ -196,7 +194,7 @@ export default function ProjectFreeLanceDetailPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {/* Organizer */}
                 <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-700 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
                     <User className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -205,6 +203,35 @@ export default function ProjectFreeLanceDetailPage() {
                       {project.users
                         ? project.users.name
                         : `User ${project.idUser}`}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Price */}
+                <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-700 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CreditCard className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Paid</p>
+                    <p className="text-lg font-semibold text-gray-800">
+                      Rp {project.price?.toLocaleString("id-ID")}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Date Range */}
+                <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">
+                      Project Duration
+                    </p>
+                    <p className="text-lg font-semibold text-gray-800">
+                      {formatDate(project.startDate!)} -{" "}
+                      {formatDate(project.endDate!)}
                     </p>
                   </div>
                 </div>
@@ -224,41 +251,13 @@ export default function ProjectFreeLanceDetailPage() {
                   </div>
                 </div>
 
-                {/* Date Range */}
-                <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600 mb-1">
-                      Project Duration
-                    </p>
-                    <p className="text-sm font-semibold text-gray-800">
-                      {project.startDate} - {project.endDate}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Price */}
-                <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <CreditCard className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600 mb-1">Paid</p>
-                    <p className="text-sm font-semibold text-gray-800">
-                      Rp {project.price},00
-                    </p>
-                  </div>
-                </div>
-
                 {/* Skills */}
                 <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200 md:col-span-2">
                   <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <Tag className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm text-gray-600 mb-2">
+                    <p className="text-xl font-bold text-gray-600 mb-2">
                       Required Skills
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -382,3 +381,10 @@ export default function ProjectFreeLanceDetailPage() {
     </div>
   );
 }
+
+const formatDate = (dateStr: string) =>
+  new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(dateStr));

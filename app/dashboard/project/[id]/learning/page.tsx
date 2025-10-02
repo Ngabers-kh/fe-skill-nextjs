@@ -125,7 +125,7 @@ export default function ProjectLearningDetailPage() {
   if (loading)
     return (
       <div className="w-full min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">Loading project details...</p>
+        <p className="text-gray-600">Loading project learning details...</p>
       </div>
     );
 
@@ -201,10 +201,13 @@ export default function ProjectLearningDetailPage() {
         {/* Back Button */}
         <button
           onClick={() => router.push("/dashboard/project")}
-          className="flex items-center gap-2 mb-6 text-gray-700 hover:text-blue-600 font-medium transition-colors group"
+          className="cursor-pointer flex items-center gap-2 mb-6 px-4 py-2 rounded-xl 
+             text-gray-700 hover:text-white hover:bg-gradient-to-r 
+             hover:from-blue-600 hover:to-[rgb(2,44,92)] font-medium 
+             transition-all duration-300 shadow-sm hover:shadow-md group"
         >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          Back to Projects
+          <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+          <span className="text-sm">Back to Projects</span>
         </button>
 
         <div className="max-w-4xl mx-auto">
@@ -216,9 +219,6 @@ export default function ProjectLearningDetailPage() {
                 <div>
                   <span className="px-4 py-1.5 text-sm font-semibold rounded-full bg-white/20 backdrop-blur-sm">
                     Learning
-                  </span>
-                  <span className="ml-3 px-3 py-1 text-xs font-medium rounded-full bg-white text-blue-700">
-                    {project.status}
                   </span>
                 </div>
               </div>
@@ -233,9 +233,11 @@ export default function ProjectLearningDetailPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {/* Organizer */}
                 <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <User className="w-6 h-6 text-blue-600" />
+                  <div className="w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <User className="w-5 h-5 text-white" />
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-600">Organizer</p>
+                    <p className="text-sm text-gray-600 mb-1">Organizer</p>
                     <p className="text-lg font-semibold text-gray-800">
                       {project.users
                         ? project.users.name
@@ -246,9 +248,11 @@ export default function ProjectLearningDetailPage() {
 
                 {/* Price */}
                 <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <CreditCard className="w-6 h-6 text-green-600" />
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-700 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CreditCard className="w-5 h-5 text-white" />
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-600">Price</p>
+                    <p className="text-sm text-gray-600 mb-1">Price</p>
                     <p className="text-lg font-semibold text-gray-800">
                       Rp {project.price?.toLocaleString("id-ID")}
                     </p>
@@ -257,48 +261,62 @@ export default function ProjectLearningDetailPage() {
 
                 {/* Date */}
                 <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <Calendar className="w-6 h-6 text-purple-600" />
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-5 h-5 text-white" />
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-600">Date</p>
+                    <p className="text-sm text-gray-600 mb-1">Date</p>
                     <p className="text-lg font-semibold text-gray-800">
-                      {project.date}
+                      {new Date(project.date).toLocaleDateString("id-ID", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
                     </p>
                   </div>
                 </div>
 
                 {/* Time */}
                 <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <Clock className="w-6 h-6 text-orange-600" />
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-600 to-amber-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-5.5 h-5.5 text-white" />
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-600">Time</p>
+                    <p className="text-sm text-gray-600 mb-1">Time</p>
                     <p className="text-lg font-semibold text-gray-800">
-                      {project.startTime} - {project.endTime}
+                      {formatTime(project.startTime!)} -{" "}
+                      {formatTime(project.endTime!)} WIB
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Skills */}
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <Tag className="w-5 h-5 text-yellow-600" />
-                  <h2 className="text-xl font-bold text-gray-800">
-                    Skills You'll Learn
-                  </h2>
+              <div className="flex items-start gap-4 p-4 mb-8 -mt-2 bg-gray-50 rounded-xl border border-gray-200 md:col-span-2">
+                <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Tag className="w-5 h-5 text-white" />
                 </div>
-                <div className="flex flex-wrap gap-3">
-                  {skills.length > 0 ? (
-                    skills.map((skill) => (
-                      <span
-                        key={skill.idSkill}
-                        className="px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg text-sm font-medium border border-yellow-200"
-                      >
-                        {skill.nameSkill}
+                <div className="flex-1">
+                  <p className="text-xl font-bold text-gray-600 mb-2">
+                    Skills You'll Learn
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {skills.length > 0 ? (
+                      skills.map((skill) => (
+                        <span
+                          key={skill.idSkill}
+                          className="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium border border-blue-200"
+                        >
+                          {skill.nameSkill}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-gray-500 text-sm">
+                        No skills required
                       </span>
-                    ))
-                  ) : (
-                    <span className="text-gray-500 text-sm">No skills</span>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -323,7 +341,7 @@ export default function ProjectLearningDetailPage() {
                     </div>
                     <button
                       onClick={checkOut}
-                      className="px-8 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-[rgb(2,44,92)] text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                      className="cursor-pointer px-8 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-[rgb(2,44,92)] text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all transform hover:scale-105 flex items-center gap-2"
                     >
                       Checkout
                     </button>
@@ -337,3 +355,9 @@ export default function ProjectLearningDetailPage() {
     </div>
   );
 }
+
+const formatTime = (timeStr: string) => {
+  if (!timeStr) return "";
+  const [hour, minute] = timeStr.split(":");
+  return `${hour}:${minute}`;
+};
