@@ -21,7 +21,7 @@ export default function BoardPage() {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 9;
 
   // Apply filters
   const filteredBoards = useMemo(() => {
@@ -91,7 +91,7 @@ export default function BoardPage() {
         />
 
         {/* Board List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
           {paginatedBoards.map((board) => (
             <BoardCard
               key={board.id}
