@@ -120,52 +120,26 @@ export default function InboxPage() {
               <Inbox className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">Inbox</h1>
+              <h1 className="text-3xl font-bold text-gray-800">Messages</h1>
               <p className="text-gray-600 text-sm">
                 All your messages and notifications
               </p>
             </div>
           </div>
-
-          {/* Stats */}
-          {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
-              <p className="text-xs text-gray-600 mb-1">Total Messages</p>
-              <p className="text-2xl font-bold text-gray-800">
-                {messages.length}
-              </p>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
-              <p className="text-xs text-gray-600 mb-1">Freelance</p>
-              <p className="text-2xl font-bold text-green-600">
-                {messages.filter((m) => m.category === "Freelance").length}
-              </p>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
-              <p className="text-xs text-gray-600 mb-1">Learning</p>
-              <p className="text-2xl font-bold text-blue-600">
-                {messages.filter((m) => m.category === "Learning").length}
-              </p>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
-              <p className="text-xs text-gray-600 mb-1">Replies</p>
-              <p className="text-2xl font-bold text-purple-600">
-                {messages.filter((m) => m.category === "Reply").length}
-              </p>
-            </div>
-          </div> */}
         </div>
 
         {/* Filter */}
         <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 mb-6 border border-gray-200/50 shadow-sm">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <span className="text-sm font-medium text-gray-700">Filter:</span>
-            <div className="flex gap-2">
+
+            {/* Tombol filter */}
+            <div className="flex flex-wrap gap-2 sm:gap-3 overflow-x-auto">
               {["All", "Freelance", "Learning", "Reply"].map((category) => (
                 <button
                   key={category}
                   onClick={() => setFilter(category)}
-                  className={`cursor-pointer px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  className={`cursor-pointer px-3 sm:px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     filter === category
                       ? "bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white shadow-sm"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -190,7 +164,7 @@ export default function InboxPage() {
                   }/${msg.category.toLowerCase()}`}
                   className="block p-4 hover:bg-blue-50/50 transition-colors group"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-4">
                     {/* Left Section */}
                     <div className="flex items-start gap-3 flex-1 min-w-0">
                       {/* Icon */}
@@ -216,10 +190,11 @@ export default function InboxPage() {
 
                       {/* Content */}
                       <div className="flex-1 min-w-0">
+                        {/* Top row: title+category (left) | date+status (right on sm+) */}
                         <div className="flex items-start justify-between">
-                          {/* Left - Title + Category */}
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-sm font-semibold text-gray-800 truncate transition-colors">
+                          {/* Title + Category */}
+                          <div className="flex items-center gap-2 min-w-0">
+                            <h3 className="text-sm font-semibold text-gray-800 truncate">
                               {msg.subject || msg.boardTitle}
                             </h3>
                             <span
@@ -235,8 +210,8 @@ export default function InboxPage() {
                             </span>
                           </div>
 
-                          {/* Right - Date + Status */}
-                          <div className="flex items-center gap-2 text-xs">
+                          {/* Date + Status for sm and up (stays on the right, won't force title to wrap) */}
+                          <div className="hidden sm:flex flex-shrink-0 items-center gap-2 text-xs whitespace-nowrap ml-3">
                             {msg.status && (
                               <span
                                 className={`px-2 py-0.5 rounded text-xs font-medium ${
@@ -270,6 +245,36 @@ export default function InboxPage() {
                         <p className="text-xs text-gray-600 line-clamp-2 mt-1">
                           {msg.boardDescription || msg.message || msg.status}
                         </p>
+
+                        {/* Mobile: Date + Status shown below, aligned right (visible only on xs) */}
+                        <div className="flex justify-end items-center gap-2 mt-2 text-xs text-gray-500 sm:hidden">
+                          {msg.status && (
+                            <span
+                              className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                msg.status === "Accepted"
+                                  ? "bg-green-50 text-green-700 border border-green-200"
+                                  : msg.status === "Rejected"
+                                  ? "bg-red-50 text-red-700 border border-red-200"
+                                  : "bg-yellow-50 text-yellow-700 border border-yellow-200"
+                              }`}
+                            >
+                              {msg.status}
+                            </span>
+                          )}
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            <span>
+                              {new Date(msg.created_at).toLocaleDateString(
+                                "id-ID",
+                                {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                }
+                              )}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
