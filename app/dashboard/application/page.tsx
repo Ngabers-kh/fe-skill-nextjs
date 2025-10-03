@@ -1,7 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { FileCheck, Calendar, User, Tag, Clock } from "lucide-react";
+import {
+  FileCheck,
+  Calendar,
+  User,
+  Tag,
+  Clock,
+  ChevronDown,
+} from "lucide-react";
 import {
   getAllApplicationsFreeLanceByUser,
   getAllApplicationsLearningByUser,
@@ -64,6 +71,7 @@ export default function ApplicationPage() {
   const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
+  const [open, setOpen] = useState(false);
 
   const token = Cookies.get("token") || "";
   const idUser = Cookies.get("userId");
@@ -152,24 +160,46 @@ export default function ApplicationPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
-              <p className="text-xs text-gray-600 mb-1">Total Applications</p>
-              <p className="text-2xl font-bold text-gray-800">
-                {applications.length}
-              </p>
+          <div className="mb-3">
+            <div
+              className="flex md:hidden items-center justify-between px-4 py-2 bg-white/80 backdrop-blur-sm rounded-xl border cursor-pointer"
+              onClick={() => setOpen((prev) => !prev)}
+            >
+              <span className="font-medium text-gray-700">
+                Application Stats
+              </span>
+              <ChevronDown
+                className={`w-5 h-5 text-gray-500 transition-transform ${
+                  open ? "rotate-180" : ""
+                }`}
+              />
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
-              <p className="text-xs text-gray-600 mb-1">Freelance</p>
-              <p className="text-2xl font-bold text-green-600">
-                {applications.filter((a) => a.category === "Freelance").length}
-              </p>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 shadow-sm">
-              <p className="text-xs text-gray-600 mb-1">Learning</p>
-              <p className="text-2xl font-bold text-blue-600">
-                {applications.filter((a) => a.category === "Learning").length}
-              </p>
+
+            {/* Stats */}
+            <div
+              className={`grid grid-cols-1 md:grid-cols-3 gap-4 transition-all duration-300 overflow-hidden ${
+                open ? "max-h-[1000px] mt-3" : "max-h-0 md:max-h-full"
+              }`}
+            >
+              <StatCard
+                label="Total Applications"
+                value={applications.length}
+                color="text-gray-800"
+              />
+              <StatCard
+                label="Freelance"
+                value={
+                  applications.filter((a) => a.category === "Freelance").length
+                }
+                color="text-green-600"
+              />
+              <StatCard
+                label="Learning"
+                value={
+                  applications.filter((a) => a.category === "Learning").length
+                }
+                color="text-blue-600"
+              />
             </div>
           </div>
         </div>
@@ -197,7 +227,7 @@ export default function ApplicationPage() {
         </div>
 
         {/* Applications Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
           {filteredApplications.map((app) => (
             <div
               key={app.id}
@@ -296,6 +326,23 @@ export default function ApplicationPage() {
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  color,
+}: {
+  label: string;
+  value: number;
+  color: string;
+}) {
+  return (
+    <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50">
+      <p className="text-xs text-gray-600 mb-1">{label}</p>
+      <p className={`text-2xl font-bold ${color}`}>{value}</p>
     </div>
   );
 }
