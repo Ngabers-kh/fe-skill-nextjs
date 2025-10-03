@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import {
   getMessageFreeLanceFromApply,
   getMessageLearningFromApply,
+  getAllReplyFreeLanceByUser,
 } from "../../services/api"; // ganti sesuai path kamu
 
 interface Message {
@@ -14,13 +15,13 @@ interface Message {
   message?: string | null;
   status?: string | null;
   created_at: string;
-  boardTitle: string;
-  boardDescription: string;
-  organizer: string;
+  boardTitle?: string;
+  boardDescription?: string;
+  organizer?: string;
   totalAmount?: number;
   paymentStatus?: string;
   link?: string;
-  category: "Freelance" | "Learning";
+  category: "Freelance" | "Learning" | "Reply";
 }
 
 export default function InboxPage() {
@@ -39,14 +40,18 @@ export default function InboxPage() {
           return;
         }
 
+        // ambil semua data
         const freelance = await getMessageFreeLanceFromApply(idUser, token);
         const learning = await getMessageLearningFromApply(idUser, token);
+        const replies = await getAllReplyFreeLanceByUser(idUser, token);
 
+        // mapping freelance
         const freelanceMapped: Message[] = freelance.map((f: any) => ({
           ...f,
           category: "Freelance",
         }));
 
+        // mapping learning
         const learningMapped: Message[] = learning.map((l: any) => ({
           ...l,
           subject: "Materi / Link Belajar",
@@ -54,7 +59,28 @@ export default function InboxPage() {
           category: "Learning",
         }));
 
-        setMessages([...freelanceMapped, ...learningMapped]);
+        // mapping replies (jawaban Accepted/Rejected)
+        const replyMapped: Message[] = replies.map((r: any) => ({
+          id: r.id,
+          subject: r.subject,
+          status: r.status,
+          created_at: r.created_at,
+          boardTitle: "Balasan Lamaran Freelance",
+          organizer: "System",
+          category: "Reply",
+        }));
+
+        // gabung semua + sort by created_at terbaru
+        const allMessages = [
+          ...freelanceMapped,
+          ...learningMapped,
+          ...replyMapped,
+        ].sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+
+        setMessages(allMessages);
       } catch (err) {
         console.error("Gagal fetch pesan:", err);
       } finally {
@@ -76,23 +102,23 @@ export default function InboxPage() {
       <div className="divide-y">
         {messages.map((msg) => (
           <Link
-            key={msg.id}
+            key={`${msg.category}-${msg.id}`} // unique key
             href={`/dashboard/inbox/${msg.id}/${msg.category.toLowerCase()}`}
             className="block p-4 hover:bg-gray-100"
           >
             <div className="flex justify-between items-center">
-              <span className="font-medium text-gray-800">
-                {msg.organizer} ({msg.category})
+              <span className="text-gray-800 font-semibold">
+                {msg.subject || msg.boardTitle}
               </span>
               <span className="text-xs text-gray-500">
-                {new Date(msg.created_at).toLocaleDateString()}
+                {new Date(msg.created_at).toLocaleDateString("id-ID")}
               </span>
             </div>
-            <p className="text-sm text-gray-700 font-semibold">
-              {msg.subject || msg.boardTitle}
+            <p className="text-sm text-gray-700">
+              {msg.category}
             </p>
             <p className="text-xs text-gray-500 truncate">
-              {msg.boardDescription}
+              {msg.boardDescription || msg.message || msg.status}
             </p>
           </Link>
         ))}

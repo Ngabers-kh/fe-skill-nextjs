@@ -24,6 +24,7 @@ export default function AddBoardLearningPage() {
     date: "",
     startTime: "",
     endTime: "",
+    link: "",
   });
 
   const token = Cookies.get("token") || "";
@@ -99,6 +100,7 @@ export default function AddBoardLearningPage() {
           startTime: form.startTime,
           endTime: form.endTime,
           skills: selectedSkills,
+          link: form.link
         },
         token
       );
@@ -219,6 +221,22 @@ export default function AddBoardLearningPage() {
               className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200 hover:border-slate-300"
             />
           </div>
+        </div>
+
+        {/* link */}
+        <div className="mb-5">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
+            Link
+          </label>
+          <input
+            type="text"
+            name="link"
+            value={form.link}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200 hover:border-slate-300"
+            placeholder="Example: Link Zoom or Gmeet"
+          />
         </div>
 
         {/* Skills */}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,9 +15,20 @@ import {
   Inbox,
   LogOut,
 } from "lucide-react";
+import { getUser } from "../services/api";
 
 // Define the sidebar width for use in Tailwind CSS and calculations
 const DESKTOP_SIDEBAR_WIDTH = "w-80"; // w-80 is 320px
+
+interface User {
+  id?: number;
+  name?: string;
+  email?: string;
+  address?: string;
+  job?: string;
+  bio?: string;
+  role?: string;
+}
 
 export default function DashboardLayout({
   children,
@@ -27,6 +39,10 @@ export default function DashboardLayout({
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const token = Cookies.get("token") || "";
+  const userId = Cookies.get("userId") || "";
+  const [loading, setLoading] = useState(true);
 
   // NOTE: This state is key for client-only rendering portions like motion.div
   const [isClient, setIsClient] = useState(false);
@@ -37,6 +53,26 @@ export default function DashboardLayout({
     // You might also want to close the mobile sidebar on navigation
     setIsOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+      async function fetchData() {
+        try {
+          if (!userId || !token) {
+            throw new Error("Token atau userId tidak ditemukan di cookie");
+          }
+  
+          const userData= await getUser(Number(userId), token);
+  
+          setUser(userData);
+        } catch (err) {
+          console.error("Gagal ambil data:", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+  
+      fetchData();
+    }, [userId, token]);
 
   const menus = [
     {
@@ -74,7 +110,8 @@ export default function DashboardLayout({
   const handleLogout = () => {
     // NOTE: This check ensures localStorage is only accessed on the client.
     if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
+      Cookies.remove("token");
+      Cookies.remove("userId"); 
       router.push("/auth");
     }
   };
@@ -173,9 +210,9 @@ export default function DashboardLayout({
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-medium text-white text-sm truncate">
-                John Doe
+                {user?.name || "No Name"}
               </p>
-              <p className="text-blue-200 text-xs">Premium Member</p>
+              <p className="text-blue-200 text-xs">{user?.role || "No Name"}</p>
             </div>
             <div className="w-2 h-2 bg-green-400 rounded-full"></div>
           </div>
@@ -297,11 +334,11 @@ export default function DashboardLayout({
                             {" "}
                             <p className="font-medium text-white text-sm">
                               {" "}
-                              John Doe{" "}
+                              {user?.name || "No Name"}{" "}
                             </p>{" "}
                             <p className="text-blue-200 text-xs">
                               {" "}
-                              john@example.com{" "}
+                              {user?.email || "No Email"}{" "}
                             </p>{" "}
                           </div>{" "}
                         </div>{" "}

@@ -123,6 +123,7 @@ export async function createBoardLearning(data: {
   startTime: string;
   endTime: string;
   skills: number[];
+  link: string,
 }, token: string) {
   const res = await fetch(`${BASE_URL}/boardsLearning/create`, {
     method: "POST",
@@ -358,6 +359,22 @@ export async function getAllApplicationsFreeLanceByUser(idUser: number, token: s
   return res.json();
 }
 
+export async function getAllReplyFreeLanceByUser(idUser: number, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/freelance/messages/reply/${idUser}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil boards Free Lance");
+  return res.json();
+}
+
+export async function getReplyFreeLanceById(idUser: number, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/freelance/messages/detail/${idUser}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil Reply Free Lance");
+  return res.json();
+}
+
 // Get all Boards Apply Learning
 export async function getAllApplicationsLearningByUser(idUser: number, token: string) {
   const res = await fetch(`${BASE_URL}/applications/learning/${idUser}`, {
@@ -389,5 +406,37 @@ export async function getMessageLearningFromById(id: number, token: string) {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error("Gagal ambil Pesan");
+  return res.json();
+}
+
+export async function getMessageFreeLanceFromById(id: number, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/freelance/message/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Gagal ambil Pesan");
+  return res.json();
+}
+
+// update board dan balasan pesan 
+export async function updateBoardFeedBack(data: {
+  id: number,
+  idUserCreated: number;
+  idBoardFreeLance: number;
+  idUserTarget: number;
+  status: string;
+  subject: string;
+}, token: string) {
+  const res = await fetch(`${BASE_URL}/applications/freeLance/message/update/${data.id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("Gagal simpan Feedback apply board FreeLance");
+  }
   return res.json();
 }

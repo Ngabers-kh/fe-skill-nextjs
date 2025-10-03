@@ -92,7 +92,7 @@ export default function EditProfilePage() {
 
       await updateUser(Number(userId), token, {
         ...form,
-        skillIds: skills.map((s) => s.idSkill),
+        skillIds: selectedSkills,
       });
 
       // Success notification with better UX

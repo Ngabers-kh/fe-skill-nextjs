@@ -25,6 +25,7 @@ interface BoardLearning {
   startTime: string;
   endTime: string;
   status: string;
+  link: string;
 }
 
 export default function EditBoardLearningPage({
@@ -44,6 +45,7 @@ export default function EditBoardLearningPage({
     startTime: "",
     endTime: "",
     status: "open",
+    link: "link",
   });
 
   const [allSkills, setAllSkills] = useState<Skill[]>([]);
@@ -245,6 +247,20 @@ export default function EditBoardLearningPage({
               className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-700 bg-white transition-all duration-200"
             />
           </div>
+        </div>
+
+        {/* link */}
+        <div className="mb-4">
+          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            Project link
+          </label>
+          <input
+            name="link"
+            value={form.link}
+            onChange={handleChange}
+            placeholder="Masukkan judul"
+            className="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none text-sm text-slate-800 bg-white transition-all duration-200"
+          />
         </div>
 
         {/* Status */}
