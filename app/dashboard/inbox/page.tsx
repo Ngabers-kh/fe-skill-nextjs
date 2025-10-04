@@ -171,19 +171,19 @@ export default function InboxPage() {
                       <div
                         className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
                           msg.category === "Freelance"
-                            ? "bg-green-100"
+                            ? "bg-purple-100"
                             : msg.category === "Learning"
-                            ? "bg-blue-100"
-                            : "bg-purple-100"
+                            ? "bg-green-100"
+                            : "bg-blue-100"
                         }`}
                       >
                         <Mail
                           className={`w-5 h-5 ${
                             msg.category === "Freelance"
-                              ? "text-green-600"
+                              ? "text-purple-600"
                               : msg.category === "Learning"
-                              ? "text-blue-600"
-                              : "text-purple-600"
+                              ? "text-green-600"
+                              : "text-blue-600"
                           }`}
                         />
                       </div>
@@ -200,10 +200,10 @@ export default function InboxPage() {
                             <span
                               className={`px-2 py-0.5 text-xs font-medium rounded flex-shrink-0 ${
                                 msg.category === "Freelance"
-                                  ? "bg-green-100 text-green-700"
+                                  ? "bg-purple-100 text-purple-700"
                                   : msg.category === "Learning"
-                                  ? "bg-blue-100 text-blue-700"
-                                  : "bg-purple-100 text-purple-700"
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-blue-100 text-blue-700"
                               }`}
                             >
                               {msg.category}
