@@ -191,14 +191,14 @@ export default function ApplicationPage() {
                 value={
                   applications.filter((a) => a.category === "Freelance").length
                 }
-                color="text-green-600"
+                color="text-purple-600"
               />
               <StatCard
                 label="Learning"
                 value={
                   applications.filter((a) => a.category === "Learning").length
                 }
-                color="text-blue-600"
+                color="text-green-600"
               />
             </div>
           </div>
@@ -238,8 +238,8 @@ export default function ApplicationPage() {
                 <span
                   className={`px-2.5 py-0.5 text-xs font-semibold rounded-full ${
                     app.category === "Learning"
-                      ? "bg-blue-100 text-blue-700"
-                      : "bg-green-100 text-green-700"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-purple-100 text-purple-700"
                   }`}
                 >
                   {app.category}
@@ -296,7 +296,7 @@ export default function ApplicationPage() {
                     app.skills.slice(0, 3).map((skill: string, idx: number) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 bg-yellow-50 text-yellow-700 rounded text-xs border border-yellow-200"
+                        className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs border border-blue-200"
                       >
                         {skill}
                       </span>
