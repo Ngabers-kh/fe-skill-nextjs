@@ -55,7 +55,7 @@ export default function SkillPage() {
       setLoading(true);
       const res = await addUserSkills(Number(userId), selectedSkills, token);
       console.log("Skills berhasil disimpan:", res);
-      router.push("/dashboard");
+      router.push("/dashboard/project");
     } catch (err) {
       console.error("Error submit skills:", err);
       alert("Failed to save skills. Please try again.");

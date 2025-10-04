@@ -29,7 +29,7 @@ export default function AuthPage() {
         Cookies.set("token", res.token, { expires: 1 });
         Cookies.set("userId", res.userId, { expires: 1 });
       }
-      router.push("/dashboard");
+      router.push("/dashboard/project");
     } catch (err: any) {
       setErrorMsg(err.message || "Login failed");
     } finally {
