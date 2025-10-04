@@ -34,6 +34,7 @@ export type BoardLearning = {
   endTime: string;
   date: string;
   iduser: number;
+  amount: number;
   users?: { name: string };
 };
 
@@ -56,6 +57,7 @@ export type UnifiedBoard = {
   date?: string;
   startTime?: string;
   endTime?: string;
+  amount?: number;
 };
 
 export function useBoards() {
@@ -102,6 +104,7 @@ export function useBoards() {
         date: b.date,
         startTime: b.startTime,
         endTime: b.endTime,
+        amount: b.amount,
       }));
 
       setBoards([...mappedFL, ...mappedL]);
