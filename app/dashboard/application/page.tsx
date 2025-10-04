@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import {
   FileCheck,
@@ -8,6 +8,9 @@ import {
   Tag,
   Clock,
   ChevronDown,
+  BookOpen,
+  Briefcase,
+  MoreHorizontal,
 } from "lucide-react";
 import {
   getAllApplicationsFreeLanceByUser,
@@ -177,28 +180,30 @@ export default function ApplicationPage() {
 
             {/* Stats */}
             <div
-              className={`grid grid-cols-1 md:grid-cols-3 gap-4 transition-all duration-300 overflow-hidden ${
+              className={`grid grid-cols-1 md:grid-cols-3 gap-3 transition-all duration-300 overflow-hidden ${
                 open ? "max-h-[1000px] mt-3" : "max-h-0 md:max-h-full"
               }`}
             >
               <StatCard
+                icon={
+                  <MoreHorizontal className="w-5 h-5 text-[rgb(2,44,92)]" />
+                }
                 label="Total Applications"
                 value={applications.length}
-                color="text-gray-800"
               />
               <StatCard
-                label="Freelance"
-                value={
-                  applications.filter((a) => a.category === "Freelance").length
-                }
-                color="text-purple-600"
-              />
-              <StatCard
+                icon={<BookOpen className="w-5 h-5 text-[rgb(2,44,92)]" />}
                 label="Learning"
                 value={
-                  applications.filter((a) => a.category === "Learning").length
+                  applications.filter((b) => b.category === "Learning").length
                 }
-                color="text-green-600"
+              />
+              <StatCard
+                icon={<Briefcase className="w-5 h-5 text-[rgb(2,44,92)]" />}
+                label="Freelance"
+                value={
+                  applications.filter((b) => b.category === "Freelance").length
+                }
               />
             </div>
           </div>
@@ -331,18 +336,25 @@ export default function ApplicationPage() {
 }
 
 function StatCard({
+  icon,
   label,
   value,
-  color,
 }: {
+  icon: JSX.Element;
   label: string;
   value: number;
-  color: string;
 }) {
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50">
-      <p className="text-xs text-gray-600 mb-1">{label}</p>
-      <p className={`text-2xl font-bold ${color}`}>{value}</p>
+    <div className="bg-white rounded-xl p-4 border border-gray-200">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+          {icon}
+        </div>
+        <div>
+          <p className="text-gray-500 text-xs font-medium">{label}</p>
+          <p className="text-lg font-bold text-gray-800">{value}</p>
+        </div>
+      </div>
     </div>
   );
 }
