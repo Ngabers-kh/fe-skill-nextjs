@@ -14,7 +14,8 @@ export async function registerUser(form: {
     body: JSON.stringify(form),
   });
 
-  if (!res.ok) throw new Error("Register gagal");
+  if (!res.ok)
+    throw new Error("Register failed. Email or password already used.");
   return res.json();
 }
 
@@ -26,7 +27,7 @@ export async function loginUser(email: string, password: string) {
     body: JSON.stringify({ email, password }),
   });
 
-  if (!res.ok) throw new Error("Login gagal");
+  if (!res.ok) throw new Error("Login failed. Incorrect email or password.");
   return res.json();
 }
 
