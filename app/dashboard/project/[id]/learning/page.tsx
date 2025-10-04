@@ -235,7 +235,7 @@ export default function ProjectLearningDetailPage() {
           className="cursor-pointer flex items-center gap-2 mb-6 text-gray-700 hover:text-blue-600 font-medium transition-colors group"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          Back to Inbox
+          Back to Project
         </button>
 
         <div className="max-w-4xl mx-auto">
