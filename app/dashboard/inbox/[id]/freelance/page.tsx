@@ -146,7 +146,7 @@ export default function FreelanceMessageDetailPage({
           {/* Main Card */}
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-700 p-8 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] p-8 text-white">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
                   <Mail className="w-6 h-6 text-white" />
