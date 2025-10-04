@@ -91,8 +91,8 @@ export default function AuthPage() {
               {/* Error Message for Register */}
               {!isLogin && errorMsg && (
                 <div className="mb-4 p-3 rounded-xl bg-red-500/20 border border-red-400/30 backdrop-blur-sm">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="w-5 h-5 text-red-200 flex-shrink-0 mt-0.5" />
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-red-200 flex-shrink-0" />
                     <div className="flex-1">
                       <p className="text-sm text-red-100 font-medium">
                         {errorMsg}
@@ -188,8 +188,8 @@ export default function AuthPage() {
               {/* Error Message for Login */}
               {isLogin && errorMsg && (
                 <div className="mb-4 p-3 rounded-xl bg-red-500/20 border border-red-400/30 backdrop-blur-sm">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="w-5 h-5 text-red-200 flex-shrink-0 mt-0.5" />
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-red-200 flex-shrink-0" />
                     <div className="flex-1">
                       <p className="text-sm text-red-100 font-medium">
                         {errorMsg}
