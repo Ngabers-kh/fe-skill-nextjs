@@ -40,7 +40,7 @@ interface BoardLearning {
   endTime: string;
   status: string;
   iduser: number;
-  users?: { name: string };
+  users?: { idUser: number; name: string };
 }
 
 export default function ProjectLearningDetailPage() {
@@ -56,6 +56,7 @@ export default function ProjectLearningDetailPage() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const [alreadyApplied, setAlreadyApplied] = useState(false);
+  const [checkingApply, setCheckingApply] = useState(true);
 
   // === Load Snap.js Midtrans ===
   useEffect(() => {
@@ -97,30 +98,44 @@ export default function ProjectLearningDetailPage() {
     fetchData();
   }, [boardId, token]);
 
-  // === Cek apakah sudah daftar ===
+  // === Cek apakah user sudah daftar ATAU punya project sendiri ===
   useEffect(() => {
-    async function checkApplication() {
-      try {
-        if (!idUser || !boardId) return;
+    async function checkAccess() {
+      if (!idUser || !boardId || !project) return;
 
+      // === Ambil ID Owner (pemilik project) ===
+      const ownerId =
+        project.iduser ?? // dari tabel utama boardLearning
+        project.users?.idUser ?? // dari relasi users(idUser, name)
+        0;
+
+      // === Cek apakah user login == owner ===
+      const isOwner = Number(idUser) === Number(ownerId);
+
+      if (isOwner) {
+        setAlreadyApplied(true); // user nggak boleh daftar project sendiri
+        setCheckingApply(false);
+        return;
+      }
+
+      try {
+        setCheckingApply(true);
         const result = await checkApplyBoardLearning(
-          {
-            idUser: Number(idUser),
-            idBoardLearning: boardId,
-          },
+          { idUser: Number(idUser), idBoardLearning: boardId },
           token
         );
 
-        if (result.alreadyExist === true || result === true) {
-          setAlreadyApplied(true);
-        }
+        setAlreadyApplied(result?.alreadyExist === true || result === true);
       } catch (err) {
         console.error("Gagal cek aplikasi:", err);
+        setAlreadyApplied(false);
+      } finally {
+        setCheckingApply(false);
       }
     }
 
-    checkApplication();
-  }, [idUser, boardId, token]);
+    checkAccess();
+  }, [idUser, boardId, token, project]);
 
   if (loading) {
     return (
@@ -144,6 +159,21 @@ export default function ProjectLearningDetailPage() {
 
   // === Checkout ke Midtrans ===
   const checkOut = async () => {
+    if (!project || !idUser) return;
+
+    // Cek apakah project ini milik user sendiri
+    const ownerId =
+      project.iduser ??
+      (project as any).idUser ??
+      (project as any).id_user ??
+      project.users?.idUser ??
+      0;
+
+    if (Number(idUser) === Number(ownerId)) {
+      alert("Kamu tidak dapat membeli learning project milikmu sendiri.");
+      return;
+    }
+
     try {
       const response = await fetch("/api/tokenizer", {
         method: "POST",
@@ -167,22 +197,17 @@ export default function ProjectLearningDetailPage() {
 
       window.snap.pay(snapToken, {
         onSuccess: async (result) => {
-          try {
-            await createApplicationLearning(
-              {
-                idUser: Number(idUser),
-                idBoardLearning: project.id,
-                idTransaction: result.transaction_id,
-                totalAmount: Number(result.gross_amount),
-              },
-              token
-            );
-            alert("Pembayaran berhasil & tersimpan ke Board Learning!");
-            router.push("/dashboard/project");
-          } catch (err) {
-            console.error("Gagal simpan aplikasi:", err);
-            alert("Pembayaran berhasil, tapi gagal simpan ke Board Learning.");
-          }
+          await createApplicationLearning(
+            {
+              idUser: Number(idUser),
+              idBoardLearning: project.id,
+              idTransaction: result.transaction_id,
+              totalAmount: Number(result.gross_amount),
+            },
+            token
+          );
+          alert("Pembayaran berhasil & tersimpan ke Board Learning!");
+          router.push("/dashboard/project");
         },
         onPending: (result) => {
           console.log("Pending:", result);
@@ -325,11 +350,30 @@ export default function ProjectLearningDetailPage() {
 
               {/* Action */}
               <div className="pt-6 border-t border-gray-200">
-                {alreadyApplied ? (
+                {checkingApply || loading ? (
+                  <div className="flex items-center justify-center gap-3 p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                    <div className="w-4 h-4 border-2 border-[rgb(2,44,92)] border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-gray-600">Checking access…</p>
+                  </div>
+                ) : Number(idUser) ===
+                  Number(
+                    project.iduser ??
+                      (project as any).idUser ??
+                      (project as any).id_user ??
+                      project.users?.idUser ??
+                      0
+                  ) ? (
+                  <div className="flex items-center justify-center gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+                    <CheckCircle className="w-5 h-5 text-yellow-600" />
+                    <p className="text-yellow-700 font-semibold">
+                      This is your learning project
+                    </p>
+                  </div>
+                ) : alreadyApplied ? (
                   <div className="flex items-center justify-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
                     <CheckCircle className="w-5 h-5 text-green-600" />
                     <p className="text-green-700 font-semibold">
-                      You're already registered for this learning session
+                      You're already registered of this learning session
                     </p>
                   </div>
                 ) : (
