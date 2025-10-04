@@ -15,6 +15,7 @@ import {
 import {
   getMessageFreeLanceFromById,
   updateBoardFeedBack,
+  getUser,
 } from "../../../../services/api";
 
 interface MessageFreeLanceDetail {
@@ -26,7 +27,11 @@ interface MessageFreeLanceDetail {
   boardTitle: string;
   idUserTarget?: number;
   idBoardFreeLance?: number;
-  organizer?: string;
+  user?: string;
+}
+
+interface userCreated {
+  name: string,
 }
 
 export default function FreelanceMessageDetailPage({
@@ -38,6 +43,7 @@ export default function FreelanceMessageDetailPage({
   const router = useRouter();
 
   const [message, setMessage] = useState<MessageFreeLanceDetail | null>(null);
+  const [userCreated, setuserCreated] = useState<userCreated | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const idUser = Number(Cookies.get("userId"));
@@ -63,6 +69,25 @@ export default function FreelanceMessageDetailPage({
     };
     fetchMessage();
   }, [messageId]);
+
+  useEffect(() => {
+      async function fetchData() {
+        try {
+          if (!idUser || !token) {
+            throw new Error("Token atau idUser tidak ditemukan di cookie");
+          }
+  
+          const userData= await getUser(Number(idUser), token);
+          setuserCreated(userData);
+        } catch (err) {
+          console.error("Gagal ambil data:", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+  
+      fetchData();
+    }, [idUser, token]);
 
   const handleFeedback = async (status: "Accepted" | "Rejected") => {
     try {
@@ -168,7 +193,7 @@ export default function FreelanceMessageDetailPage({
               {/* Letter Content */}
               <div className="mb-6">
                 <p className="text-sm text-gray-700 leading-relaxed mb-6">
-                  Dear <span className="font-semibold">Organizer</span>,
+                  Dear <span className="font-semibold">{userCreated?.name}</span>,
                   <br />
                   <br />I am submitting my freelance application for the board{" "}
                   <span className="font-semibold">{message.boardTitle}</span>.
@@ -228,7 +253,7 @@ export default function FreelanceMessageDetailPage({
                     </div>
 
                     {/* Organizer */}
-                    {message.organizer && (
+                    {message.user && (
                       <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                         <div className="flex items-start gap-3">
                           <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -239,7 +264,7 @@ export default function FreelanceMessageDetailPage({
                               Organizer
                             </p>
                             <p className="text-sm font-semibold text-gray-800">
-                              {message.organizer}
+                              {userCreated?.name}
                             </p>
                           </div>
                         </div>
