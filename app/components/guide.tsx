@@ -23,18 +23,18 @@ const Guide = () => {
   const steps = [
     {
       icon: <BookOpen size={22} />,
-      title: "Learn",
-      desc: "Access curated courses and resources to build your skills.",
+      title: "Create & Publish",
+      desc: "Sign up easily, then create a class to teach or a freelance board to post a job. Or simply browse and choose from available classes and jobs.",
     },
     {
       icon: <Users size={22} />,
-      title: "Connect",
-      desc: "Engage with organizers and peers in a collaborative community.",
+      title: "Apply & Get Approved",
+      desc: "Students can join classes, freelancers can apply for jobs. Wait for approval from the class host or job provider.",
     },
     {
       icon: <Briefcase size={22} />,
-      title: "Work",
-      desc: "Apply your skills directly to real-world projects and jobs.",
+      title: "Learn & Work",
+      desc: "Once accepted, start learning new skills or working on real projects. Grow your portfolio, improve your skills, and gain real experience.",
     },
   ];
 
@@ -92,15 +92,20 @@ const Guide = () => {
 
       {/* Timeline */}
       <div className="relative max-w-5xl mx-auto px-6">
-        {/* gradient line tengah */}
-        <div className="absolute left-1/2 top-0 h-full w-1 bg-gradient-to-b from-blue-500 via-[#043873] to-[rgb(2,44,92)] transform -translate-x-1/2"></div>
+        {/* gradient line tengah (pindah ke kiri saat mobile) */}
+        <div
+          className="absolute top-0 h-full w-1 bg-gradient-to-b from-blue-500 via-[#043873] to-[rgb(2,44,92)]
+    left-5 translate-x-0 md:left-1/2 md:-translate-x-1/2"
+        ></div>
 
         <div className="space-y-20 relative z-10">
           {steps.map((step, index) => (
             <div
               key={index}
               className={`flex items-center w-full ${
-                index % 2 === 0 ? "justify-start" : "justify-end"
+                index % 2 === 0
+                  ? "justify-start md:justify-start max-md:justify-end"
+                  : "justify-end md:justify-end max-md:justify-end"
               }`}
             >
               <motion.div
@@ -108,18 +113,20 @@ const Guide = () => {
                 initial="hidden"
                 whileInView="show"
                 viewport={{ amount: 0.2 }}
-                className={`relative w-5/12 p-6 bg-white/70 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition-transform duration-100 hover:-translate-y-1 ${
-                  index % 2 === 0 ? "text-right" : "text-left"
+                className={`relative w-5/12 max-md:w-10/12 p-6 bg-white/70 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition-transform duration-100 hover:-translate-y-1 ${
+                  index % 2 === 0
+                    ? "text-right md:text-right max-md:text-left"
+                    : "text-left"
                 }`}
               >
                 {/* bulatan ikon di pojok card */}
                 <div
                   className={`absolute top-0 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md
-          ${
-            index % 2 === 0
-              ? "right-0 translate-x-1/2"
-              : "left-0 -translate-x-1/2"
-          }`}
+            ${
+              index % 2 === 0
+                ? "right-0 translate-x-1/2 md:right-0 md:translate-x-1/2 max-md:left-0 max-md:-translate-x-1/2"
+                : "left-0 -translate-x-1/2"
+            }`}
                 >
                   {step.icon}
                 </div>
