@@ -107,12 +107,18 @@ export default function BoardCard({
               <div className="flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-gray-500" />
                 <span>{formatDate(board.date!)}</span>
-              </div>
-              <div className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-gray-500" />
                 <span>
-                  {formatTime(board.startTime!)} - {formatTime(board.endTime!)}
+                  {formatTime(board.startTime!)} - {formatTime(board.endTime!)} WIB
                 </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="w-3.5 h-3.5 text-gray-500" />
+                {board.amount && board.amount > 0 ? (
+                  <span>{board.amount} pendaftar</span>
+                ) : (
+                  <span>Belum ada yang mendaftar</span>
+                )}
               </div>
             </>
           )}
@@ -150,5 +156,5 @@ const formatDate = (dateStr: string) =>
 const formatTime = (timeStr: string) => {
   if (!timeStr) return "";
   const [hour, minute] = timeStr.split(":");
-  return `${hour}:${minute} WIB`;
+  return `${hour}:${minute}`;
 };
