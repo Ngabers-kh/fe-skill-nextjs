@@ -31,7 +31,7 @@ interface MessageFreeLanceDetail {
 }
 
 interface userCreated {
-  name: string,
+  name: string;
 }
 
 export default function FreelanceMessageDetailPage({
@@ -71,23 +71,23 @@ export default function FreelanceMessageDetailPage({
   }, [messageId]);
 
   useEffect(() => {
-      async function fetchData() {
-        try {
-          if (!idUser || !token) {
-            throw new Error("Token atau idUser tidak ditemukan di cookie");
-          }
-  
-          const userData= await getUser(Number(idUser), token);
-          setuserCreated(userData);
-        } catch (err) {
-          console.error("Gagal ambil data:", err);
-        } finally {
-          setLoading(false);
+    async function fetchData() {
+      try {
+        if (!idUser || !token) {
+          throw new Error("Token atau idUser tidak ditemukan di cookie");
         }
+
+        const userData = await getUser(Number(idUser), token);
+        setuserCreated(userData);
+      } catch (err) {
+        console.error("Gagal ambil data:", err);
+      } finally {
+        setLoading(false);
       }
-  
-      fetchData();
-    }, [idUser, token]);
+    }
+
+    fetchData();
+  }, [idUser, token]);
 
   const handleFeedback = async (status: "Accepted" | "Rejected") => {
     try {
@@ -193,9 +193,11 @@ export default function FreelanceMessageDetailPage({
               {/* Letter Content */}
               <div className="mb-6">
                 <p className="text-sm text-gray-700 leading-relaxed mb-6">
-                  Dear <span className="font-semibold">{userCreated?.name}</span>,
+                  Dear{" "}
+                  <span className="font-semibold">{userCreated?.name}</span>,
                   <br />
-                  <br />I am submitting my freelance application for the board{" "}
+                  <br />I am {message?.user} submitting my freelance application
+                  for the board{" "}
                   <span className="font-semibold">{message.boardTitle}</span>.
                 </p>
 
