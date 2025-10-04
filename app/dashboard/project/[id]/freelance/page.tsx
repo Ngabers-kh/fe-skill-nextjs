@@ -12,6 +12,7 @@ import {
   X,
   Send,
   CreditCard,
+  CheckCircle,
 } from "lucide-react";
 import {
   getBoardFreeLanceById,
@@ -35,7 +36,7 @@ interface BoardFreeLance {
   endDate: string;
   status: string;
   idUser: number;
-  users?: { name: string };
+  users?: { idUser: number; name: string };
 }
 
 export default function ProjectFreeLanceDetailPage() {
@@ -286,39 +287,23 @@ export default function ProjectFreeLanceDetailPage() {
               </div>
 
               {/* Action Section */}
-              <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+              <div className="pt-6 border-t border-gray-200">
                 {project.idUser === idUser ? (
-                  // Kalau proyek ini milik user sendiri
-                  <div className="flex items-center justify-between w-full">
-                    <div className="text-sm text-gray-600">
-                      <span className="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-3 rounded-lg font-semibold">
-                        💼 This is your project
-                      </span>
-                    </div>
-                    <button
-                      disabled
-                      className="px-8 py-3 bg-gray-300 text-gray-600 rounded-xl text-sm font-semibold shadow-sm cursor-not-allowed"
-                    >
-                      Unable to apply
-                    </button>
+                  <div className="flex items-center justify-center gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+                    <CheckCircle className="w-5 h-5 text-yellow-600" />
+                    <p className="text-yellow-700 font-semibold">
+                      This is your freelance project
+                    </p>
                   </div>
                 ) : alreadyApplied ? (
-                  // 📨 User sudah apply ke project ini
-                  <div className="flex items-center justify-between w-full">
-                    <div className="text-sm text-gray-600">
-                      <span className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-3 rounded-lg font-semibold">
-                        You have already registered on this freelance
-                      </span>
-                    </div>
-                    <button
-                      disabled
-                      className="px-8 py-3 bg-gray-300 text-gray-600 rounded-xl text-sm font-semibold shadow-sm cursor-not-allowed"
-                    >
-                      Already Applied
-                    </button>
+                  <div className="flex items-center justify-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <p className="text-green-700 font-semibold">
+                      You're already registered on this freelance
+                    </p>
                   </div>
                 ) : (
-                  <>
+                  <div className="flex items-center justify-between">
                     <div className="text-sm text-gray-600">
                       Ready to start working?
                     </div>
@@ -328,7 +313,7 @@ export default function ProjectFreeLanceDetailPage() {
                     >
                       Apply
                     </button>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
