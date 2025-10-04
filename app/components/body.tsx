@@ -71,11 +71,13 @@ const Body = () => {
           viewport={{ amount: 0.2 }}
           className="flex justify-center items-center"
         >
-          <div className="w-[350px] h-[220px] bg-white/70 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-xl flex items-center justify-center hover:scale-105 transition-transform duration-300">
-            <span className="text-lg font-semibold text-gray-700">
-              🚀 Modern Design
-            </span>
-          </div>
+          <Image
+            src="/learn.png"
+            alt="Work Together"
+            width={290}
+            height={160}
+            className="object-contain hover:scale-105 transition-transform duration-300"
+          />
         </motion.div>
 
         {/* Left Bottom */}
