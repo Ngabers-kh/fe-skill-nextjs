@@ -161,13 +161,10 @@ export default function ProjectFreeLanceDetailPage() {
         {/* Back Button */}
         <button
           onClick={() => router.push("/dashboard/project")}
-          className="cursor-pointer flex items-center gap-2 mb-6 px-4 py-2 rounded-xl 
-             text-gray-700 hover:text-white hover:bg-gradient-to-r 
-             hover:from-blue-600 hover:to-[rgb(2,44,92)] font-medium 
-             transition-all duration-300 shadow-sm hover:shadow-md group"
+          className="cursor-pointer flex items-center gap-2 mb-6 text-gray-700 hover:text-blue-600 font-medium transition-colors group"
         >
-          <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-          <span className="text-sm">Back to Projects</span>
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          Back to Inbox
         </button>
 
         <div className="max-w-4xl mx-auto">
