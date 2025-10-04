@@ -49,6 +49,7 @@ export default function ProjectFreeLanceDetailPage() {
   const [project, setProject] = useState<BoardFreeLance | null>(null);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
+  const [alreadyApplied, setAlreadyApplied] = useState(false);
 
   // state modal
   const [showModal, setShowModal] = useState(false);
@@ -69,6 +70,13 @@ export default function ProjectFreeLanceDetailPage() {
 
         setProject(boardData);
         setSkills(boardSkills);
+        const check = await checkApplyBoardFreeLance(
+          { idUser, idBoardFreeLance: boardId },
+          token
+        );
+        if (check.alreadyExist || check === true) {
+          setAlreadyApplied(true);
+        }
       } catch (err) {
         console.error("Gagal ambil detail project:", err);
       } finally {
@@ -77,7 +85,7 @@ export default function ProjectFreeLanceDetailPage() {
     }
 
     fetchData();
-  }, [boardId, token]);
+  }, [boardId, token, idUser]);
 
   // handle apply
   const handleApply = async () => {
@@ -277,17 +285,51 @@ export default function ProjectFreeLanceDetailPage() {
                 </div>
               </div>
 
-              {/* Action Button */}
+              {/* Action Section */}
               <div className="flex items-center justify-between pt-6 border-t border-gray-200">
-                <div className="text-sm text-gray-600">
-                  Ready to start working?
-                </div>
-                <button
-                  onClick={() => setShowModal(true)}
-                  className="cursor-pointer px-8 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
-                >
-                  Apply
-                </button>
+                {project.idUser === idUser ? (
+                  // Kalau proyek ini milik user sendiri
+                  <div className="flex items-center justify-between w-full">
+                    <div className="text-sm text-gray-600">
+                      <span className="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-3 rounded-lg font-semibold">
+                        💼 This is your project
+                      </span>
+                    </div>
+                    <button
+                      disabled
+                      className="px-8 py-3 bg-gray-300 text-gray-600 rounded-xl text-sm font-semibold shadow-sm cursor-not-allowed"
+                    >
+                      Unable to apply
+                    </button>
+                  </div>
+                ) : alreadyApplied ? (
+                  // 📨 User sudah apply ke project ini
+                  <div className="flex items-center justify-between w-full">
+                    <div className="text-sm text-gray-600">
+                      <span className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-3 rounded-lg font-semibold">
+                        You have already registered on this freelance
+                      </span>
+                    </div>
+                    <button
+                      disabled
+                      className="px-8 py-3 bg-gray-300 text-gray-600 rounded-xl text-sm font-semibold shadow-sm cursor-not-allowed"
+                    >
+                      Already Applied
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-sm text-gray-600">
+                      Ready to start working?
+                    </div>
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="cursor-pointer px-8 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                    >
+                      Apply
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
