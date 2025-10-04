@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
-import { MoreHorizontal, Plus } from "lucide-react";
+import { Layout, MoreHorizontal, Plus } from "lucide-react";
 import { useBoards } from "./hooks/useBoard";
 import BoardStats from "./components/BoardStats";
 import BoardFilters from "./components/BoardFilters";
@@ -64,7 +64,7 @@ export default function BoardPage() {
         <div className="mb-3">
           <div className="flex items-center gap-4 mb-3">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-[rgb(2,44,92)] rounded-2xl flex items-center justify-center">
-              <MoreHorizontal className="w-6 h-6 text-white" />
+              <Layout className="w-6 h-6 text-white" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-800">My Boards</h1>
@@ -109,9 +109,14 @@ export default function BoardPage() {
             />
           ))}
           {paginatedBoards.length === 0 && (
-            <p className="text-gray-500 col-span-full text-center py-10">
-              No boards found.
-            </p>
+            <div className="col-span-full text-center py-12">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                  <Layout className="w-8 h-8 text-gray-400" />
+                </div>
+                <p className="text-gray-500 text-sm">No boardss found</p>
+              </div>
+            </div>
           )}
         </div>
 

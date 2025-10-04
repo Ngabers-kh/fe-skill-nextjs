@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:4001"; 
+export const BASE_URL = "https://api-skillearn-supabase.vercel.app";
 
 // Register
 export async function registerUser(form: {
@@ -14,8 +14,9 @@ export async function registerUser(form: {
     body: JSON.stringify(form),
   });
 
-  if (!res.ok) throw new Error("Register gagal");
-  return res.json(); 
+  if (!res.ok)
+    throw new Error("Register failed. Email or password already used.");
+  return res.json();
 }
 
 // Login
@@ -26,7 +27,7 @@ export async function loginUser(email: string, password: string) {
     body: JSON.stringify({ email, password }),
   });
 
-  if (!res.ok) throw new Error("Login gagal");
+  if (!res.ok) throw new Error("Login failed. Incorrect email or password.");
   return res.json();
 }
 
@@ -40,14 +41,18 @@ export async function getAllSkills(token: string) {
 }
 
 // Add skills to user
-export async function addUserSkills(userId: number, skills: number[], token: string) {
-  const res = await fetch(`${BASE_URL}/users/${userId}/skills`, { 
+export async function addUserSkills(
+  userId: number,
+  skills: number[],
+  token: string
+) {
+  const res = await fetch(`${BASE_URL}/users/${userId}/skills`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ skills }), 
+    body: JSON.stringify({ skills }),
   });
   if (!res.ok) throw new Error("Gagal simpan skills");
   return res.json();
@@ -87,16 +92,19 @@ export async function updateUser(userId: number, token: string, data: any) {
 }
 
 // create board freelance
-export async function createBoardFreeLance(data: {
-  idUser: number;
-  title: string;
-  description: string;
-  price: number;
-  quota: number;
-  startDate: string;
-  endDate: string;
-  skills: number[];
-}, token: string) {
+export async function createBoardFreeLance(
+  data: {
+    idUser: number;
+    title: string;
+    description: string;
+    price: number;
+    quota: number;
+    startDate: string;
+    endDate: string;
+    skills: number[];
+  },
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/boardsFreeLance/create`, {
     method: "POST",
     headers: {
@@ -114,17 +122,20 @@ export async function createBoardFreeLance(data: {
 }
 
 // create board learning
-export async function createBoardLearning(data: {
-  idUser: number;
-  title: string;
-  description: string;
-  price: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-  skills: number[];
-  link: string,
-}, token: string) {
+export async function createBoardLearning(
+  data: {
+    idUser: number;
+    title: string;
+    description: string;
+    price: number;
+    date: string;
+    startTime: string;
+    endTime: string;
+    skills: number[];
+    link: string;
+  },
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/boardsLearning/create`, {
     method: "POST",
     headers: {
@@ -160,14 +171,16 @@ export async function getAllBoardLearning(token: string) {
 }
 
 // Get all Boards Freelance by UserId
-export async function getAllBoardFreeLanceByUserId(UserId: number, token: string) {
+export async function getAllBoardFreeLanceByUserId(
+  UserId: number,
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/boardsFreeLance/${UserId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error("Gagal ambil boards Free Lance");
   return res.json();
 }
-
 
 // GET detail board freelance by id
 export async function getBoardFreeLanceById(id: Number, token: string) {
@@ -206,7 +219,10 @@ export async function getBoardFreeLanceSkills(id: number, token: string) {
 }
 
 // Get all Boards Learning by UserId
-export async function getAllBoardLearningByuserId(UserId:number, token: string) {
+export async function getAllBoardLearningByuserId(
+  UserId: number,
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/boardsLearning/${UserId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -224,7 +240,11 @@ export async function getBoardLearningById(id: Number, token: string) {
 }
 
 // UPDATE board learning
-export async function updateBoardLearning(id: number, data: any, token: string) {
+export async function updateBoardLearning(
+  id: number,
+  data: any,
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/boardsLearning/${id}`, {
     method: "PATCH",
     headers: {
@@ -266,12 +286,15 @@ export async function deleteBoardFreeLance(id: number, token: string) {
 }
 
 // create apply learning
-export async function createApplicationLearning(data: {
-  idUser: number;
-  idBoardLearning: number;
-  idTransaction: string;
-  totalAmount: number;
-}, token: string) {
+export async function createApplicationLearning(
+  data: {
+    idUser: number;
+    idBoardLearning: number;
+    idTransaction: string;
+    totalAmount: number;
+  },
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/applications/learning`, {
     method: "POST",
     headers: {
@@ -288,10 +311,13 @@ export async function createApplicationLearning(data: {
 }
 
 // cek sudah daftar atau belum board learning
-export async function checkApplyBoardLearning(data: {
-  idUser: number;
-  idBoardLearning: number;
-}, token: string) {
+export async function checkApplyBoardLearning(
+  data: {
+    idUser: number;
+    idBoardLearning: number;
+  },
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/applications/learning/search`, {
     method: "POST",
     headers: {
@@ -308,13 +334,16 @@ export async function checkApplyBoardLearning(data: {
 }
 
 // create apply FreeLance
-export async function createApplicationFreeLance(data: {
-  idUser: number;
-  idBoardFreeLance: number;
-  idUserCreated: number;
-  message: string;
-  subject: string;
-}, token: string) {
+export async function createApplicationFreeLance(
+  data: {
+    idUser: number;
+    idBoardFreeLance: number;
+    idUserCreated: number;
+    message: string;
+    subject: string;
+  },
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/applications/freelance`, {
     method: "POST",
     headers: {
@@ -331,10 +360,13 @@ export async function createApplicationFreeLance(data: {
 }
 
 // cek sudah daftar atau belum board FreeLance
-export async function checkApplyBoardFreeLance(data: {
-  idUser: number;
-  idBoardFreeLance: number;
-}, token: string) {
+export async function checkApplyBoardFreeLance(
+  data: {
+    idUser: number;
+    idBoardFreeLance: number;
+  },
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/applications/freelance/search`, {
     method: "POST",
     headers: {
@@ -351,7 +383,10 @@ export async function checkApplyBoardFreeLance(data: {
 }
 
 // Get all Boards Apply Freelance
-export async function getAllApplicationsFreeLanceByUser(idUser: number, token: string) {
+export async function getAllApplicationsFreeLanceByUser(
+  idUser: number,
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/applications/freelance/${idUser}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -359,24 +394,36 @@ export async function getAllApplicationsFreeLanceByUser(idUser: number, token: s
   return res.json();
 }
 
-export async function getAllReplyFreeLanceByUser(idUser: number, token: string) {
-  const res = await fetch(`${BASE_URL}/applications/freelance/messages/reply/${idUser}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export async function getAllReplyFreeLanceByUser(
+  idUser: number,
+  token: string
+) {
+  const res = await fetch(
+    `${BASE_URL}/applications/freelance/messages/reply/${idUser}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
   if (!res.ok) throw new Error("Gagal ambil boards Free Lance");
   return res.json();
 }
 
 export async function getReplyFreeLanceById(idUser: number, token: string) {
-  const res = await fetch(`${BASE_URL}/applications/freelance/messages/detail/${idUser}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const res = await fetch(
+    `${BASE_URL}/applications/freelance/messages/detail/${idUser}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
   if (!res.ok) throw new Error("Gagal ambil Reply Free Lance");
   return res.json();
 }
 
 // Get all Boards Apply Learning
-export async function getAllApplicationsLearningByUser(idUser: number, token: string) {
+export async function getAllApplicationsLearningByUser(
+  idUser: number,
+  token: string
+) {
   const res = await fetch(`${BASE_URL}/applications/learning/${idUser}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -385,18 +432,30 @@ export async function getAllApplicationsLearningByUser(idUser: number, token: st
 }
 
 // get message
-export async function getMessageFreeLanceFromApply(idUser: number, token: string) {
-  const res = await fetch(`${BASE_URL}/applications/freelance/messages/${idUser}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export async function getMessageFreeLanceFromApply(
+  idUser: number,
+  token: string
+) {
+  const res = await fetch(
+    `${BASE_URL}/applications/freelance/messages/${idUser}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
   if (!res.ok) throw new Error("Gagal ambil Pesan");
   return res.json();
 }
 
-export async function getMessageLearningFromApply(idUser: number, token: string) {
-  const res = await fetch(`${BASE_URL}/applications/learning/messages/${idUser}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export async function getMessageLearningFromApply(
+  idUser: number,
+  token: string
+) {
+  const res = await fetch(
+    `${BASE_URL}/applications/learning/messages/${idUser}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
   if (!res.ok) throw new Error("Gagal ambil Pesan");
   return res.json();
 }
@@ -417,23 +476,29 @@ export async function getMessageFreeLanceFromById(id: number, token: string) {
   return res.json();
 }
 
-// update board dan balasan pesan 
-export async function updateBoardFeedBack(data: {
-  id: number,
-  idUserCreated: number;
-  idBoardFreeLance: number;
-  idUserTarget: number;
-  status: string;
-  subject: string;
-}, token: string) {
-  const res = await fetch(`${BASE_URL}/applications/freeLance/message/update/${data.id}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
+// update board dan balasan pesan
+export async function updateBoardFeedBack(
+  data: {
+    id: number;
+    idUserCreated: number;
+    idBoardFreeLance: number;
+    idUserTarget: number;
+    status: string;
+    subject: string;
+  },
+  token: string
+) {
+  const res = await fetch(
+    `${BASE_URL}/applications/freeLance/message/update/${data.id}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!res.ok) {
     throw new Error("Gagal simpan Feedback apply board FreeLance");

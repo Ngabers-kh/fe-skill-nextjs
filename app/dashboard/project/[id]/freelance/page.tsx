@@ -12,6 +12,7 @@ import {
   X,
   Send,
   CreditCard,
+  CheckCircle,
 } from "lucide-react";
 import {
   getBoardFreeLanceById,
@@ -35,7 +36,7 @@ interface BoardFreeLance {
   endDate: string;
   status: string;
   idUser: number;
-  users?: { name: string };
+  users?: { idUser: number; name: string };
 }
 
 export default function ProjectFreeLanceDetailPage() {
@@ -49,6 +50,7 @@ export default function ProjectFreeLanceDetailPage() {
   const [project, setProject] = useState<BoardFreeLance | null>(null);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
+  const [alreadyApplied, setAlreadyApplied] = useState(false);
 
   // state modal
   const [showModal, setShowModal] = useState(false);
@@ -69,6 +71,13 @@ export default function ProjectFreeLanceDetailPage() {
 
         setProject(boardData);
         setSkills(boardSkills);
+        const check = await checkApplyBoardFreeLance(
+          { idUser, idBoardFreeLance: boardId },
+          token
+        );
+        if (check.alreadyExist || check === true) {
+          setAlreadyApplied(true);
+        }
       } catch (err) {
         console.error("Gagal ambil detail project:", err);
       } finally {
@@ -77,7 +86,7 @@ export default function ProjectFreeLanceDetailPage() {
     }
 
     fetchData();
-  }, [boardId, token]);
+  }, [boardId, token, idUser]);
 
   // handle apply
   const handleApply = async () => {
@@ -161,13 +170,10 @@ export default function ProjectFreeLanceDetailPage() {
         {/* Back Button */}
         <button
           onClick={() => router.push("/dashboard/project")}
-          className="cursor-pointer flex items-center gap-2 mb-6 px-4 py-2 rounded-xl 
-             text-gray-700 hover:text-white hover:bg-gradient-to-r 
-             hover:from-blue-600 hover:to-[rgb(2,44,92)] font-medium 
-             transition-all duration-300 shadow-sm hover:shadow-md group"
+          className="cursor-pointer flex items-center gap-2 mb-6 text-gray-700 hover:text-blue-600 font-medium transition-colors group"
         >
-          <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-          <span className="text-sm">Back to Projects</span>
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          Back to Inbox
         </button>
 
         <div className="max-w-4xl mx-auto">
@@ -280,17 +286,35 @@ export default function ProjectFreeLanceDetailPage() {
                 </div>
               </div>
 
-              {/* Action Button */}
-              <div className="flex items-center justify-between pt-6 border-t border-gray-200">
-                <div className="text-sm text-gray-600">
-                  Ready to start working?
-                </div>
-                <button
-                  onClick={() => setShowModal(true)}
-                  className="cursor-pointer px-8 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
-                >
-                  Apply
-                </button>
+              {/* Action Section */}
+              <div className="pt-6 border-t border-gray-200">
+                {project.idUser === idUser ? (
+                  <div className="flex items-center justify-center gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+                    <CheckCircle className="w-5 h-5 text-yellow-600" />
+                    <p className="text-yellow-700 font-semibold">
+                      This is your freelance project
+                    </p>
+                  </div>
+                ) : alreadyApplied ? (
+                  <div className="flex items-center justify-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <p className="text-green-700 font-semibold">
+                      You're already registered on this freelance
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-gray-600">
+                      Ready to start working?
+                    </div>
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="cursor-pointer px-8 py-3 bg-gradient-to-r from-blue-600 to-[rgb(2,44,92)] hover:from-blue-700 hover:to-blue-800 text-white rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

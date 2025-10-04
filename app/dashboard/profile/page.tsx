@@ -55,10 +55,10 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-[#F9FAFB] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-6 h-6 border-2 border-[rgb(2,44,92)] border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-600 text-sm">Loading your profile...</p>
+      <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-[rgb(2,44,92)] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600 font-medium">Loading your profile...</p>
         </div>
       </div>
     );
