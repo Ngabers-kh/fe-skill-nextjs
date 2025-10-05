@@ -165,9 +165,9 @@ export default function FreelanceReplyDetailPage({
                 <p className="text-sm text-gray-700 leading-relaxed">
                   Dear{" "}
                   <span className="font-semibold">
-                    {reply.idUserCreated.name}
+                    {reply.idUserTarget.name}
                   </span>{" "}
-                  ({reply.idUserCreated.email}),
+                  ({reply.idUserTarget.email}),
                   <br />
                   <br />
                   {isAccepted
@@ -251,10 +251,10 @@ export default function FreelanceReplyDetailPage({
                   <div className="flex-1">
                     <p className="text-xs text-gray-600 mb-2">Reply sent by</p>
                     <p className="text-sm font-semibold text-gray-800">
-                      {reply.idUserTarget.name}
+                      {reply.idUserCreated.name}
                     </p>
                     <p className="text-xs text-gray-600">
-                      {reply.idUserTarget.email}
+                      {reply.idUserCreated.email}
                     </p>
                     <p className="text-xs text-gray-500 mt-3 italic">
                       Thank you for applying. We wish you success in your next

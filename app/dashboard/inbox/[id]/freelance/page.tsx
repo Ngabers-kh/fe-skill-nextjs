@@ -110,7 +110,7 @@ export default function FreelanceMessageDetailPage({
         token
       );
 
-      alert(`Application successfully${status}`);
+      alert(`Application successfully ${status}`);
       router.push("/dashboard/inbox");
     } catch (err) {
       console.error("Gagal update feedback:", err);
