@@ -251,7 +251,7 @@ export default function ApplicationPage() {
                 </span>
                 <span
                   className={`px-2 py-0.5 text-xs font-medium rounded ${
-                    app.status === "Pending"
+                    app.status === "pending"
                       ? "bg-yellow-50 text-yellow-700 border border-yellow-200"
                       : app.status === "Accepted"
                       ? "bg-green-50 text-green-700 border border-green-200"
