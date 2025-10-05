@@ -100,7 +100,7 @@ export default function ProjectFreeLanceDetailPage() {
       );
 
       if (check.alreadyExist || check === true) {
-        alert("Anda sudah terdaftar pada freelance ini.");
+        alert("You are already registered on this freelance.");
         return;
       }
 
@@ -116,11 +116,11 @@ export default function ProjectFreeLanceDetailPage() {
         token
       );
 
-      alert("Berhasil daftar freelance!");
+      alert("Successfully registered as a freelancer!");
       router.push("/dashboard/project");
     } catch (err) {
       console.error("Gagal apply freelance:", err);
-      alert("Gagal apply freelance");
+      alert("Failed to apply freelance");
     } finally {
       setSubmitting(false);
     }

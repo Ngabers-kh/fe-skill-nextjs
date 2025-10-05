@@ -170,7 +170,7 @@ export default function ProjectLearningDetailPage() {
       0;
 
     if (Number(idUser) === Number(ownerId)) {
-      alert("Kamu tidak dapat membeli learning project milikmu sendiri.");
+      alert("You cannot buy your own learning project.");
       return;
     }
 
@@ -191,7 +191,7 @@ export default function ProjectLearningDetailPage() {
       const { token: snapToken } = await response.json();
 
       if (!snapToken) {
-        alert("Gagal mendapatkan token Midtrans");
+        alert("Failed to get Midtrans token");
         return;
       }
 
@@ -206,23 +206,23 @@ export default function ProjectLearningDetailPage() {
             },
             token
           );
-          alert("Pembayaran berhasil & tersimpan ke Board Learning!");
+          alert("Payment successful!");
           router.push("/dashboard/project");
         },
         onPending: (result) => {
           console.log("Pending:", result);
-          alert("Pembayaran masih pending, silakan selesaikan.");
+          alert("Payment is still pending, please complete it.");
         },
         onError: (result) => {
           console.error("Error:", result);
-          alert("Pembayaran gagal!");
+          alert("Payment failed!");
         },
         onClose: () => {
-          alert("Kamu menutup popup tanpa menyelesaikan pembayaran.");
+          alert("You closed the popup without completing the payment.");
         },
       });
     } catch (err) {
-      console.error("Checkout gagal:", err);
+      console.error("Checkout failed:", err);
     }
   };
 

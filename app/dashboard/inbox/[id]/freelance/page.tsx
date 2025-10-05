@@ -104,13 +104,13 @@ export default function FreelanceMessageDetailPage({
           status,
           subject:
             status === "Accepted"
-              ? "Selamat, lamaran kamu diterima!"
-              : "Mohon maaf, lamaran kamu ditolak.",
+              ? "Congratulations, your application has been accepted!"
+              : "Sorry, your application has been rejected.",
         },
         token
       );
 
-      alert(`Lamaran berhasil di-${status}`);
+      alert(`Application successfully${status}`);
       router.push("/dashboard/inbox");
     } catch (err) {
       console.error("Gagal update feedback:", err);
