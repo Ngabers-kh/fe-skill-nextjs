@@ -17,8 +17,7 @@ import {
 } from "lucide-react";
 import { getUser } from "../services/api";
 
-// Define the sidebar width for use in Tailwind CSS and calculations
-const DESKTOP_SIDEBAR_WIDTH = "w-80"; // w-80 is 320px
+const DESKTOP_SIDEBAR_WIDTH = "w-80";
 
 interface User {
   id?: number;
@@ -44,35 +43,33 @@ export default function DashboardLayout({
   const userId = Cookies.get("userId") || "";
   const [loading, setLoading] = useState(true);
 
-  // NOTE: This state is key for client-only rendering portions like motion.div
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
     setDropdownOpen(false);
-    // You might also want to close the mobile sidebar on navigation
     setIsOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-      async function fetchData() {
-        try {
-          if (!userId || !token) {
-            throw new Error("Token atau userId tidak ditemukan di cookie");
-          }
-  
-          const userData= await getUser(Number(userId), token);
-  
-          setUser(userData);
-        } catch (err) {
-          console.error("Gagal ambil data:", err);
-        } finally {
-          setLoading(false);
+    async function fetchData() {
+      try {
+        if (!userId || !token) {
+          throw new Error("Token atau userId tidak ditemukan di cookie");
         }
+
+        const userData = await getUser(Number(userId), token);
+
+        setUser(userData);
+      } catch (err) {
+        console.error("Gagal ambil data:", err);
+      } finally {
+        setLoading(false);
       }
-  
-      fetchData();
-    }, [userId, token]);
+    }
+
+    fetchData();
+  }, [userId, token]);
 
   const menus = [
     {
@@ -108,16 +105,14 @@ export default function DashboardLayout({
   ];
 
   const handleLogout = () => {
-    // NOTE: This check ensures localStorage is only accessed on the client.
     if (typeof window !== "undefined") {
       Cookies.remove("token");
-      Cookies.remove("userId"); 
+      Cookies.remove("userId");
       router.push("/auth");
     }
   };
 
   const SidebarContent = ({ isMobile = false }) => (
-    // This div needs to be consistent between server and client
     <div className="flex flex-col h-full">
       {/* Header */}
       <div
@@ -162,7 +157,7 @@ export default function DashboardLayout({
                     : "text-blue-100 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                {/* Active indicator (ONLY rendered on client when isClient is true) */}
+                {/* Active indicator */}
                 {isClient && isActive && (
                   <motion.div
                     suppressHydrationWarning
@@ -233,11 +228,9 @@ export default function DashboardLayout({
   );
 
   return (
-    // 1. Removed 'flex' from the top-level div
     <div className="min-h-screen bg-gray-50">
-      {/* Desktop Sidebar (FIXED) */}
+      {/* Desktop Sidebar */}
       <aside
-        // 2. Added 'lg:fixed', 'lg:inset-y-0', 'lg:left-0', 'h-screen'
         className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex ${DESKTOP_SIDEBAR_WIDTH} h-screen bg-gradient-to-br bg-[rgb(2,44,92)] text-white flex-col p-6 shadow-2xl relative overflow-hidden z-20`}
       >
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
@@ -245,7 +238,7 @@ export default function DashboardLayout({
         <SidebarContent isMobile={false} />
       </aside>
 
-      {/* Mobile Sidebar Overlay (Unchanged) */}
+      {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -272,9 +265,8 @@ export default function DashboardLayout({
       </AnimatePresence>
 
       {/* Main Content Container */}
-      {/* 3. Added 'lg:ml-80' to account for the fixed sidebar's width */}
       <main className={`lg:ml-80 flex-1 flex flex-col min-h-screen`}>
-        {/* Top Nav (Mobile) */}{" "}
+        {/* Top Nav */}{" "}
         <header className="lg:hidden sticky top-0 z-30 bg-[rgb(2,44,92)] backdrop-blur-md border-b border-gray-200/80 shadow-sm">
           {" "}
           <div className="flex items-center justify-between px-4 py-3">
@@ -378,7 +370,6 @@ export default function DashboardLayout({
           </div>{" "}
         </header>
         {/* Page Content */}
-        {/* Removed overflow-auto from this div as the scroll is naturally on the body/main content */}
         <div className="flex-1">
           <div className="min-h-full">{children}</div>
         </div>
